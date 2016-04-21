@@ -18,7 +18,7 @@ PATH2=$BASESH$DIR/ # /Users/atlasgroup/Git/Themes/
 URI=$BASEGIT$USER/$REPO.git # https://github.com/grayox/foo-bar.git
 
 # 1. (GitCreate) Create new Github repository
-#cd $PATH1 && sh GitCreate.sh "$REPO" "$TOK"
+cd $PATH1 && sh GitCreate.sh "$REPO" "$TOK"
 
 # 2. Clone project template
 #cd $BASESH
