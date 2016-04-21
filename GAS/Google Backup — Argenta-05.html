@@ -1,0 +1,1033 @@
+<script>
+// Change log:
+// v5. 1. Upgraded home page HTML and CSS to use Bootstrap for a cleaner look/feel. Also, fixed certain exception classes.
+//     2. Deleted signup.html (then, subsequently re-added it)  3. Added sandbox.html  4. Added result.html
+// v6. 1. Added .navbar and .jumbotron to give it a more commercial feel; 2. Masked AVMs to prepare to protect trade secrets to market to political consultants
+//----------------------------------- Exceptions Log -----------------------------------
+// 4009 Pittwood, Danville, VA       — DataQuick returns text string
+// 5200 SW 32nd St, Topeka, KS 66614 — continually runs
+// -- Fixed --
+// 2865 S Meridian St, Indianapolis, In
+// 605 upper st, danville, va
+// 732 franklin st, westbury, ny 11590
+//-------------------------------------- Resources --------------------------------------
+// Schools       : http://www.greatschools.org/search/search.page?lat=40.733223&lon=-80.30786799999998&zipCode=15066&state=PA&normalizedAddress=1124%208th%20Avenue%2C%20New%20Brighton%2C%20PA%2015066&city=New%20Brighton&sortBy=DISTANCE&locationSearchString=1124%208th%20Ave%2C%20New%20Brighton%2C%20PA%2015066&distance=5
+// Neighborhoods : http://www.areavibes.com/danville-va/livability/
+// BPO Agents    : http://www.nabpop.org/
+// Inspectors    : http://inspectorseek.com/results.php?q=seattle%2C+WA&range=40 || http://inspectorseek.com/results.php?q=24112&range=40
+// Appraisors    : https://www.asc.gov/National-Registry/FindAnAppraiser.aspx
+//-------------------------------------- Code.gs --------------------------------------
+// JSON visualization | viewer: http://chris.photobooks.com/json/default.htm
+// function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
+// Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
+// Test Functions
+// function test(){Logger.log(avmReportServeData(encodeURIComponent("5008 corson ave s, seattle, wa")))}
+// function test(){Logger.log(avmReportServeData(                   "5008 corson ave s, seattle, wa" ))}
+function auth    (){}
+function timer   (){var t=new Date().getTime();Logger.log(t);return t}//1388228703613
+function backup  (){var desc="Argenta™ Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print   (str){var desc="Argenta™ Print — timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
+//function print   (){var desc="Argenta™ Print — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"note"});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print_test(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"Argenta Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function size    (){var db=ScriptDb.getMyDb();Logger.log(/*ScriptDb.getMyDb()*/db.query({}).getSize());}
+function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
+function showOne (){Logger.log(/*Utilities.jsonStringify*/JSON.stringify(ScriptDb.getMyDb().query({item:"eXjKqn1"/*/table:"note"/* /"user",user:"atlaslive@gmail.com",seller:true/*,city:"test"*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function showAll (){var db=ScriptDb.getMyDb(),r,results=db.query({});while(results.hasNext()){r=results.next();Logger.log(/*Utilities.jsonStringify*/JSON.stringify(r));return arr}} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2fipwhwd75f9M6jkzvWk4TZmOzH2A4uRg"/*act*/)}
+function print2doc(str,proj,clas){var desc="Backup | "+proj+" | "+clas+" | timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id)}
+//function del     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({xtable:"note"/*,/*source:"fciEx_foo",* /table:db.not("report"),* /timestamp_posted:db.greaterThan(1388548425377),k:"8u0hjrtbd68s3hi1w9kl",/*"36sgd2m257w2j0sn5isa",* /"report"/* /"bid"/*"user"* /,xcity:"test"/*xseller:true,xuser* /,bidder:"atlaslive@gmail.com"*/});while(results.hasNext()){arr.push(results.next().getId());}db.removeByIdBatch(arr,false);} // Replaced: while(results.hasNext()){r=results.next();db.remove(r);}}
+//function mod     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({/*item* /city:true,/*db.not(db.anyValue())/*/xtable:"note"/*,pctLtv:db.between(0,1.1),lienPos:db.not(1)/*,/*use* /lienPos:db.anyOf(["1st"/*false,db.not(db.anyValue())/*"Hospitality"/*"Commercial"/*"Apt","Multifamily"* /])/*"Oth"/* /"bid"*/});while(results.hasNext()){r=results.next();try{r.pctLtv=Math.round(100*r.balCur/r.estValue)}catch(e){r.pctLtv="";Logger.log("Error : "+e.message)}/*r.lienPos=1;/*LibraryjsUtil.stateConvert(r.state,"abbr");/*.use="X";/*"CRE";/*"MUL";/*r.city=LibraryjsUtil.toCaseTitle(r.city);/*r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));/*if(r.askPrice==""){r.askPrice=0}/* /r.remove=false;r.accepted=false;/*r.askRate=r.buyRate;r.askPrice=r.buyPts;* /r.bids=[];/*r.table="note";r.datePosted=new Date().getTime();* /var i=r.bids.length;while(i--){/*r.bids[i].timestamp=r.bids[i].time;* /r.bids[i].accepted=false;/*r.bids[i].target_id=r.getId();* /r.bids[i].time=""/* /if(r.bids[i].bidder=="atlaslive@gmail.com"){r.bids.splice(i,1)}* /db.save(r);*/arr.push(r);}db.saveBatch(arr,false)}
+//function doPost(e){ // function xdoPost(e){return ContentService.createTextOutput("Hello World"/*"User says: "+JSON.stringify(e)*/)} // e.postData.getDataAsString()
+//    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+//            case   /* receive from fci */ "36sgd2m257w2j0sn5isa" : return receiveScrape (p,"fciEx"     ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+//            case   /* receive from nmp */ "3w34xo2xeuyy8jprgmzg" : return receiveScrape (p,"noteMktPl" ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+//            case   /* receive from ml  */ "8u0hjrtbd68s3hi1w9kl" : return receiveScrape (p,"moolahList") ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+//         default                                                 :                                       ; break;}}}
+//function xdoGet (e){return ContentService.createTextOutput("Hello World")}
+function doGet (e){ // References: https://developers.google.com/apps-script/guides/html-service-communication#private_functions // https://sites.google.com/site/appsscripttutorial/miscellaneous/creating-form-elements-dynamically-using-google-apps-script-gas
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput("                                      foo({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);} // https://developers.google.com/apps-script/reference/base/mime-type
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput("jQuery164024488894315436482_1409647426359({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);} // Must inspect http requests and responses
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput(e.parameter.jsoncallback     +           "({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);}
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+           case   /* serve AVM report */ "3bc9cpv6wb54gyqv6kl3"  : return ContentService.createTextOutput(e.parameter.jsoncallback+"(" + JSON.stringify(avmReportServeData({addy:m.split("?a=")[1]}))+")").setMimeType(ContentService.MimeType./*JSON*/JAVASCRIPT);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+           case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return avmReportServeData2html({item:decodeURIComponent(m)/*item number (or maybe address string)*/,type:"HTML"}).htm                  .setSandboxMode(HtmlService.SandboxMode.IFRAME)         ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return HtmlService.createTemplateFromFile  ("result.html"  ).evaluate()                                                                                                                    ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return ContentService.createTextOutput("Hello " + m + " World")                                                                                                                            ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve marquee    */ "rv8eqwuvdm11f66c431g"  : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveMarquee       (                 )) + ")").setMimeType(ContentService.MimeType./*JSON*/JAVASCRIPT);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+        default                                                  : break;}}
+	if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
+            case   "argentabpo"                                  :
+                    if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"                        : return HtmlService.createHtmlOutputFromFile("home.html"     ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                            case   "sandbox"                     : return HtmlService.createHtmlOutputFromFile("sandbox.html"  ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break; // For Gviz charts to appear (but also causes Bootstrap tables to misalign... but not when inside a .tab), use IFRAME SetSandboxMode e.g., HtmlService.createHtmlOutputFromFile("index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME); References: https://developers.google.com/apps-script/reference/html/sandbox-mode | https://developers.google.com/apps-script/guides/html/templates#pushing_variables_to_templates
+                         // case   "signup"                      : return HtmlService.createHtmlOutputFromFile("signup.html"   ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "order"                       : return HtmlService.createHtmlOutputFromFile("order.html"    ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "result"                      : return HtmlService.createHtmlOutputFromFile("result.html"   ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                         // case   "fill"                        : return HtmlService.createHtmlOutputFromFile("fill.html"     ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "authorize"                   : return authorize                           (                )                                               ;break;
+                         // case   "account"                     : return HtmlService.createTemplateFromFile  ("account.html"  ).evaluate()                                    ;break;
+                         // case   "account"                     : var h=HtmlService.createTemplateFromFile("ssExport")/*;h.m=m Parameter*/;return h.evaluate()                ;break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON*/);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+			             default                                 :                                                                                                              break;}}
+        //  case   "creditrepairnation"                          : // acquire inventory
+		//			if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+        //                  case   "home"                        : return HtmlService.createHtmlOutputFromFile("collect.html"  ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+		//  			 default                                 :                                                                                                             ;break;}}
+         default                                                 :                                                                                                              break;}}}
+function authorize(){return HtmlService.createHtmlOutput("<div align='center' style='color:#808080;font-family0:verdana;color:orange;font-weight:bold;margin-top:15px;'>Authorization successful!<div style='color:#808080;font-size:smaller;font-weight:normal;'>You may now access all features</div><img src='https://lh5.googleusercontent.com/-a81AytXYq0Q/Umtn0FrFdhI/AAAAAAAAIyE/xCYArSNCR1k/s144/orange-check-mark.png' height='100'></div>")}
+function receiveSignup(ob){LibraryjsUtil.recordUpdate("argenta","agent",{email:Session.getActiveUser().getEmail()},ob);LibraryjsUtil.zones2zips("argenta","agent","zip",ob)}
+function processForm_receiveFundDocs(ob){var i,user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),q={table:"user",seller:true,user:user},r=db.query(q).next();
+    if(!r){r=q;r.record=[];r.emailList={current:[],archive:[]};}r.record.unshift(ob);r.record[0].date=t;r.emailList.current.unshift((t+","+ob.emailListString).split(/[\s,]+/)); // function test(){Logger.log("foo bar, zap-foo, baz bat".split(/[\s,]+/))} // Search term: split string by commar or space // Reference: http://stackoverflow.com/questions/1835032/regexp-split-string-by-commas-and-spaces-but-ignore-hyphenated-words
+    i=r.emailList.current[0].length;while(i---1){if(r.emailList.archive.indexOf(r.emailList.current[i])==-1){r.emailList.archive.push(r.emailList.current[0][i])}}Logger.log(JSON.stringify(r));db.save(r)}
+function processForm_registerSeller(ob){var i,user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),q={table:"user",seller:true,user:user},r=db.query(q).next();
+    if(!r){r=q;r.record=[];r.emailList={current:[],archive:[]};}r.record.unshift(ob);r.record[0].timestamp=t;r.emailList.current.unshift((t+","+ob.emailListString).split(/[\s,]+/)); // function test(){Logger.log("foo bar, zap-foo, baz bat".split(/[\s,]+/))} // Search term: split string by commar or space // Reference: http://stackoverflow.com/questions/1835032/regexp-split-string-by-commas-and-spaces-but-ignore-hyphenated-words
+    i=r.emailList.current[0].length;while(i---1){if(r.emailList.archive.indexOf(r.emailList.current[i])==-1){r.emailList.archive.push(r.emailList.current[0][i])}}Logger.log(JSON.stringify(r));db.save(r)}
+function processForm_addNote(ob){var user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),u=db.query({table:"user",user:user,seller:true}).next(),i,dist=u.emailList.current[0].slice(1),site=SitesApp.getSite("onlinenoteexchange");if(!u.record[0].agreed){Logger.log(user+" did not agree to groundrules.");return}ob.table="note";ob.timestamp_posted=t;ob.seller=user;ob.remove=false;ob.accepted=false;ob.filePic=processPic(ob.filePic);ob.fileDoc=processDoc(ob.fileDoc);if(ob.askPrice==""){ob.askPrice=0};var id=db.save(ob).getId(),r=db.load(id);r.item=LibraryjsUtil.toBase62(Number(id.slice(1)));db.save(r);
+    chromeLogoBlob=UrlFetchApp.fetch("https://lh5.googleusercontent.com/-zCLeer1r3ro/Udnn8thtnmI/AAAAAAAAHys/lWkaQnXPv_Q/s144/Google_Chrome_icon_2011.jpg").getBlob().setName("chromeLogoBlob");
+    i=dist.length;while(i--){try{site.addViewer(dist[i])}catch(e){Logger.log(dist[i]+": "+e.message)}MailApp.sendEmail({to:dist[i],subject:"New loan: "+r.askRate+"%, "+r.askPrice+" points",htmlBody:("<a href='https://sites.google.com/site/onlinenoteexchange/buy'>Click here</a> (item: "+r.item+") <a href='https://www.google.com/intl/en/chrome/browser/'><img src='cid:chromeLogo' height='15' style='text-decoration:none;border:0;outline:none'></a> <a href='https://www.google.com/intl/en/chrome/browser/'>Chrome required</a>.<br><br>Rate: "+r.askRate+"% +"+r.askPrice+" points<br><br>Collateral:<br>"+r.sa+", "+r.city+", "+r.state+" "+r.zip+"<br>"+r.use+", "+r.beds+" beds, "+r.baths+" baths, "+r.sqft+" sqft, "+"<br><br>Loan Type: "+r.purpose+"<br>Unpaid Principal Balance: $"+r.balCur+"<br>Estimated Value: $"+r.estValue+"<br>LTV: "+r.pctLtv/*+"%<br>Term: "+r.term+" months<br>"*/+"<br>Highlights: "+r.notes),name:"atlaslive@gmail.com",inlineImages:{chromeLogo:chromeLogoBlob/*,youtubeLogo:youtubeLogoBlob*/}});}/*Logger.log(JSON.stringify(ob));*/return}
+function sendUserToClient(){var user=Session.getActiveUser().getEmail(),u=ScriptDb.getMyDb().query({table:"user",seller:true,user:user}).next();/*Logger.log(JSON.stringify(r));*/return u;}
+function processDoc(blob){try{var id=DocsList.createFile(blob/*.getAs("application/pdf")*/).getId();}catch(e){Logger.log("Error : "+e.message);return "";}DriveApp.getFileById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);return DocsList.getFileById(id).getUrl();} // Reference: https://developers.google.com/apps-script/reference/base/composite-blob#getAs(String) // Reference: https://code.google.com/p/google-apps-script-issues/issues/detail?id=1660 see #37, Oct 13, 2012 // Use DocsList instead of DriveApp which will not allow document to be viewed properly
+function processPic(blob){if(!blob.length){return ""}return "https://drive.google.com/uc?export=view&id="+DriveApp.createFile(blob/*.getAs("image/jpeg")*/).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW).getId()} // Image // Reference: http://stackoverflow.com/questions/10311092/displaying-files-e-g-images-stored-in-google-drive-on-a-website // http://stackoverflow.com/questions/14717426/referencing-project-files-with-html-service > http://googleappsdeveloper.blogspot.in/2012/11/announcing-google-drive-site-publishing.html
+//function avmReportGetLink(ob){return "<a href='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00?a="+encodeURIComponent(LibraryjsAvm.avmPrep(ob.address,"manual").address.full)+"'><img src='https://lh4.googleusercontent.com/-WFV1IdXKZvI/U_1KktTMNOI/AAAAAAAAMmM/Ky7L7IOq0Lc/s144/btn.png'></a>"}//JSON.stringify(LibraryjsAvm.avmData(addy))}//addy}//"<strong>Hello</strong> world"}//return HtmlService.createHtmlOutputFromFile("AvmReport.html").setSandboxMode(HtmlService.SandboxMode.NATIVE)}//function test(){var out=JSON.stringify(avmReportGetLink("5115 Longfellow Street, Los Angeles, CA, 90042"));Logger.log(out);print(out)}//"5115 Longfellow Street, Los Angeles, CA, 90042"//"12204 12th Ave NW, Seattle, WA 98177"
+function avmReportServeData_batch_ss2ss(id){//@param{string} id — Google Sheets spreadsheet ID // Full property addresses in column 1 // Column 1 has header
+    var AR=["Estimate","Low","High"]
+	  , sheet=SpreadsheetApp.openById(id).getSheets()[0],i=1,returnCellCount=AR.length,range,addy,out,empty,lena,lene;
+    sheet.getRange(1,2,1,returnCellCount).setValues([AR]).setHorizontalAlignment("center");
+    sheet.getRange(1,1,sheet.getLastRow(),1).setHorizontalAlignment("left")
+    sheet.getRange(1,2,sheet.getLastRow(),returnCellCount).setNumberFormat("$#,##0_);($#,##0)").setHorizontalAlignment("right");
+    while(true){
+        range=sheet.getRange(++i,1,1,returnCellCount+1);
+        addy =range.getCell(1,1).getValue();
+        empty=range.getCell(1,2).getValue();
+        lena =addy .length||addy;
+        lene =empty.length||empty;
+        if(lena&&lene){continue}else if(lena&&!lene){
+            try{out=avmReportServeData(addy).dataTable[1];out.shift()}catch(e){out=["X","X","X"];Logger.log("Error Jh2sR: %s",e.message)} // ob.dataTable[1]=["Median",est,low,high]
+		 // out.push(); // Add additional data fields in the future here. Also adjust AR=["Estimate","Low","High"] accordingly
+            sheet.getRange(i,2,1,returnCellCount).setValues([out]);Utilities.sleep(5000)
+        }else{break}}return} // function test(){avmReportServeData_batch_ss2ss("1YH5s11C2K3QUEOeVuBeEv7zCoHDRX7NfFh5dHfB9Tz8")}
+function avmReportServeData(ob/*addy*/){ob.exit=1;return LibraryjsAvm.avmReport(ob/*{addy:addy,exit:1}*/)} // function test(){Logger.log(JSON.stringify(avmReportServeData("12420 SE 223rd Drive, Kent, WA 98031")))}
+function avmReportServeData2html(ob/*a*/){if(!ob.item/*a*/){ob={addy:ob}}//@return{object} //@param{string} ob.a address //@param{string} ob.type Use "HTML" to return HtmlOutput; test ob.type!="HTML" if called by GAS .html file because HtmlOutput is not a legal return type to client-side function; So, type:"HTML" is called by non-GAS .html page; Translated: if(Argenta)ob.type!="HTML"; if(DealDigger)ob.type=="HTML" 
+    /*  Deprecated code
+	var r=avmReportServeData(a),out=''
+         ; out +=   '<div class="col-xs-4 col-xs-offset-4">'
+         ; out +=       '<div class="panel panel-default xpanel-primary xpanel-success">'
+		 ; out +=   		'<div class="panel-heading"><abbr class="initialism" title="Automated Valuation Models">AVM</abbr>s</div>'
+		 ; out +=			'<div class="panel-body">'
+		 ; out +=				'<table class="table table-striped table-hover">'
+		 ; out +=					'<thead>'
+		 ; out +=						'<th>Source</th>'
+		 ; out +=						'<th>Estimate</th>'
+		 ; out +=						'<th>Low</th>'
+		 ; out +=						'<th>High</th>'
+		 ; out +=					'</thead>'
+		 ; out +=					'<tfoot>'
+		 ; out +=						'<tr>'
+		 ; out +=							'<td colspan="4">'
+		 ; out +=								'<div id="no-paging" xid="paging">&nbsp;</div>'
+		 ; out +=							'</td>'
+		 ; out +=						'</tr>'
+		 ; out +=					'</tfoot>'
+		 ; out +=					'<tbody>'
+		 ; out +=						'<tr>'
+		 ; out +=							'<td>Zillow</td>'
+		 ; out +=							'<td>$100,000</td>'
+		 ; out +=							'<td>$75,000</td>'
+		 ; out +=							'<td>$125,000</td>'
+		 ; out +=						'</tr>'
+		 ; out +=					'</tbody>'
+		 ; out +=				'</table>'
+		 ; out +=			'</div>'
+		 ; out +=		'</div>'
+		 ; out +=	'</div>'
+/*
+<div class="col-xs-4 col-xs-offset-4">
+	<div class="panel panel-default xpanel-primary xpanel-success">
+		<div class="panel-heading"><abbr class="initialism" title="Automated Valuation Models">AVM</abbr>s
+			<!--<span class="glyphicon xglyphicon-info-sign glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+			<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-hover">
+				<thead>
+					<th>Source</th>
+					<th>Estimate</th>
+					<th>Low</th>
+					<th>High</th>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="4">
+							<div id="no-paging" xid="paging">&nbsp;
+								<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<tr>
+						<td>Zillow</td>
+						<td>$100,000</td>
+						<td>$75,000</td>
+						<td>$125,000</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>		
+</div>
+*/
+    var FIND,REPL,hout,str,out={}
+	  ,                   t             =      HtmlService.createTemplateFromFile("result.html"         )
+  //  ;                   t.r           =      LibraryjsUtil.null2str(avmReportServeData(          a)   )  // Fails return to server if any value is null // So we apply null2str() method
+      ;                   t.r           =      LibraryjsUtil.null2str(avmReportServeData(ob/*{item:a}*/))  // Converted argument from address string to object containing item string (objectId) // ob.item=<string> if DealDigger // ob.addy=<string> if Argenta
+	  ;                   out.data      =      t.r                                                         // Fails if any value is null // Undefined is okay // So we apply null2str() method
+	  ; if(ob.type=="HTML"){ // Incoming request from DealDigger
+						; FIND          =     "google.setOnLoadCallback(drawChart_load);"
+						; REPL          =      FIND
+						; REPL         +=     '\n function drawChart_load(){'
+                        ; REPL         +=     '\n new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable('+ JSON.stringify(t.r.dataValue) +'),'+JSON.stringify(t.r.options) +')'
+                        ; REPL         +=     '\n;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable('+ JSON.stringify(t.r.dataAttr ) +'),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}})'
+						; REPL         +=     '\n}'
+	                    ; str           =      HtmlService.createHtmlOutputFromFile(/*"sandbox.html"*/"home.html").getContent().replace(FIND,REPL);
+						; hout          =      HtmlService.createHtmlOutput()
+						; hout                .append(str.match(/^((\s|\S)+<div class="container container-fluid">)/m)[0])
+						; hout                .append('<br><br><br><div class="col-xs-12 col-xs-offset-0" id="result">')
+						; hout                .append(t.evaluate().getContent()) //.setSandboxMode(HtmlService.SandboxMode.IFRAME) (added at call)
+						; hout                .append('</div>')
+	                    ; hout                .append(str.match(/(<\/div>\n<script (\s|\S)+)$/m)[0])
+	                    ;  out.htm      =      hout                    // Return type is HtmlOutput // Logger.log/print2doc("line 206 hout: " + hout.getContent());
+	   }else            {  out.result   =    t.evaluate().getContent() // .getContent() to return string because HtmlOutput is not a legal return type to client side .html file in GAS
+                                           // Wrong file // .replace(/(google.setOnLoadCallback\(drawChart_load(\s|\S)+function drawChart\()/m,"function drawChart(") // Deletes the drawChart_load() function because the following strings throw errors: 1. "<?=r.dataValue?>" and 2. "new google.visualization.BarChart..."
+	   }return             out
+	//  avmReportServeData(a).dataBar//*NO.fact//*GO.link//GO.dataGauge//GO.dataTable//*NO.dataBar//GO.options
+	 /* { array   : 
+					  [ [ 'Year' , 'Sales' , 'Expenses' ]
+					  , [ '2004' ,   1000  ,       400  ]
+					  , [ '2005' ,   1170  ,       460  ]
+					  , [ '2006' ,    660  ,      1120  ]
+					  , [ '2007' ,   1030  ,       540  ] ]
+		  , options : {title:"Sales",vAxis:{title:"Year",titleTextStyle:{color:"blue"}}}}* /}*/}//HtmlService.createTemplateFromFile("result.html").evaluate().getContent()}//HtmlService.createHtmlOutputFromFile("result.html").setSandboxMode(HtmlService.SandboxMode.NATIVE).toString()}//out}
+function getEmailReport(){LibraryjsUtil.getEmailReport()}
+-------------------------------------- form.html (a template kit for implementing forms; must be unpacked) --------------------------------------
+function processForm(formObject){var formBlob=formObject.myFile,driveFile=DriveApp.createFile(formBlob);return driveFile.getUrl()} // Goes in Code.gs // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+<form id="myForm"><input name="myFile" type="file"><input type="button" value="Submit" onclick="google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()"></form><div id="output"></div><script>function updateUrl(url){document.getElementById("output").innerHTML='<a href="'+url+'">Got it!</a>'}</script><!--Goes in index.html; Reference: https://developers.google.com/apps-script/guides/html/communication#forms-->
+-------------------------------------- signup.html -------------------------------------- 8/24/2014, 8/26/2014 To add features, see file: Bootstrap_Argenta_Signup (Undeprecated) Features: info and question glyphs, formatted tooltips and popovers, iframe for multiple pages on single Google Sites page
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+	    html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    */  input    {padding:7px 10px;border-radius:5px;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+    </style>
+</head>
+<body><h1>Agents signup here</h1>
+    <form id="myForm" class="form-inline" xclass="form-horizontal"> <!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+        <!--<fieldset><legend>Company information</legend>-->
+		<div class="well"><h2 class="text-left">Registration Form <small>for agents to provide BPO services</small></h2>
+		<div class="well"><h4 class="text-left">Your Contact Details</h4>
+		    &nbsp;&nbsp;&nbsp;<input type="text" id="email" name="email" placeholder="Email" style="width:200px" title="Example: janedoe@example.com">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="name"  name="name"  placeholder="Name"  style="width:200px" title="Example: Jane Doe">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="phone" name="phone" placeholder="Phone" style="width:100px" title="Example: 2125551212">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="zip"   name="zip"   placeholder="Zip"   style="width: 70px" title="Example: 02139">
+		</div>
+		<!--</fieldset><fieldset><legend>Pricing</legend>-->
+		<div class="well"><h4 class="text-left">BPO Pricing</h4>
+		      &nbsp;&nbsp;&nbsp; Zone 1
+		          <label class="sr-only" for="radius1">Radius</label><input type="text" size="1" id="radius1" name="radius1" placeholder="Miles" title="Radius in miles for zone 1. Example: 5">
+                  <label class="sr-only" for="price1" >Price </label><input type="text" size="1" id="price1"  name="price1"  placeholder="Price" title="Price in dollars for zone 1. Example: 20">
+		      &nbsp;&nbsp;&nbsp; Zone 2
+		          <label class="sr-only" for="radius2">Radius</label><input type="text" size="1" id="radius2" name="radius2" placeholder="Miles" title="Radius in miles for zone 2. Example: 5">
+                  <label class="sr-only" for="price2" >Price </label><input type="text" size="1" id="price2"  name="price2"  placeholder="Price" title="Price in dollars for zone 2. Example: 20">
+		      &nbsp;&nbsp;&nbsp; Zone 3
+		          <label class="sr-only" for="radius3">Radius</label><input type="text" size="1" id="radius3" name="radius3" placeholder="Miles" title="Radius in miles for zone 3. Example: 5">
+                  <label class="sr-only" for="price3" >Price </label><input type="text" size="1" id="price3"  name="price3"  placeholder="Price" title="Price in dollars for zone 3. Example: 20">
+		<!--</fieldset>-->
+		</div></div>
+    <input  type="button" class="btn btn-lg btn-block btn-primary" xclass="blue" onclick=           "myFunction()" value="Submit" xstyle="xtext-align:center;xbackground:#3e0901;xfont-size:100%;xcolor:white;xfont-weight:bold;xpadding:10px 20px;xborder-radius:999px;xdisplay:inline-block;xwidth:770px;" > <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -->
+    <input  type="button" class="btn btn-lg btn-block btn-default" xclass="grey" onclick="this.parentNode.reset()" value="Reset"  xstyle="xtext-align:center;xbackground:#3e0901;xfont-size:100%;xcolor:white;xfont-weight:bold;xpadding:10px 20px;xborder-radius:999px;xdisplay:inline-block;xwidth:770px;" >
+	</form><br><br><br>
+						<table class="table table-striped table-hover" xclass="CSSTableGenerator-gray">
+                        <thead><th>Field A</th><th>Field B</th><th>Field C</th></thead>
+						<tbody>
+						<tr>
+						  <td>100</td>
+						  <td>200</td>
+						  <td>300</td>
+						</tr>
+						<tr>
+						  <td>400</td>
+						  <td>500</td>
+						  <td>600</td>
+						</tr>
+						<tr>
+						  <td>700</td>
+						  <td>800</td>
+						  <td>900</td>
+						</tr>
+						</tbody>
+						</table>
+<div id="result"></div>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- Latest compiled and minified JavaScript --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js -->
+    <script type="text/javascript">
+//$(function(){$("[rel='tooltip']").tooltip();});
+//$(document).ready(function(){$("body").tooltip({selector:'[data-toggle=tooltip]'});});
+//$('[data-toggle="tooltip"]').tooltip({"placement":"top","html":false,"animation":"true","delay":{"show":0,"hide":0}}); // References: http://jsfiddle.net/LhZpX/ http://stackoverflow.com/questions/18410922/bootstrap-3-0-popovers-and-tooltips
+//$('#mark-info'    ).tooltip({"show":true,"placement":"left","title":"We let you specify three pricing zones around your center zip code. This optimizes your pricing flexibility to be more competitive for closer locations and recoup costs if you have to travel farther."});
+//$('#mark-question').tooltip({"show":true,"placement":"left","title":"Pricing zones are defined by their distance around your home zone specified in the section labelled Contact Details"});
+function onFailure(e){alert(e.message)}function onSuccess(str){document.getElementById("result").innerHTML=str}//iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){//document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receiveSignup(this.parentNode);this.parentNode.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parentNode” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" // Note: Use this.parentNode to retrieve all the fields in a form; to get only a single field, use something like: document.getElementById("address").value //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+</script></body></html>
+------------------------------------- sandbox.html -------------------------------------
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+        html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    * / input    {padding:7px 10px;border-radius:5px;margin-bottom:3px;xcolor-blue-button-primary:#428bca;xcolor-blue-button-hover:#3071a9;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+       <div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" style="border-left-style:solid;border-left-width:5px;border-left-color:#f0ad4e" role="alert"></div>
+    */ .alert        {border-left-width:5px ; border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+       .alert-default{border-left-color:#777   } /* User-created */
+       .alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+       .alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+       .alert-info   {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+       .alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+       .alert-danger {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */
+	</style>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','gauge']}]}"></script>
+	<script>
+	//	$(function(){$("#tabs").tabs()}); // jQueryUi // http://jqueryui.com/tabs/ // This function is called by onSuccess() handler using callback as argument
+		google.setOnLoadCallback(drawChart_load);
+     /* function drawChart_load(/*ob* /){
+		    var data = google.visualization.arrayToDataTable(/*JSON.stringify(* /JSON.parse(< ?=r.dataValue?>)/*)/*ob.dataBar/*array/ * /[
+			             [ 'Year' , 'Sales' , 'Expenses' ]
+			           , [ '2004' ,   1000  ,       400  ]
+			           , [ '2005' ,   1170  ,       460  ]
+			           , [ '2006' ,    660  ,      1120  ]
+			           , [ '2007' ,   1030  ,       540  ]
+			           ]/* * /);
+			var options = JSON.parse(< ?=r.options?>) /*ob.options/ * /{
+			                  title: 'Company Performance',
+			                  vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
+			                  }/* * /;
+			var chart = new google.visualization.BarChart(document.getElementById('chartBar_value'));
+			chart.draw(data, options);* /
+                               new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataValue?>)),JSON.parse(<?=r.options?>)) //intervals:{lineWidth:0,barWidth:0.8}
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataAttr ?>)),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+        }*/
+   	function drawChart(ob){ob.options.animation={startup:true,duration:500}
+		                      ;new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(ob.dataValue),ob.options)
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+ // Screen freezes at load // ;new google.visualization.Gauge   (document.getElementById("chartBar_attrDials" )).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{/*width:500,height:120,min:0,max:100,*/majorTicks:["0","10","20","30","40","50","60","70","80","90","100"],redFrom:0,redTo:30,yellowFrom:30,yellowTo:70,greenFrom:70,greenTo:100,minorTicks:2}) // Reference: https://developers.google.com/chart/interactive/docs/gallery/gauge
+							  ;}
+	</script>
+</head>
+<body>
+<div class="container container-fluid">
+<!--<div class="row">
+		<div style="width:65%;margin:auto;text-align:center">
+			<form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-- >
+				<input type="text" style="width:100%" id="address" name="address" placeholder="Enter address" title="e.g., 123 Main St, Los Angeles, CA 90210" onkeyup="updateLink()"> 
+			<br><a id="reportLink"><input type="button" class="btn btn-block btn-primary" xclass="blue|#428bca" value="Get free report" xonclick="myFunction()"></a> <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -- >
+			</form><!--<br><div id="result"></div>-- >
+		</div>
+	</div>-->
+	<div class="row">
+		<div class="col-xs-6 col-xs-offset-3">
+            <p style="text-align:center">
+			    <a href="https://docs.google.com/document/d/1PUoAaEo8tajVjiz4syxdimYLCapwEBXaA99MdIhnAyw/preview" target="_blank">
+                    <abbr title="Instant due diligence on any U.S. property. We only support Chrome. Click here to learn more.">
+				        <span class="glyphicon xglyphicon-search xglyphicon-info-sign glyphicon-question-sign" aria-hidden="true"></span>
+					    <!--<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>-->
+				    </abbr>
+				</a>
+            </p>
+            <form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+				<div class="input-group">
+				<!--<input type="button" class="btn xbtn-block xbtn-default btn-primary" xclass="blue|#428bca" value="Get free report!" xonclick="myFunction()">-->
+				<!--<span class="input-group-addon" id="search-addon1">
+						<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="20" xstyle="max-width:100%;max-height:100%">
+					</span>-->
+					<input type="text" class="form-control" id="address" name="address" placeholder="Enter address..." title="e.g., 123 Main St, Los Angeles, CA 90210" aria-describedby="search-addon1" xonkeyup="updateLink()"> <!-- Note: Must use "onkeyup," otherwise "onkeypress" or "onkeydown" captures input before character is registered; so last character is omitted; usually the last digit of the zip code. -->
+					<span class="input-group-btn">
+						<button class="btn xbtn-link btn-default xbtn-primary xbtn-block" xstyle="blue|#428bca" value="Get free report" onclick="myFunction()" type="button">
+							<!--Get free report-->
+							<!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+							<!--<img src="https://lh4.googleusercontent.com/-RKG7E06LFOA/VMSOGhj5lmI/AAAAAAAANc0/ft1gvN0pZmA/s800/search_white.png" style="margin:0px 18px">-->
+							<!--<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="18" style="margin:0px 15px;xmax-width:100%;xmax-height:100%">-->
+						    <span class="glyphicon glyphicon-search xglyphicon-info-sign glyphicon-question-sign" aria-hidden="true"></span>
+						</button>
+					</span>
+				</div>
+			</form><!--<br><div id="result"></div>-->
+		</div>
+	</div>
+	<br>
+	<div class="row">
+        <div class="col-xs-12 col-xs-offset-0" id="result"></div>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script><!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script>$(function(){$("#tabs").tabs()})</script>
+<script>
+//function updateLink(){document.getElementById("reportLink").href="https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00?a="+encodeURIComponent(document.getElementById("address").value)}
+function onFailure(e){alert(e.message)}
+function onSuccess(callback){document.getElementById("result").innerHTML=callback.result;$("#tabs").tabs();drawChart(callback.data)} // jQueryUi // http://jqueryui.com/tabs/ //DISREGARD THIS COMMENT... iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){document.getElementById("result").innerHTML="<div class='row' style='text-align:center'><img src='https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif' xsrc='https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif'><br><abbr title='If this takes longer than one minute to load, it might be a bug. Please email us a note at atlas.argenta@gmail.com to let us know. Please include the property address.'><span class="glyphicon xglyphicon-search xglyphicon-info-sign glyphicon-question-sign" aria-hidden="true"></span><!--<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>--></abbr></div>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).avmReportServeData2html(document.getElementById("address").value)}
+</script></body></html>
+------------------------------------- result.html -------------------------------------
+<div>
+	<?var i,j,len,keys,INFO='<span class="glyphicon xglyphicon-search glyphicon-info-sign xglyphicon-question-sign" aria-hidden="true"></span>'//"<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>" // Use <?!=INFO? >
+	,VAL_EXP="After Repair Value (ARV): Estimated full market value after all repairs.";
+	?>
+	<div class="well xwell-sm xwell-lg alert alert-default xalert-success xalert-info xalert-warning xalert-danger" xrole="alert">
+		<strong><?=r.fact.sa/*123 Main Street*/?></strong>, <?=r.fact.city/*Chicago*/?>, <?=r.fact.state/*Il*/?> <?=r.fact.zip/*60619*/?>
+		<big><span class="label label-default xlabel-primary xlabel-success xlabel-info xlabel-warning xlabel-danger">
+			<?=LibraryjsUtil.num2cur(r.fact.autoEst,0,"$","")/*$125,000*/?></span></big> <abbr title='<?=VAL_EXP?>'><?!=INFO?></abbr>
+	</div>
+	<div id="tabs" role="tabpanel"> <!-- References: http://getbootstrap.com/javascript/#tabs <style> | http://jqueryui.com/tabs/ <script> -->
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs xnav-pills" role="tablist">
+			<li role="presentation"  class="active"><a role="tab" data-toggle="tab" aria-controls="tabs-1"  href="#tabs-1"  >Value</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-2"  href="#tabs-2"  >Attributes</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-3"  href="#tabs-3"  >Facts</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-4"  href="#tabs-4"  >Links</a></li>
+		<!--<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-5"  href="#tabs-5"  >Comps</a></li>
+		<!--<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-6"  href="#tabs-6"  >Maps</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-7"  href="#tabs-7"  >Environmental</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-8"  href="#tabs-8"  >Financing</a></li>
+			<li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-9"  href="#tabs-9"  >Title</a></li>
+		 -->
+		    <li role="presentation" xclass="active"><a role="tab" data-toggle="tab" aria-controls="tabs-10" href="#tabs-10" >Batches</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane fade in   active" id="tabs-1">
+				<div class="page-header">
+					<h3>Value <span class="label label-default xlabel-primary xlabel-success xlabel-info xlabel-warning xlabel-danger">
+						<?=LibraryjsUtil.num2cur(r.fact.autoEst,0,"$","")/*$125,000*/?></span> <abbr title='<?=VAL_EXP?>'><small><?!=INFO?></small></abbr>
+					</h3>
+				</div>
+				<div class="col-xs-7 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading"><abbr xclass="initialism" xtitle="Automated Valuation Models">Chart</abbr>
+							<!--<span class="glyphicon xglyphicon-search xglyphicon-info-sign glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon xglyphicon-search  glyphicon-user"                             ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<div id="chartBar_value" style="width:100%" xstyle="width:900px;height:500px;"></div>
+						</div>
+					</div>
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading">More <abbr class="initialism" title="Automated Valuation Models">AVM</abbr>s
+							    <abbr title="Copy/paste address"><span class="glyphicon xglyphicon-info-sign glyphicon-question-sign"></span></abbr>
+							<!--<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Copy/paste address">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<ul class="nav nav-pills">
+								<li role="presentation" xclass="active" data-toggle="tooltip" data-placement="top" title="Must copy address then paste on link page">
+									<a href="<?=r.link.link_boa?>"      target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+									    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+										Bank of America
+									</a>
+								</li>
+								<li role="presentation" xclass="active" data-toggle="tooltip" data-placement="top" title="Must copy address then paste on link page">
+									<a href="<?=r.link.link_chase?>"    target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+									    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+										Chase
+									</a>
+								</li>
+								<li role="presentation" xclass="active" data-toggle="tooltip" data-placement="top" title="Must copy address then paste on link page">
+									<a href="<?=r.link.link_homesCom?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+									    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+										Homes
+									</a>
+								</li>
+							<!--<li role="presentation" xclass="active">
+									<a href="< ?=r.link.link_cityData?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">City-Data</a>
+								</li>-->
+							</ul>
+						</div>
+					</div>
+				<!--<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading"><abbr xclass="initialism" xtitle="Automated Valuation Models">Attributes</abbr>
+							<!--<span class="glyphicon xglyphicon-info-sign glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-- >
+						</div>
+						<div class="panel-body">
+							<div id="chartBar_attributes" style="width:100%" xstyle="width:900px;height:500px;"></div>
+						</div>
+					</div>-->
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading"><abbr xclass="initialism" xtitle="Automated Valuation Models">Data</abbr>
+							<!--<span class="glyphicon xglyphicon-info-sign glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover" style="margin:0">
+								<thead>
+								<!--<th>Source</th>
+									<th>Estimate</th>
+									<th>Low</th>
+									<th>High</th>-->
+								<?len=false;j=r.dataTable[0].reverse().length;while(j--){?>
+									<th <?if(len){?>style="text-align:center"<?}?>
+									   ><?=r.dataTable[0][j].split(" ")[0]?></th>
+								<?len=true}?>    
+								</thead>
+								<tfoot>
+									<tr>
+										<td colspan="4">
+											<div id="no-paging" xid="paging">&nbsp;
+												<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+								<tbody>
+								<!--<tr>
+										<td>Zillow</td>
+										<td>$100,000</td>
+										<td>$75,000</td>
+										<td>$125,000</td>
+									</tr>-->
+								<?i=r.dataTable.reverse().length-1;while(i--){?>
+									<tr><?len=false;j=r.dataTable[i].reverse().length;while(j--){?>
+										<td <?if(len){?>style="text-align:right"<?}?>
+										   ><?=function(){if(!r.dataTable[i][j]){return ""}
+														  else{return Boolean(parseInt(r.dataTable[i][j]))?LibraryjsUtil.num2cur(r.dataTable[i][j],0,"$",""):r.dataTable[i][j]}}()?>
+										</td><?len=true}?>
+									</tr>
+								<?}?>
+								</tbody>
+							</table>
+						<!--<div class="list-group">
+								<a xhref="#" class="list-group-item xactive disabled">
+									<h4 class="list-group-item-heading"><abbr title="If you are aware of any others, email us at atlas.argenta@gmail.com and let us know.">Additional Estimates</abbr></h4>
+									<p class="list-group-item-text"><abbr title="For convenience, copy address at top, click link, paste in address field.">Copy/paste address</abbr></p>
+								</a>
+								<a href="< ?=r.link.link_homesCom?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">Homes</a>
+								<a href="< ?=r.link.link_chase?>"             target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">Chase</a>
+								<a href="< ?=r.link.link_boa?>"               target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">Bank of America</a>
+								<a href="< ?=r.link.link_cityData?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">City-Data</a>
+							</div>-->            
+						</div>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane fade     xactive" id="tabs-2">
+				<div class="page-header">
+					<h3>Attributes <small></small></h3>
+				</div>
+				<div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info  alert-warning xalert-danger" role="alert">
+					<strong>Note:</strong> Chart description is <a class="alert-link" href="https://docs.google.com/document/d/1PUoAaEo8tajVjiz4syxdimYLCapwEBXaA99MdIhnAyw/preview#bookmark=id.rv0y7sr75h07" target="_blank">documented here</a>
+					        under <strong>Qualitative Attributes</strong>.
+				</div>
+				<div class="row">
+					<div id="chartBar_attributes" class="col-xs-12 col-xs-offset-0" xstyle="width:100%" xstyle="width:900px;height:500px;"></div>
+				</div>
+		<!--    <div class="row">
+					<div id="chartBar_attrDials"  class="col-xs-12 col-xs-offset-0" xstyle="width:100%" xstyle="width:900px;height:500px;"></div>
+				</div> Screen freezes at load. Deleting this HTML without deleting code stops error. -->
+				<div class="row">
+					<div class="col-xs-8 col-xs-offset-2">
+						<div class="list-group">
+							<a href="#" class="list-group-item xactive xlist-group-item-success  list-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Qualitative Attributes</h4>
+								<br>
+								<p class="list-group-item-text">
+									Our qualitative data attempts to analog the perception one gets from a drive by exterior inspection. We reduce the “location, location, location,” creed practiced by real estate investors into a single set of relative variables. One limitation is that current property condition can not be known using these tools. At present, a human still must determine that. (But we’re working on automating that too.) Future versions will allow users to order a visual inspection for a fee.
+								</p>
+								<br>
+								<p class="list-group-item-text">
+									The following variables comprise our qualitative description. Each is normalized to a score on a scale of 0 to 100. For each variable, a zero score is least desirable and 100 is most desirable. Homes that score above 50 for any given variable are generally above average and/or expected to outperform the market for that particular attribute.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Market</h4>
+								<p class="list-group-item-text">
+									Current health of a region’s housing market relative to other markets across the country. The Market Health Index is based on up to 10 metrics including those capturing the past and projected evolution of home values, the prevalence of foreclosures, foreclosure re-sales, negative equity and delinquency, as well as whether homes are currently selling faster or slower than in the past.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Value</h4>
+								<p class="list-group-item-text">
+									Relative rating of subject’s projected appreciation over a 10-year holding period.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Investor</h4>
+								<p class="list-group-item-text">
+									Relative rating of subject’s projected positive cash flow over a 10-year holding period.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Income</h4>
+								<p class="list-group-item-text">
+									Median income of subject’s neighborhood as a percentile of all U.S. taxpayer filings.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Nhood</h4>
+								<p class="list-group-item-text">
+									Normalized ratio of subject’s estimated value to median value of other properties in subject’s neighborhood. In this case, a lower estimated value of the subject is better and leads to a higher Nhood ratio. This is because, from an investment standpoint, it is better to own the least expensive house in the neighborhood. Not the most expensive. To put it a different way, a good neighborhood is an attractive attribute.
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Forecl</h4>
+								<p class="list-group-item-text">
+									Normalized ratio of foreclosures in subject’s neighborhood per 10,000 homes as compared to the national average. Fewer foreclosures are better. So, a gauge reading of 50 means the subject’s neighborhood has a foreclosure rate equal to the national average. A higher gauge reading means fewer foreclosures. 
+								</p>
+							</a>
+							<a href="#" class="list-group-item xactive xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger">
+								<h4 class="list-group-item-heading">Section</h4>
+								<p class="list-group-item-text">
+									Home value index of subject’s neighborhood as a percentile of neighborhoods surrounding it. Higher subject neighborhood value is better.
+								</p>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane fade     xactive" id="tabs-3">
+				<div class="page-header">
+					<h3>Facts <small></small></h3>
+				</div>
+				<div class="col-xs-12 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading">Source Data Comparison<!--<abbr xclass="initialism" xtitle="Automated Valuation Models">Data</abbr>
+							<!--<span class="glyphicon xglyphicon-info-sign glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover" xstyle="margin:0">
+								<thead>
+									<th style="text-align:left"  >Item</th>
+									<th style="text-align:center">Compiled</th>
+									<th style="text-align:center">Zillow</th>
+									<th style="text-align:center">Trulia</th>
+									<th style="text-align:center">Realtor</th>
+									<th style="text-align:center">HomeSnap</th>
+								</thead>
+								<tfoot>
+									<tr>
+										<td colspan="6">
+											<div id="no-paging" xid="paging">&nbsp;
+												<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+								<tbody>
+									<tr>
+										<td style="text-align:left"  >Status</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.status||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.realtor.status||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Use Code</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.useCode_alt||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.useCode.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.dataSet.typeDisplay.replace(/( Home)/,"")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Bedrooms</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.beds||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.bedrooms.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.beds||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.realtor.beds||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.homeSnap.beds||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Bathrooms</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.baths||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.bathrooms.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.baths||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.realtor.baths||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.homeSnap.baths||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Square feet</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.fact.sf)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.zillow.searchresults.response.results.result.finishedSqFt.Text)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.trulia.sqft)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.realtor.sqft)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.homeSnap.sqft)||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Lot size</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.fact.lot)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.zillow.searchresults.response.results.result.lotSizeSqFt.Text)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.numberWithCommas(r.avm.avm.dataset.trulia.lot)||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return Math.round(LibraryjsUtil.numberWithCommas(43560*r.avm.avm.dataset.homeSnap.lot),0)||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Year built</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.yearBuilt||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.yearBuilt.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.yrBuilt||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.homeSnap.yearBuilt||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Latitude</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.latitude||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.address.latitude.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.dataSet.latitude||r.avm.avm.dataset.trulia.locationData.latitude}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Longitude</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.longitude||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.address.longitude.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.trulia.dataSet.longitude||r.avm.avm.dataset.trulia.locationData.longitude}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Tax assessment</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.fact.taxVal,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.zillow.searchresults.response.results.result.taxAssessment.Text,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Tax expense</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.fact.taxExp,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.homeSnap.taxEst,0,"$","")||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Last sold price</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.fact.lastSoldPrice,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.zillow.searchresults.response.results.result.lastSoldPrice.Text,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.homeSnap.lastSalePrice,0,"$","")||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Last sold year</td>
+										<td style="text-align:right" ><?=function(){try{return r.fact.lastSoldYear||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.lastSoldDate.Text||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return r.avm.avm.dataset.homeSnap.lastSaleDate||""}catch(e){return ""}}()?></td>
+									</tr>
+									<tr>
+										<td style="text-align:left"  >Rent estimate</td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.zillow.searchresults.response.results.result.rentzestimate.amount.Text,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.zillow.searchresults.response.results.result.rentzestimate.amount.Text,0,"$","")||""}catch(e){return ""}}()?></td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" > </td>
+										<td style="text-align:right" ><?=function(){try{return LibraryjsUtil.num2cur(r.avm.avm.dataset.homeSnap.rentEst,0,"$","")||""}catch(e){return ""}}()?></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane fade     xactive" id="tabs-4">
+				<div class="page-header">
+					<h3>Links <small></small></h3>
+				</div>
+				<div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" role="alert">
+					<strong>Instruction:</strong> Copy/paste address for <strong>highlighted links</strong>.
+					<span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" title="Must copy address then paste on link page" aria-hidden="true"></span>
+				</div>
+			<!--<div class="col-xs-3 col-xs-offset-0">
+					<div class="list-group">
+						< ?keys=Object.keys(r.link);i=keys.length;while(i--){?>
+							<a href="< ?=r.link[keys[i]]?>" target="_blank" class="list-group-item xactive xdisabled">< ?=keys[i].split("_")[1]?></a>
+						< ?}?>
+					</div>
+				</div>-->
+				<div class="col-xs-3 col-xs-offset-0">
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading">Maps</h4>
+							<p class="list-group-item-text"><abbr title="Birdseye and street views">Virtual drive bys</abbr></p>
+						</a>
+						<a href="<?= r.link.link_googleMap?>"        target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign glyphicon-link" aria-hidden="true"></span>
+							Google
+						</a>
+						<a href="<?= r.link.link_zillow||r.avm.avm.dataset.zillow.searchresults.response.results.result.links.graphsanddata.Text?>"
+																	 target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign glyphicon-link" aria-hidden="true"></span>
+				            Zillow
+						</a>
+					</div>
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading">Comparables</h4>
+							<p class="list-group-item-text">Similar property sales</p>
+						</a>
+						<a href="<?= function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.links.comparables.Text||''}catch(e){return ''}}()?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign glyphicon-link" aria-hidden="true"></span>
+						    Zillow
+						</a>
+						<a href="<?= function(){try{return r.link.link_trulia                                                                   ||''}catch(e){return ''}}()?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign glyphicon-link" aria-hidden="true"></span>
+						    Trulia
+						</a>
+						<a href="<?=r.link.link_chase?>"             target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled" data-toggle="tooltip" data-placement="top" title="Must copy address then paste on link page">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+						    Chase
+						</a>
+						<a href="<?=r.link.link_boa?>"               target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled" data-toggle="tooltip" data-placement="top" title="Must copy address then paste on link page">
+						    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+						    Bank of America
+						    </a>
+					</div>            
+				</div>
+				<div class="col-xs-3 col-xs-offset-0">
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading">Real Estate</h4>
+							<p class="list-group-item-text">Rich property information</p>
+						</a>
+						<a href="<?= r.link.link_zillowdetails?>"     target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> Zillow</a>
+						<a href="<?= r.link.link_realtor?>"           target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> Realtor</a>
+						<a href="<?= r.link.link_trulia?>"            target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> Trulia</a>
+						<a href="<?= r.link.link_homeSnap?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> HomeSnap</a>
+						<a href="<?= r.link.link_homesCom?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Homes</a>
+						<a href="<?= r.link.link_zipRealty?>"         target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Zip Realty</a>
+						<a href="<?= r.link.link_propertyShark?>"     target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Property Shark</a>
+						<a href="<?= r.link.link_movotoRe?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Movoto</a>
+					<!--<a href="< ?=r.link.link_realEstate?>"        target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Real Estate</a>
+						<a href="< ?=r.link.link_homeGain?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Home Gain</a>
+				--> </div>            
+				</div>
+				<div class="col-xs-3 col-xs-offset-0">
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading">Demographics</h4>
+							<p class="list-group-item-text">Contextual location info</p>
+						</a>
+						<a href="<?= r.link.link_movotoDemo?>"        target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> Movoto</a>
+						<a href="<?= r.link.link_trulia?>"            target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled" xdata-toggle="tooltip" xdata-placement="top" xtitle="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign  glyphicon-link"                      aria-hidden="true"></span> Trulia</a>
+						<a href="<?= r.link.link_esriZip?>"           target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Esri</a>
+						<a href="<?= r.link.link_neighborhoodScout?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Neighborhood Scout</a>
+					<!--<a href="<?= r.link.link_cityData?>"          target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> City-Data</a>-->
+					<!--<a href="< ?=r.link.link_zipSkinny?>"         target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Zip Skinny</a>-->
+					</div>            
+				</div>
+				<div class="col-xs-3 col-xs-offset-0">
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading"><abbr class="initialism" title="Automated Valuaion Models">AVM</abbr>s</h4>
+							<p class="list-group-item-text"><abbr title="If you are aware of any others, email us at atlas.argenta@gmail.com and let us know.">More value estimates</abbr></p>
+						</a>
+						<a href="<?=r.link.link_homesCom?>"           target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Homes</a>
+						<a href="<?=r.link.link_chase?>"              target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Chase</a>
+						<a href="<?=r.link.link_boa?>"                target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> Bank of America</a>
+					<!--<a href="<?=r.link.link_cityData?>"           target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info  list-group-item-warning xlist-group-item-danger xactive xdisabled"  data-toggle="tooltip"  data-placement="top"  title="Must copy address then paste on link page"><span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign xglyphicon-link glyphicon-new-window" aria-hidden="true"></span> City-Data</a>-->
+					</div>            
+				</div>
+			</div>
+		<!--<div role="tabpanel" class="tab-pane fade     xactive" id="tabs-5">
+				<div class="page-header">
+					<h3>Comps <small></small></h3>
+				</div>
+				<div class="col-xs-4 col-xs-offset-4">
+					<div class="list-group">
+						<a xhref="#" class="list-group-item xactive disabled">
+							<h4 class="list-group-item-heading">Comparables</h4>
+							<p class="list-group-item-text">See similar property sales.</p>
+						</a>
+						<a href="< ?= function(){try{return r.avm.avm.dataset.zillow.searchresults.response.results.result.links.comparables.Text||''}catch(e){return ''}}()?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">Zillow</a>
+						<a href="< ?= function(){try{return r.link.link_trulia                                                                   ||''}catch(e){return ''}}()?>" target="_blank" class="list-group-item xlist-group-item-success xlist-group-item-info xlist-group-item-warning xlist-group-item-danger xactive xdisabled">Trulia</a>
+					</div>            
+				</div>
+			</div>
+		<!--<div role="tabpanel" class="tab-pane xactive" id="tabs-6">
+				<div class="page-header">
+					<h3>Maps <small></small></h3>
+				</div>
+				<p>Coming soon.</p>
+			</div>
+			<div role="tabpanel" class="tab-pane xactive" id="tabs-7">
+				<div class="page-header">
+					<h3>Environmental <small></small></h3>
+				</div>
+				<p>Coming soon.</p>
+			</div>
+			<div role="tabpanel" class="tab-pane xactive" id="tabs-8">
+				<div class="page-header">
+					<h3>Financing <small></small></h3>
+				</div>
+				<p>Coming soon.</p>
+			</div>
+			<div role="tabpanel" class="tab-pane xactive" id="tabs-9">
+				<div class="page-header">
+					<h3>Title <small></small></h3>
+				</div>
+				<p>Coming soon.</p>
+			</div>-->
+		    <div role="tabpanel" class="tab-pane fade     xactive" id="tabs-10">
+				<div class="page-header">
+					<h3>Batches <small></small></h3>
+				</div>
+				<div class="xwell xwell-sm xwell-lg alert xalert-success alert-info xalert-warning xalert-danger" role="alert">
+					<strong>Note:</strong> Let us analyze for you hundreds or thousands at a time.
+				</div>
+				<p> 
+				    <span class="glyphicon xglyphicon-search xglyphicon-info-sign xglyphicon-question-sign glyphicon-envelope" aria-hidden="true"></span>
+				    Email us at atlas.argenta@gmail.com to request a batch analysis. In the subject line, type &ldquo;<strong>Argenta Batch Analysis</strong>.&rdquo;
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+-------------------------------------- home.html --------------------------------------
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+	<!--<link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/cupertino/jquery-ui.css">-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+        html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    * / input    {padding:7px 10px;border-radius:5px;margin-bottom:3px;xcolor-blue-button-primary:#428bca;xcolor-blue-button-hover:#3071a9;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+       <div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" style="border-left-style:solid;border-left-width:5px;border-left-color:#f0ad4e" role="alert"></div>
+    */ .alert        {border-left-width:5px ; border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+       .alert-default{border-left-color:#777   } /* User-created */
+       .alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+       .alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+       .alert-info   {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+       .alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+       .alert-danger {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */
+	</style>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','gauge']}]}"></script>
+	<script>
+	//	$(function(){$("#tabs").tabs()}); // jQueryUi // http://jqueryui.com/tabs/ // This function is called by onSuccess() handler using callback as argument
+		google.setOnLoadCallback(drawChart_load);
+     /* function drawChart_load(/*ob* /){
+		    var data = google.visualization.arrayToDataTable(/*JSON.stringify(* /JSON.parse(< ?=r.dataValue?>)/*)/*ob.dataBar/*array/ * /[
+			             [ 'Year' , 'Sales' , 'Expenses' ]
+			           , [ '2004' ,   1000  ,       400  ]
+			           , [ '2005' ,   1170  ,       460  ]
+			           , [ '2006' ,    660  ,      1120  ]
+			           , [ '2007' ,   1030  ,       540  ]
+			           ]/* * /);
+			var options = JSON.parse(< ?=r.options?>) /*ob.options/ * /{
+			                  title: 'Company Performance',
+			                  vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
+			                  }/* * /;
+			var chart = new google.visualization.BarChart(document.getElementById('chartBar_value'));
+			chart.draw(data, options);* /
+                               new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataValue?>)),JSON.parse(<?=r.options?>)) //intervals:{lineWidth:0,barWidth:0.8}
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataAttr ?>)),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+        }*/
+   	function drawChart(ob){ob.options.animation={startup:true,duration:500}
+		                      ;new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(ob.dataValue),ob.options)
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+ // Screen freezes at load // ;new google.visualization.Gauge   (document.getElementById("chartBar_attrDials" )).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{/*width:500,height:120,min:0,max:100,*/majorTicks:["0","10","20","30","40","50","60","70","80","90","100"],redFrom:0,redTo:30,yellowFrom:30,yellowTo:70,greenFrom:70,greenTo:100,minorTicks:2}) // Reference: https://developers.google.com/chart/interactive/docs/gallery/gauge
+							  ;}
+	</script>
+</head>
+<body>
+<div class="container container-fluid">
+<!--<div class="row">
+		<div style="width:65%;margin:auto;text-align:center">
+			<form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-- >
+				<input type="text" style="width:100%" id="address" name="address" placeholder="Enter address" title="e.g., 123 Main St, Los Angeles, CA 90210" onkeyup="updateLink()"> 
+			<br><a id="reportLink"><input type="button" class="btn btn-block btn-primary" xclass="blue|#428bca" value="Get free report" xonclick="myFunction()"></a> <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -- >
+			</form><!--<br><div id="result"></div>-- >
+		</div>
+	</div>-->
+	<div class="row">
+		<div class="col-xs-6 col-xs-offset-3">
+            <p style="text-align:center">
+			    <a href="https://docs.google.com/document/d/1PUoAaEo8tajVjiz4syxdimYLCapwEBXaA99MdIhnAyw/preview" target="_blank">
+                    <abbr title="Instant due diligence on any U.S. property. We only support Chrome. Click here to learn more.">
+						<span class="glyphicon xglyphicon-search glyphicon-info-sign xglyphicon-question-sign xglyphicon-link" aria-hidden="true"></span>
+					    <!--<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>-->
+					</abbr>
+				</a>
+            </p>
+            <form id="research" onSubmit="myFunction()"><!--References: http://stackoverflow.com/questions/7996572/making-a-submit-button-respond-to-hitting-enter-and-click https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+				<div class="input-group">
+				<!--<input type="button" class="btn xbtn-block xbtn-default btn-primary" xclass="blue|#428bca" value="Get free report!" xonclick="myFunction()">-->
+				<!--<span class="input-group-addon" id="search-addon1">
+						<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="20" xstyle="max-width:100%;max-height:100%">
+					</span>-->
+					<input type="text" class="form-control" id="address" name="address" placeholder="Enter address..." title="e.g., 123 Main St, Los Angeles, CA 90210" aria-describedby="search-addon1" xonkeyup="updateLink()"> <!-- Note: Must use "onkeyup," otherwise "onkeypress" or "onkeydown" captures input before character is registered; so last character is omitted; usually the last digit of the zip code. -->
+					<span class="input-group-btn">
+						<button class="btn xbtn-link btn-default xbtn-primary xbtn-block" xstyle="blue|#428bca" value="Get free report" onclick="myFunction()" type="button">
+							<!--Get free report-->
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<!--<img src="https://lh4.googleusercontent.com/-RKG7E06LFOA/VMSOGhj5lmI/AAAAAAAANc0/ft1gvN0pZmA/s800/search_white.png" style="margin:0px 18px">-->
+							<!--<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="18" style="margin:0px 15px;xmax-width:100%;xmax-height:100%">-->
+						</button>
+					</span>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+        <div class="col-xs-12 col-xs-offset-0" id="result"></div>
+    </div>
+</div>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!--<script src="//getbootstrap.com/dist/js/bootstrap.min.js"></script><!--<script src="https://googledrive.com/host/0B1LVOoV_2dFtRE9QbU5iem9JM0U"></script>-->
+<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script><!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<!--<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script>$(function(){$("#tabs").tabs()})</script>
+<script>
+//function updateLink(){document.getElementById("reportLink").href="https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00?a="+encodeURIComponent(document.getElementById("address").value)}
+function onFailure(e){alert(e.message)}
+function onSuccess(callback){document.getElementById("result").innerHTML=callback.result;drawChart(callback.data)} // jQueryUi // http://jqueryui.com/tabs/ //DISREGARD THIS COMMENT... iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){document.getElementById("result").innerHTML="<div class='row' style='text-align:center'><img src='https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif' xsrc='https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif'><br><abbr title='If this takes longer than one minute to load, it might be a bug. Please email us a note at atlas.argenta@gmail.com to let us know. Please include the property address.'><span class='glyphicon xglyphicon-search xglyphicon-info-sign glyphicon-question-sign' aria-hidden='true'></span><!--<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>--></abbr></div>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).avmReportServeData2html(document.getElementById("address").value)}
+</script></body></html>

@@ -1,0 +1,130 @@
+UNDEPRECATED: As of 8/26/2014, we decided to implement Bootstrap for the UI. This page will be the starter page for an independent page delivered via iframe to add the following features at a later date.
+    Feature set: 
+        1. Info and question glyphs
+		2. Formatted tooltips and popovers
+		3. iframe for multiple pages on single Google Sites page
+    The reason for going back to Bootstrap is because we discovered the following problems using the Google CSS Package:
+	    Google CSS problems:
+        1. Blocks style tags from working; must use inline CSS on each element
+        2. Buttons look better because the font is bold and smaller; somewhat sleeker design; however, mouseover effects do not contrast as much; plus there is optional formatting with Bootstrap
+        3. Can't add block level buttons (like we can in Bootstrap. Yay!)
+DEPRECATED. As of 8/24/2014 we are suspending full development using the Bootstrap platform (http://getbootstrap.com/) because there are too many compatibility issues (problems) with Google Sites and Google Apps Script to rely exclusively on Bootstrap as our only CSS/styling solution.
+    To wit: 1. The script tags (e.g., $('[data-toggle="tooltip"]').tooltip(...)) don't work in GAS. They appear to be scrubbed using the GAS sanitizer.
+            2. The disabled script tags cause the tooltips not to work.
+		    3. The submit buttons don't work. I.e., they do not properly pass the form to the server.
+		       a. To even work at all, the non-working script functions (beginning with "$") must be commented out.
+		       b. Then only null values are sent to the server.
+		    4. There are multiple formatting problems.
+		       a. The spacing between text fields in the contact details section appears random. And there is no space between the name and phone fields.
+		       b. We can not get a proper spacing on the pricing box in zones 1-3.
+    Conclusion: 
+        1. I tried using an <iframe> to circumvent GAS sanitation
+		2. I was going to suspend Bootstrap altogether and go with Google CSS exclusively; but Google CSS has holes; it does not support, say, tables, for example.
+		3. We will proceed by trying to combine Bootstrap with the Google CSS Package <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+	    html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        input    {color:#3e0901;xheight:100px;font-size:150%;padding:15px 30px;border:5px solid #3e0901;border-radius:999px;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	 */ sup      {font-style:italic;text-decoration:underline}
+    </style>
+</head>
+<body><h1>Agents signup here</h1>
+    <form id="form" class="form-inline" xclass="form-horizontal"> <!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+        <!--<fieldset><legend>Company information</legend>-->
+		<div class="well"><h2 class="text-left">Registration Form <small>for agents to provide BPO services</small></h2>
+		<div class="well"><h4 class="text-left">Your Contact Details</h4>
+		<div class="row">
+		          <div class="col-xs-3"><input class="form-control" type="text" size="20" id="email" name="email" placeholder="Email" data-toggle="tooltip" title="Example: janedoe@example.com">
+            </div><div class="col-xs-2"><input class="form-control" type="text" size="20" id="name"  name="name"  placeholder="Name"  data-toggle="tooltip" title="Example: Jane Doe">
+            </div><div class="col-xs-2"><input class="form-control" type="text" size="6"  id="phone" name="phone" placeholder="Phone" data-toggle="tooltip" title="Example: 2125551212">
+            </div><div class="col-xs-2"><input class="form-control" type="text" size="1"  id="zip"   name="zip"   placeholder="Zip"   data-toggle="tooltip" title="Example: 02139">
+		</div><span class="glyphicon glyphicon-info-sign" id="mark-info"></span></div></div>
+		<!--</fieldset><fieldset><legend>Pricing</legend>-->
+		<div class="well"><h4 class="text-left">BPO Pricing</h4>
+		<div class="well well-sm"><h5 class="text-left">Zone 1 <span class="glyphicon glyphicon-question-sign" id="mark-question"></span></h5><div class="row"><div class="col-xs-4">
+		            <div class="form-group"><label class="sr-only" for="radius1">Radius</label>
+		                <div class="input-group">
+                            <span class="input-group-addon">Within a</span>
+		                <input class="form-control" type="text" size="1" id="radius1" name="radius1" placeholder="miles" title="Radius in miles for zone 1. Example: 5">
+                            <span class="input-group-addon">mile radius,</span></div>
+        </div></div><div class="form-group"><label class="sr-only" for="price1" >Price </label><div class="col-xs-5">
+		                <div class="input-group">
+                            <span class="input-group-addon">I charge, $</span>
+		                <input class="form-control" type="text" size="1" id="price1"  name="price1"  placeholder="dollars" title="Price in dollars for zone 1. Example: 20">
+                            <span class="input-group-addon"><sup>.00</sup> per BPO.</span></div>
+		</div></div></div></div>
+		<div class="well well-sm"><h5 class="text-left">Zone 2 <span class="glyphicon glyphicon-question-sign" id="mark-question"></span></h5><div class="row"><div class="col-xs-4">
+		            <div class="form-group"><label class="sr-only" for="radius2">Radius</label>
+		                <div class="input-group">
+                            <span class="input-group-addon">Within a</span>
+		                <input class="form-control" type="text" size="1" id="radius2" name="radius2" placeholder="miles" title="Radius in miles for zone 2. Example: 10">
+                            <span class="input-group-addon">mile radius,</span></div>
+        </div></div><div class="form-group"><label class="sr-only" for="price2" >Price </label><div class="col-xs-6">
+		                <div class="input-group">
+                            <span class="input-group-addon">I charge, $</span>
+                        <input class="form-control" type="text" size="1" id="price2"  name="price2"  placeholder="dollars" title="Price in dollars for zone 2. Example: 25">
+                            <span class="input-group-addon"><sup>.00</sup> per BPO.</span></div>
+		</div></div></div></div>
+		<div class="well well-sm"><h5 class="text-left">Zone 3 <span class="glyphicon glyphicon-question-sign" id="mark-question"></span></h5><div class="row"><div class="col-xs-4">
+		            <div class="form-group"><label class="sr-only" for="radius3">Radius</label>
+		                <div class="input-group">
+                            <span class="input-group-addon">Within a</span>
+		                <input class="form-control" type="text" size="1" id="radius3" name="radius3" placeholder="miles" title="Radius in miles for zone 3. Example: 15">
+                            <span class="input-group-addon">mile radius,</span></div>
+        </div></div><div class="form-group"><label class="sr-only" for="price3" >Price </label><div class="col-xs-7">
+		                <div class="input-group">
+                            <span class="input-group-addon">I charge, $</span>
+                        <input class="form-control" type="text" size="1" id="price3"  name="price3"  placeholder="dollars" title="Price in dollars for zone 3. Example: 30">
+                            <span class="input-group-addon"><sup>.00</sup> per BPO.</span></div>
+		<!--</fieldset>-->
+		</div></div></div></div></div>
+    <input  type="submit" class="btn  btn-default xbtn-primary xbtn-large" onclick="myFunction()" value="Save" />
+    <button type="reset"  class="btn  btn-default xbtn-primary  btn-large" onclick="myFunction()">Reset</button>
+    <button type="submit" class="btn xbtn-default  btn-primary  btn-large" onclick="myFunction()">Submit</button>
+    <input  type="button" class="btn xbtn-default  btn-primary  btn-large" onclick="myFunction()" value="Submit" xstyle="background:#3e0901;font-size:100%;color:white;font-weight:bold;padding:10px 20px;border-radius:999px;display:inline-block;width:770px;"> <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -->
+	</form>
+						<table class="table table-hover table-striped">
+                        <thead><th>Field 1</th><th>Field 2</th><th>Field 3</th></thead>
+						<tbody>
+						<tr>
+						  <td>100</td>
+						  <td>200</td>
+						  <td>300</td>
+						</tr>
+						<tr>
+						  <td>400</td>
+						  <td>500</td>
+						  <td>600</td>
+						</tr>
+						<tr>
+						  <td>700</td>
+						  <td>800</td>
+						  <td>900</td>
+						</tr>
+						</tbody>
+						</table>
+<div id="result"></div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- Latest compiled and minified JavaScript --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js -->
+<script type="text/javascript">
+//$(function(){$("[rel='tooltip']").tooltip();});
+  $(document).ready(function(){$("body").tooltip({selector:'[data-toggle=tooltip]'});});
+  $('[data-toggle="tooltip"]').tooltip({"placement":"top","html":false,"animation":"true","delay":{"show":0,"hide":0}}); // References: http://jsfiddle.net/LhZpX/ http://stackoverflow.com/questions/18410922/bootstrap-3-0-popovers-and-tooltips
+  $('#mark-info'    ).tooltip({"show":true,"placement":"left","title":"We let you specify three pricing zones around your center zip code. This optimizes your pricing flexibility to be more competitive for closer locations and recoup costs if you have to travel farther."});
+  $('#mark-question').tooltip({"show":true,"placement":"left","title":"Pricing zones are defined by their distance around your home zone specified in the section labelled Contact Details"});
+function onFailure(e){alert(e.message)}function onSuccess(str){document.getElementById("result").innerHTML=str}//iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){//document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+  //google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receiveSignup(document.getElementById("form").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+    google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()}
+</script></body></html>

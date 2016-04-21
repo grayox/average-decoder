@@ -1,0 +1,74 @@
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #36752D; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 10px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #36752D), color-stop(1, #275420) );background:-moz-linear-gradient( center top, #36752D 5%, #275420 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#36752D', endColorstr='#275420');background-color:#36752D; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #36752D; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #275420; border-left: 1px solid #C6FFC2;font-size: 12px;border-bottom: 1px solid #C6FFC2;font-weight: normal; }.datagrid table tbody .alt td { background: #DFFFDE; color: #275420; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #36752D;background: #DFFFDE;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #36752D;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #36752D), color-stop(1, #275420) );background:-moz-linear-gradient( center top, #36752D 5%, #275420 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#36752D', endColorstr='#275420');background-color:#36752D; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #275420; color: #FFFFFF; background: none; background-color:#36752D;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+/*
+               <!--                                         Grey                                                              Blue                                                              Brown                                                             Green                                                             Purple                                                            Red                                                        -->
+Call         : <link rel="stylesheet" type="text/css" href="https://googledrive.com/host/0B1LVOoV_2dFtMEQxYks5SnY4UDQ" xhref="https://googledrive.com/host/0B1LVOoV_2dFtSEtlUmdQcEZWUEE" xhref="https://googledrive.com/host/0B1LVOoV_2dFtUnBXa242eGlpdzg" xhref="https://googledrive.com/host/0B1LVOoV_2dFtMXFxVFFqalRyNGs" xhref="https://googledrive.com/host/0B1LVOoV_2dFtOTlfTU9xQ1RueWM" xhref="https://googledrive.com/host/0B1LVOoV_2dFta1NwUVZheXR0ZFE"  />
+Color        : Green
+Row lines    : On #C6FFC2
+Source       : http://tablestyler.com/#
+Search terms : pretty html tables 
+This is a CSS template for a "pretty" HTML table.
+We found this sheet by searching Google using the terms: pretty html tables
+An alternate styled table can be found here: http://wptheming.com/downloads/simpletable/ < http://www.freshdesignweb.com/free-css-tables.html < Google: pretty html tables
+HTML:
+<div class="datagrid" style="margin:auto;xwidth:500px;width:50%">
+    <table>
+        <thead>
+	        <tr>
+	            <th>header</th>
+		        <th>header</th>
+		        <th>header</th>
+		        <th>header</th>
+	        </tr>
+	    </thead>
+        <tfoot>
+	        <tr>
+	            <td colspan="4">
+				    <div id="no-paging" xid="paging">&nbsp;
+		            <!--<ul>
+			                <li><a href="#"               ><span>Previous</span></a></li>
+			                <li><a href="#" class="active"><span> 1      </span></a></li>
+			                <li><a href="#"               ><span> 2      </span></a></li>
+                            <li><a href="#"               ><span> 3      </span></a></li>
+                            <li><a href="#"               ><span> 4      </span></a></li>
+                            <li><a href="#"               ><span> 5      </span></a></li>
+                            <li><a href="#"               ><span>Next    </span></a></li>
+			            </ul>-->
+		            </div>
+                </td>
+	        </tr>
+	    </tfoot>
+        <tbody>
+	        <tr>
+	            <td>data</td>
+	            <td>data</td>
+	            <td>data</td>
+	            <td>data</td>
+			</tr>
+            <tr class="alt">
+	            <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+	        </tr>
+            <tr>
+	            <td>data</td>
+		        <td>data</td>
+	            <td>data</td>
+	            <td>data</td>
+	        </tr>
+            <tr class="alt">
+	            <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+	        </tr>
+            <tr>
+		        <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+		        <td>data</td>
+	        </tr>
+        </tbody>
+    </table>
+</div>
+*/

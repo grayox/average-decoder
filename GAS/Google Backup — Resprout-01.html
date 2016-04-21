@@ -1,0 +1,406 @@
+<script>
+// Change Log:
+// v1. Working template for radio buttons, panes, tabs and modals — use this version home.html as future template; use repeater.html for repeater template - this also contains .navbar template
+// v1. Contained other examples of radio button attempts
+// v2. Added fully reduced / minimal height navbar; Deleted extraneous content including some tabs, panes and modals
+// v3. Added wizard from FuelUX; Key to this was to move class="fuelux" from <html> to internal <div> within modal to avoid css conflicts
+// v4. Modified FuelUX wizard to conform with actual business process instead of template;
+// v5. *NON-WORKING* Attempt to dynamically load and remove (with wizard modal) conflicting script; after moving it to <head>; <script type='text/javascript' src="//fuelcdn.com/fuelux/2.3.1/loader.min.js"></ script>
+// v5. *NON-WORKING* Reference: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml  Google Search Terms: dynamically load javascript // NOT WORKING // ABANDON THIS APPROACH
+// v6. Attempted to implement template from htmlTemplate-Wizard-02.html; .css and .js ...SUCCESS! The key was to replace <label><input type="radio"> with <button ...>
+// v7. Wizard Forms: 1. add functionality 2. improve look/feel
+// -------------------------------------- Code.gs --------------------------------------
+// JSON visualization | viewer: http://chris.photobooks.com/json/default.htm
+// function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
+// Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
+function auth    (){}
+function timer   (){Logger.log(new Date().getTime())}//1388228703613
+function backup  (){var desc="Argenta™ Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print_dbScript(){var desc="Argenta™ Print — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"note"});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"TaxLienExchange Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function size    (){var db=ScriptDb.getMyDb();Logger.log(/*ScriptDb.getMyDb()*/db.query({}).getSize());}
+function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
+function showOne (){Logger.log(/*Utilities.jsonStringify*/JSON.stringify(ScriptDb.getMyDb().query({item:"eXjKqn1"/*/table:"note"/* /"user",user:"atlaslive@gmail.com",seller:true/*,city:"test"*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function showAll (){var db=ScriptDb.getMyDb(),r,results=db.query({});while(results.hasNext()){r=results.next();Logger.log(/*Utilities.jsonStringify*/JSON.stringify(r));return arr}} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2fipwhwd75f9M6jkzvWk4TZmOzH2A4uRg"/*act*/)}
+function print2doc(str,proj,clas){var desc="Backup | "+proj+" | "+clas+" | timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id)}
+//function del     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({xtable:"note"/*,/*source:"fciEx_foo",* /table:db.not("report"),* /timestamp_posted:db.greaterThan(1388548425377),k:"8u0hjrtbd68s3hi1w9kl",/*"36sgd2m257w2j0sn5isa",* /"report"/* /"bid"/*"user"* /,xcity:"test"/*xseller:true,xuser* /,bidder:"atlaslive@gmail.com"*/});while(results.hasNext()){arr.push(results.next().getId());}db.removeByIdBatch(arr,false);} // Replaced: while(results.hasNext()){r=results.next();db.remove(r);}}
+//function mod     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({/*item* /city:true,/*db.not(db.anyValue())/*/xtable:"note"/*,pctLtv:db.between(0,1.1),lienPos:db.not(1)/*,/*use* /lienPos:db.anyOf(["1st"/*false,db.not(db.anyValue())/*"Hospitality"/*"Commercial"/*"Apt","Multifamily"* /])/*"Oth"/* /"bid"*/});while(results.hasNext()){r=results.next();try{r.pctLtv=Math.round(100*r.balCur/r.estValue)}catch(e){r.pctLtv="";Logger.log(e.message)}/*r.lienPos=1;/*LibraryjsUtil.stateConvert(r.state,"abbr");/*.use="X";/*"CRE";/*"MUL";/*r.city=LibraryjsUtil.toCaseTitle(r.city);/*r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));/*if(r.askPrice==""){r.askPrice=0}/* /r.remove=false;r.accepted=false;/*r.askRate=r.buyRate;r.askPrice=r.buyPts;* /r.bids=[];/*r.table="note";r.datePosted=new Date().getTime();* /var i=r.bids.length;while(i--){/*r.bids[i].timestamp=r.bids[i].time;* /r.bids[i].accepted=false;/*r.bids[i].target_id=r.getId();* /r.bids[i].time=""/* /if(r.bids[i].bidder=="atlaslive@gmail.com"){r.bids.splice(i,1)}* /db.save(r);*/arr.push(r);}db.saveBatch(arr,false)}
+//function xdoPost(e){ScriptDb.getMyDb().save(e.parameters);/*return;*/var out=ContentService.createTextOutput();out.setContent(JSON.stringify(e.parameters));return out;} // CreditReady: userId=2472, pswd=p@ssword, url=https://secure.progrexion.com/fsaffiliates/creditready/ // https://developers.google.com/apps-script/uiapp?hl=en#doGetParams // https://developers.google.com/apps-script/content_service?hl=en // Example: // <SCRIPT URL>?start=1325437200&end=1325439000;new Date(Number(request.parameters.start)*1000);new Date(Number(request.parameters.end)*1000));
+function  doPost(e){ // function xdoPost(e){return ContentService.createTextOutput("Hello World"/*"User says: "+JSON.stringify(e)*/)} // e.postData.getDataAsString()
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /* receive from fci */ "u2bmkg3mfkmwrxm0sc6p" : return receiveScrape (p,"fciEx"     ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from nmp */ "01ql19lrwaw5ow7svkti" : return receiveScrape (p,"noteMktPl" ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from ml  */ "yq6c90r2fcfrou9ag272" : return receiveScrape (p,"moolahList") ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+         default                                                 :                                       ; break;}}}
+// function xdoGet (e){return ContentService.createTextOutput("Hello World")}
+function  doGet (e){ // References : https://developers.google.com/apps-script/uiapp, https://developers.google.com/apps-script/uiapp#ServerHandlers
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /*                      */ "g4gt2rzwt3kx9evdtrm8" : var t= HtmlService.createTemplateFromFile("home");t.m=m;return HtmlService.createHtmlOutput/*FromFile*/(t.evaluate().getContent()).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycbxSuMqms70XslFJkP3NVBoEYMz2IwxzMhUq6uzYZSUIUiim2ZM/exec?k=g4gt2rzwt3kx9evdtrm8&m=g4300lhjbw7uzbq35lbl // Added URL parameter passed to HTML page
+        //  case   /*                      */ "g4gt2rzwt3kx9evdtrm8" : return HtmlService.createHtmlOutput/*FromFile*/(HtmlService.createTemplateFromFile("home").evaluate().getContent()               ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycbxSuMqms70XslFJkP3NVBoEYMz2IwxzMhUq6uzYZSUIUiim2ZM/exec?k=g4gt2rzwt3kx9evdtrm8 // .IFRAME is necessary to make glyphicons work so use this "nesting" approach
+    	//  case   /*                      */ "g4gt2rzwt3kx9evdtrm8" : return HtmlService.createTemplateFromFile  ("home.html"                                                                          ).evaluate()                                                     ;break; // .IFRAME is necessary to make glyphicons work so use above "nesting" approach
+            case   /*                      */ "60s6kgeyb91lkz128c9o" : return HtmlService.createHtmlOutputFromFile("repeater.html"                                                                      ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycbxSuMqms70XslFJkP3NVBoEYMz2IwxzMhUq6uzYZSUIUiim2ZM/exec?k=g4gt2rzwt3kx9evdtrm8
+	        case   /* table  serve         */ "hyg0hu5umfobawuzwi1f" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveTable           ( )) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+            case   /* table  receive       */ "owos3zj5e6xvcmu6lje1" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveTable         (p)) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+         default                                                     : break;}}
+	if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
+            case   "taxlienexchange"               : 
+					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"          : return HtmlService.createTemplateFromFile  (       "order.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "account"       : return HtmlService.createTemplateFromFile  (     "account.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "charts"        : return HtmlService.createTemplateFromFile  (       "chart.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-up"       : return HtmlService.createTemplateFromFile  (      "signUp.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-in"       : return HtmlService.createTemplateFromFile  (      "signIn.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "home"          : return HtmlService.createHtmlOutputFromFile(       "order.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+                         // case   "authorize"     : return authorize ();break;
+                         default                   :                    ;break;}}
+        //  case   "creditrepairnation"            : // acquire inventory
+		//			if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+        //                  case   "home"          : return HtmlService.createHtmlOutputFromFile(     "collect.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+		//  			 default                   :                    ;break;}}
+         default                                   : break;}}}
+function authorize(){return HtmlService.createHtmlOutput("<div align='center' style='color:#808080;font-family:verdana;color:orange;font-weight:bold;margin-top:15px;'>Authorization successful!<div style='color:#808080;font-size:smaller;font-weight:normal;'>You may now access all features</div><img src='https://lh5.googleusercontent.com/-a81AytXYq0Q/Umtn0FrFdhI/AAAAAAAAIyE/xCYArSNCR1k/s144/orange-check-mark.png' height='100'></div>")}
+//function test(){print2doc(JSON.stringify(DateNightMovieFinder.getFandango("98148")))}
+//function test(){print2doc(JSON.stringify(getFilmSwap("98148")))}
+//function receiveTable(p){var user=(Session.getActiveUser().getEmail())?Session.getActiveUser().getEmail():null;MailApp.sendEmail({name:"TaxLienExchange",to:ob.email,subject:"Your limit order has been filled",htmlBody:(""+p.item+","+p.price+","+p.volume+","+p.type")});if(user){ob.owner=user}/*ob.nameFirst=name[0];ob.nameLast=name[1];*/LibraryjsUtil.dbParse({verb:"post",project:"mojo",className:"invitation",ob:ob})} // Example: @return{objectId="CE05GdsyLR",createdAt=2014-07-16T06:45:19.526Z} // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+function orderSubmit(name,pos,tid){    LibraryjsUtil.dbParse({verb:"update",project:"filmSwap",className:"order",query:{movieTitleCodename:name,client:tid/*"atlaslive"*/},ob:{position:pos,movieTitleCodename:name,client:tid/*"atlaslive"*/}})
+						      //   if(!LibraryjsUtil.dbParse({verb:"count" ,project:"filmSwap",className:"order",query:{movieTitleCodename:name,position:pos,client:"atlaslive"}}).count)
+	                          //  {    LibraryjsUtil.dbParse({verb:"post"  ,project:"filmSwap",className:"order",ob   :{movieTitleCodename:name,position:pos,client:"atlaslive"}});return "Thank you for your order."}
+	                          //  else return "You already have an order matching those details."
+							      }
+function orderMatchArr(arr){//@return{array} Orders matching input array (excludes duplicates and user's own orders) //@param{array} Orders (usually all users orders)
+    var out=[],temp,j,user=cache2user().username/*Session.getActiveUser().getEmail()*/,i=arr.length;while(i--){temp=orderMatch(arr[i]);
+    j=temp.length;while(j--){if(temp[j]["username"/*"email"*/]!=user&&!LibraryjsUtil.queryArray(out,{objectId:temp[j]["objectId"]},"objectId").length){out.push(temp[j])}}}
+    return out}//function test(){var user=Session.getActiveUser().getEmail(),ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",query:{email:user,status:"Open"}}).results;Logger.log(JSON.stringify(orderMatchArr(ar)))}
+function orderMatch(ob){//ob=ob||{price:10,volume:5,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"}//@return{array or false} all open orders "matching" this order or false if no matches //@param{object} ob: the order that needs matching //function test(){Logger.log(JSON.stringify(orderMatch({yield:5.25,volume:5,type:"Buy",name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"})))} //function test(){Logger.log(JSON.stringify(orderMatch({yield:2,volume:5,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"})))}
+    var ar,q={},op=(ob.type=="Sell"/*"Buy"*/)?"$lte":"$gte";q[op]=ob.yield/*price*/;ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",query:{status:"Open",/*price*/yield:q,type:{"$ne":ob.type}},sortBy:"yield"}).results;return ar}//(ar.length>0)?ar:false}//Logger.log(ar)} // Reference: https://www.parse.com/docs/rest#queries
+function orderFill(ob){//For unmatched, new orders.//ob=ob||{price:3.6,volume:500,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"}//@return{void} "fills" all open orders "matching" this order //@param{object} ob: the order that needs matching
+    var bal=ob.volume,ar=orderMatch(ob)/*.results.sort(function(a,b){var x="price";return(a[x]-b[x])})*/,i=ar.length;if(ob.type=="Buy"){ar.reverse()}//Logger.log(JSON.stringify(ar)); // Reference: https://www.parse.com/docs/rest#queries
+    while(bal&&i--){                      ar[i].status               = "Pending"              ;
+                                      //  ar[i].counterpartyName     = ob.name                ;
+                                      //  ar[i].counterpartyPhone    = ob.phone               ;
+                                      //  ar[i].counterparty         = ob.objectId            ;
+                                          ar[i].counterparty/*Email*/= ob.email               ;
+                                          if(bal>=ar[i].volume){bal -= ar[i].volume           }
+                                          else                 {       ar[i].volume-=bal;bal=0}
+                                          LibraryjsUtil.dbParse({verb:"put" ,project:"taxLienExchange",className:"order",ob:ar[i],obid:ar[i].objectId})
+                   }if(bal){ob.volume=bal;LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"order",ob:ob                       })}}
+//function receive_signIn    (ob){var u=LibraryjsUtil.dbParse({verb:"get"  ,project:"taxLienExchange",className:"User",ob:ob});LibraryjsUtil.user2cache(u);                                          return u} // function test(){Logger.log(JSON.stringify(receive_signIn({username:"cooldude6",password:"p_n7!-e8"})))}                               // returns: {"email":"atlaslive@gmail.com","objectId":"oNweYCKVG3","sessionToken":"SCAEaM99PJTc9qbd1BWUSXkp2","username":"cooldude6"}
+//function receive_resetPw   (ob){var u=LibraryjsUtil.dbParse({verb:"reset",project:"taxLienExchange",className:"User",ob:ob})                                                                               } // function test(){Logger.log(JSON.stringify(receive_resetPw({email:"atlaslive@gmail.com"})))}                                           // returns: undefined
+//function receive_signUp    (ob){var u=LibraryjsUtil.dbParse({verb:"post" ,project:"taxLienExchange",className:"User",ob:ob});LibraryjsUtil.user2cache(u)             ;LibraryjsUtil.user2cache(ob);return u} // function test(){Logger.log(JSON.stringify(receive_signUp({username:"cooldude6",password:"p_n7!-e8",email:"atlaslive@gmail.com"})))}   // returns: {"objectId":"GNsC2EqFaC","sessionToken":"KSMjeVVDnBsx3pBerimoykjcA"}
+//function receive_userUpdate(ob){var u=LibraryjsUtil.dbParse({verb:"put"  ,project:"taxLienExchange",className:"User",ob:ob,obid:LibraryjsUtil.cache2user().objectId});LibraryjsUtil.user2cache(ob);return u} // function test(){Logger.log(JSON.stringify(receive_userUpdate({name:"x",phone:"y",company:"z",emailList:"a,b,c",obid:"jUEp6HTjUv"})))} // returns: {"updatedAt":"2014-12-18T02:55:59.117Z"}
+//function userUpdate_receive(ob){var u=Session.getUser().getEmail();/*LibraryjsUtil.dbParse("put","taxLienExchange","user",{email:u},{current:false});*/ob.email=u;return LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"user",ob:ob})}//ob.price=Number(ob.price);ob.volume=Number(ob.volume);
+function order_receive(ob){var AR=["yield","volume"],i=AR.length;while(i--){ob[AR[i]]=Number(ob[AR[i]])}ob.username=cache2user().username;ob.status="Open";orderFill(ob)}//ob.email=Session.getUser().getEmail();//Handled by orderFill(ob):return LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"order",ob:ob})}//ob.price=Number(ob.price);ob.volume=Number(ob.volume);
+function order_cancel (id){var user=cache2user().username/*Session.getActiveUser().getEmail()*/;LibraryjsUtil.dbParse({verb:"put",project:"taxLienExchange",className:"order",obid:id,ob:{status:"Cancelled",counterparty:user}})}
+function order_fill   (id){var user=cache2user().username/*Session.getActiveUser().getEmail()*/;LibraryjsUtil.dbParse({verb:"put",project:"taxLienExchange",className:"order",obid:id,ob:{status:"Pending"  ,counterparty:user}}) // For matched, existing orders. Contrasted with orderFill() which is for unmatched new orders.
+    }//MailApp.sendEmail(["a.handy@sofadvisory.com","atlaslive@gmail.com"],"Argenta! was called "+out.Argenta.apiCalls+" times","during the 24-hour period ending "+out.date/*,{name:"Atlas",htmlBody:""}*/)}
+function serveTable(){var r,ob=[]//,d=new Date(),t=d.getTime(),user=Session.getUser().getEmail(),ar=LibraryjsUtil.dbParse("get","taxLienExchange"/*"marketMaker"*/,"order"/*,{owner:user},{status:"Open"}*/).results.sort(function(a,b){var x="price";return(a[x]-b[x])})
+                                                                                                 ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",sortBy:"yield"}).results,i=ar.length,out={"totalResultsCount":i+1,"records":[]};while(i--){out.records[i]={};r=ar[i];
+	ob[i] = {
+		"nolink"                         : {
+				"item"                   : function(){try{return            r.objectId                              }catch(e){Logger.log(e.message);return "";}}() //
+			,	"email"                  : function(){try{return            r.email                                 }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"fill"                   : function(){try{return              false                                 }catch(e){Logger.log(e.message);return "";}}() //
+			,	"price"                  : function(){try{return                                r.yield             }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"priceStr"               : function(){try{return LibraryjsUtil.num2cur         (r.price,2)          }catch(e){Logger.log(e.message);return "";}}() //
+			,	"priceStr"               : function(){try{return            r.yield.toFixed(2)+"%"                  }catch(e){Logger.log(e.message);return "";}}() //
+			,	"status"                 : function(){try{return            r.status                                }catch(e){Logger.log(e.message);return "";}}() //
+			,	"datePosted"             : function(){try{return LibraryjsUtil.dateStrings2daysDiff(r.createdAt)    }catch(e){Logger.log(e.message);return "";}}() //
+			,	"dateFilled"             : function(){try{return LibraryjsUtil.dateStrings2daysDiff(r.updatedAt)    }catch(e){Logger.log(e.message);return "";}}() //
+			,	"type"                   : function(){try{return            r.type                                  }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
+			,	"volume"                 : function(){try{return                                r.volume            }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"volStr"                 : function(){try{return LibraryjsUtil.numberWithCommas(r.volume  )         }catch(e){Logger.log(e.message);return "";}}() //
+			,	"volStr"                 : function(){try{return LibraryjsUtil.num2cur         (r.volume,0)         }catch(e){Logger.log(e.message);return "";}}() //
+										   }
+	,	"link"		                     : {}
+	}
+	var keys=Object.keys(ob[i].nolink),z=keys.length;while(z--){out.records[i][keys[z]]=              ob[i].nolink[keys[z]]                                   }
+	    keys=Object.keys(ob[i].  link),z=keys.length;while(z--){out.records[i][keys[z]]='<a href="' + ob[i].  link[keys[z]] + '" target="_blank">&#10151;</a>'}//Logger.log(JSON.stringify(out.records[i]));
+	}return out}//Logger.log(JSON.stringify(out))}
+-------------------------------------- form.html (a template kit for implementing forms; must be unpacked) --------------------------------------
+function processForm(formObject){var formBlob=formObject.myFile,driveFile=DriveApp.createFile(formBlob);return driveFile.getUrl()} // Goes in Code.gs // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+<form id="myForm"><input name="myFile" type="file"><input type="button" value="Submit" onclick="google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()"></form><div id="output"></div><script>function updateUrl(url){document.getElementById("output").innerHTML='<a href="'+url+'">Got it!</a>'}</script><!--Goes in index.html; Reference: https://developers.google.com/apps-script/guides/html/communication#forms-->
+-------------------------------------- home.html --------------------------------------
+<!DOCTYPE html><html><!-- Transfer .fuelux class to interior elements to avoid conflicts eg., .navbar .modal etc. -->
+<head>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/bootstrap/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+<!--<link href="//fuelcdn.com/fuelux/2.3.1/css/fuelux.css" type="text/css" rel="stylesheet">
+  -->
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<meta http-equiv="content-type" content="text/html; charset=UTF-8"> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" href="https://lh5.googleusercontent.com/--7xW9k8_xTk/VRELjxM871I/AAAAAAAANlM/3rVAsmTvJHE/s144/movies2.png">
+	<title>FilmSwap&trade; &emdash; triple your theater traffic</title>
+<!--<link rel="stylesheet" type="text/css" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" type="text/css" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- To work, must be repositioned after main bootstrap .css -->
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"> <!-- Makes magic wizard wand icon work (located in wizard modal) -->
+    <link rel="stylesheet" type="text/css" href="//fuelcdn.com/fuelux/2.3/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+    <link rel="stylesheet" type="text/css" href="//fuelcdn.com/fuelux/2.3/css/fuelux-responsive.css">
+    <link rel="stylesheet" type="text/css" href="//googledrive.com/host/0B1LVOoV_2dFtNnZYdmlGNlF1SDQ" id="cssModBootstrap.css">
+	<style>
+	</style>
+</head>
+<body>
+<!--< ?
+var i,j,len,keys,lab;
+var pKey=m/*"g4300lhjbw7uzbq35lbl"*/,p=LibraryjsUtil.dbParse({verb:"get",project:"filmSwap",className:"projectProperties"}).results[0],u=p["theatersById"][p["theatersByParamKey"][pKey]];
+	//Switch from userName ID to u.tid //u.userName="atlaslive";
+var x,q=LibraryjsUtil.dbParse({verb:"get",project:"filmSwap",className:"order",query:{client:u.tid/*"atlaslive",movieTitleCodename:name,position:pos,*/}}).results,r=getFilmSwap(u/*.zip/*"98148"*/),show=r.shift(),len=r.unshift();r.reverse();i=q.length;while(i--){
+	x=LibraryjsUtil.queryArray(r,{movieTitleCodename:q[i].movieTitleCodename},"POSITION","FIRST")
+	;if(x){		                       r[x].pos=(q[i].client==u.tid/*userName*/)?q[i].position:0;
+				 if(q[i].position== 1){r[x].ctTake=r[x].ctTake?r[x].ctTake+1:1}
+			else if(q[i].position==-1){r[x].ctGive=r[x].ctGive?r[x].ctGive+1:1}}}
+?>-->
+<!-- Modal : User Account -->
+<div class="modal fade" id="myModal_account" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog xmodal-lg xmodal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel_account">
+					<a href="//example.com" xhref="< ?=u.theaterLink?>" target="_blank"><strong>Starbucks<!--< ?=u.theaterName?>--></strong></a>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<address>
+					<strong>Starbucks, Inc.</strong><br>
+					500 Burbank Ave, Suite 1300<br>
+					San Francisco, CA 94107<br>
+					<abbr title="Phone">P:</abbr> (123) 456-7890
+				</address>
+				<!--< ?=u.theaterAddyString?>-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal : Transaction Wizard -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog  modal-lg xmodal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h1 class="modal-title" id="myModalLabel_account">
+					Complete the Deal &nbsp;
+					<small>
+						<!-- <i class="fa fa-magic"></i> <!-- Icon requires header to include <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" type="text/css" rel="stylesheet"> -->
+						<i class="icon-magic"></i>
+						Transaction Wizard
+						<!--<small>(Demo Only)</small>-->
+					</small>
+				</h1>
+			</div>
+			<div class="modal-body">
+				<!-- Wizard -->
+				<div class="fuelux well xwizard-example">
+					<div id="MyWizard" class="wizard">
+						<ul class="steps">
+							<li data-target="#step1" class="active"><!--Step 1--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge badge-info">1</span><span class="glyphicon glyphicon-map-marker"          ></span><span class="chevron"></span></li>
+							<li data-target="#step2"               ><!--Step 2--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >2</span><span class="glyphicon glyphicon-edit xlist-alt xfile"></span><span class="chevron"></span></li>
+							<li data-target="#step3"               ><!--Step 3--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >3</span><span class="glyphicon glyphicon-time xhand-right"    ></span><span class="chevron"></span></li>
+						    <li data-target="#step4"               ><!--Step 4--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >4</span><span class="glyphicon glyphicon-plane xbarcode"      ></span><span class="chevron"></span></li>
+							<li data-target="#step5"               ><!--Step 5--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >5</span><span class="glyphicon glyphicon-globe"               ></span><span class="chevron"></span></li>
+						</ul>
+						<div class="actions">
+							<button class="btn btn-mini btn-prev"> <i class="icon-arrow-left"></i>Prev</button>
+							<button class="btn btn-mini btn-next" data-last="Finish">Next<i class="icon-arrow-right"></i></button>
+						</div>
+					</div>
+					<div class="step-content">
+						<div class="step-pane active" id="step1">
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-map-marker"></span>
+								&nbsp; 1. Confirm Address <small>(step 1 of 5)</small>
+							</h3><hr>
+							Indicate the address where you want your product shipped.
+						</div>
+						<div class="step-pane" id="step2">
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-edit xglyphicon-list-alt xglyphicon-file"></span>
+								&nbsp; 2. Promise to Ship <small>(step 2 of 5)</small>
+							</h3><hr>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+						</div>
+						<div class="step-pane" id="step3">
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-time xhand-right"></span>
+								&nbsp; 3. Wait for Counterparty <small>(step 3 of 5)</small>
+							</h3><hr>
+							Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+						</div>
+						<div class="step-pane" id="step4">
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-plane xglyphicon-barcode"></span>
+								&nbsp; 4. Ship <small>(step 4 of 5)</small>
+							</h3><hr>
+							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+						</div>
+						<div class="step-pane" id="step5">
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-globe"></span>
+								&nbsp; 5. Track <small>(step 5 of 5)</small>
+							</h3><hr>
+							Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+							<!--<a href="#" id="btnStep2">Go back to step 2.</a>-->
+						</div>
+					</div>
+					<br>
+					<input type="button" class="btn"             id="btnWizardPrev" value="Back">
+					<input type="button" class="btn btn-primary" id="btnWizardNext" value="Next">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					<span class="glyphicon glyphicon-remove"></span>
+					Close
+				</button>
+			<!--<button type="button" class="btn btn-primary">
+					<span class="glyphicon glyphicon-ok"></span>
+					I agree
+				</button>-->
+			</div>
+		</div>
+	</div>
+</div>
+<div class="navbar-xs"> <!-- Navbar -->
+	<div class="navbar-primary">
+		<nav class="navbar xnavbar-default navbar-inverse navbar-fixed-top xnavbar-static-top"> <!-- Reference: http://getbootstrap.com/examples/navbar-fixed-top/ -->
+			<div class="container xcontainer-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+					<a class="navbar-brand" href="#">Resprout&trade;</a> <!--<img height="15" src="https://lh5.googleusercontent.com/--7xW9k8_xTk/VRELjxM871I/AAAAAAAANlM/3rVAsmTvJHE/s144/movies2.png">-->
+					<p class="navbar-text" style="font-style:italic">
+						<!-- <i class="quote-left"></i> Icons appear not to work inside the .nav bar -->
+						Recycle for Rewards.
+					</p>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<!--<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+						<li><a href="#">Link</a></li>
+						<li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Separated link</a></li>
+								<li class="divider"></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul>
+						</li>
+					</ul>-->
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn xbtn-default btn-link btn-sm" data-toggle="modal" data-target="#myModal_account">
+								<span class="glyphicon xglyphicon-cog glyphicon-user" aria-hidden="true"></span>
+								<!--< ?=u.theaterName?>-->
+								Starbucks
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+<div class="jumbotron" style="background-color:#005B9A"> <!-- Jumbotron --> <!-- Colors | Alt #220066 | Reference: http://www.colorcombos.com/combotester.html?color0=005B9A&color1=0191C8&color2=74C2E1&color3=8C8984 -->
+	<div class="container">
+		<h1 style="color:white">
+			<span style="font-family:Georgia,serif;font-weight:bold">Resprout&trade;</span>
+			<small style="color:#ffcc00">Recycle for Rewards.</small>
+			<a class="btn xbtn-primary btn-default btn-lg" href="https://docs.google.com/document/d/1k2rdAyUwT2dhrzv15fodif4Pj5pXVxSmZPwJd3_0Nrk/preview" target="_blank" role="button">Learn more</a>
+		</h1>
+        <p style="color:#cccccc">
+			A recycling game that increases activity in your customer loyalty programs.
+			<span style="font-style:italic;font-family:Georgia,serif;color:#ffcc00">&ldquo;Save the planet. Save the world.&rdquo;</span>
+		</p>
+		<!--<p><a class="btn xbtn-primary btn-default btn-lg" href="//example.com" target="_blank" role="button">Learn more</a></p>-->
+	</div>
+</div>
+<div class="container container-fluid"> <!-- Main Body -->
+	<div class="col-xs-6 col-xs-offset-3">
+		<div class="panel panel-default xpanel-primary xpanel-success">
+			<div class="panel-heading">Positioning Statement</div>
+			<div class="panel-body">
+				<p class="newspaper">Resprout is the mobile application that transforms people&rsquo;s recycling behavior into a social game and provides a tradable currency to motivate increased activity in customer loyalty/reward programs.</p>
+				<p style="text-align:center">	
+					<img src="https://lh5.googleusercontent.com/-vG8TLY6cdxE/VR98MgBnCRI/AAAAAAAANm0/7Lw2W4rhuyg/s800/7_6433444075.png">
+				<!--<img src="https://lh3.googleusercontent.com/-bOmheOef2bA/VR98MqPBpZI/AAAAAAAANm4/Ef1V857fN9Q/s800/8_8538923058.gif">-->
+					<button type="button" class="btn xbtn-default  btn-danger xbtn-sm" data-toggle="modal" data-target="#myModal">
+						<span class="glyphicon xglyphicon-ok xglyphicon-plus xglyphicon-exclamation-sign glyphicon-chevron-right"  aria-hidden="true"></span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--<footer class="footer" style="margin-top:300px">
+    <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <ul class="footer-links">
+            <li><a href="//example.com">Read the blog</a></li>
+            <li><a href="//example.com">Submit issues</a></li>
+            <li><a href="//example.com">Roadmap and changelog</a></li>
+        </ul>
+    </div>
+</footer>-->
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type='text/javascript' src="//fuelcdn.com/fuelux/2.3.1/loader.min.js"></script>
+<!--<script type='text/javascript' src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>--> <!--Included with <script src="...loader.js">-->
+<script>$(function(){$("#tabs").tabs()})</script>
+<script type='text/javascript'>
+//  $(document).ready(function() {
+        $('#MyWizard').on('change', function(e, data) {
+            console.log('change');
+            if (data.step === 3 && data.direction === 'next') {
+                // return e.preventDefault();
+            }
+        });
+        $('#MyWizard').on('changed', function(e, data) {
+            console.log('changed');
+        });
+        $('#MyWizard').on('finished', function(e, data) {
+            console.log('finished');
+        });
+        $('#btnWizardPrev').on('click', function() {
+            $('#MyWizard').wizard('previous');
+        });
+        $('#btnWizardNext').on('click', function() {
+            $('#MyWizard').wizard('next', 'foo');
+        });
+        $('#btnWizardStep').on('click', function() {
+            var item = $('#MyWizard').wizard('selectedItem');
+            console.log(item.step);
+        });
+        $('#MyWizard').on('stepclick', function(e, data) {
+            console.log('step' + data.step + ' clicked');
+            if (data.step === 1) {
+                // return e.preventDefault();
+            }
+        });
+        // optionally navigate back to 2nd step
+        $('#btnStep2').on('click', function(e, data) {
+            $('[data-target=#step2]').trigger("click");
+        });
+//  });
+</script>
+</body></html>

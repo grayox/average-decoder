@@ -1,0 +1,341 @@
+<!DOCTYPE html> <!-- jqxGrid25 — DealDigger1-03.html | Works with server v.667 — Obfuscate: http://techyzilla.blogspot.com/2012/09/better-javascript-obfuscating-method-to-protect-your-code.html Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm?(bootstrap)#demos/jqxgrid/bindingtojsonp.htm // Our file: jqxGrid2 | http://jsfiddle.net/Ynp5Z/70/ -->
+<html lang="en">
+<head>
+    <title id='Description'>Buyers Datatable</title>
+	<meta charset="utf-8"/><!-- ikreator.com/special-characters/ http://chesterwebconsulting.com/special-characters/ -->
+    <link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtVlJqWDhxUk9hcG8" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1" type="text/css" />
+	<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtNm0yVXh0Z1JQWkU" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<!--<script type="text/javascript">
+      google.load('visualization', '1', {packages: ['corechart']});
+    </script>
+<!--<script type="text/javascript">
+        function drawVisualization() {
+			var data = google.visualization.arrayToDataTable([
+				['Mon', 20, 28, 38, 45]   ,
+				['Tue', 31, 38, 55, 66]   ,
+				['Wed', 50, 55, 77, 80]   ,
+				['Thu', 77, 77, 66, 50]   ,
+				['Fri', 68, 66, 22, 15] ] , true), // Treat first row as data as well.
+			options={legend:'none'},chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+			chart.draw( data, options ); }
+        google.setOnLoadCallback(drawVisualization);
+    </script> -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://googledrive.com/host/0B1LVOoV_2dFtdGF1Q25haHVEMnM" 2xsrcx="https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=k7fvbixefxcc1fy4eqr5" 1xsrcx="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script> <!-- src replaced 2xsrc per "using Google Drive to host .css and .js" Reference: http://www.mybloggerlab.com/2013/04/how-to-host-css-or-javascript-files-in-blogger-using-google-drive.html --><!-- 1xsrc replaced 1xsrc because Chrome has enabled strict MIME type checking and xsrc serves MIME=text/plain instead of the required MIME=text/javascript. Therefore, moved to Gdocs host. Reference: https://code.google.com/p/chromium/issues/detail?id=180007 -->
+<!--<style type="text/css">.editedRow{color:#b90f0f;font-style:italic;}</style>
+    <style type="text/css"> /* Source: http://proto.io/freebies/onoff/ v.iOS4 | Search: switch button css | Also: http://ios-checkboxes.awardwinningfjords.com/ */
+		.onoffswitch {
+		position: relative; width: 90px;
+		-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		}
+		.onoffswitch-checkbox {
+			display: none;
+		}
+		.onoffswitch-label {
+			display: block; overflow: hidden; cursor: pointer;
+			border: 2px solid #666666; border-radius: 5px;
+		}
+		.onoffswitch-inner {
+			width: 200%; margin-left: -100%;
+			-moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+			-o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+		}
+		.onoffswitch-inner:before, .onoffswitch-inner:after {
+			float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+			font-size: 16px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+			-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+		}
+		.onoffswitch-inner:before {
+			content: "ON";
+			padding-left: 10px;
+			background-color: #6194FD; color: #FFFFFF;
+		}
+		.onoffswitch-inner:after {
+			content: "OFF";
+			padding-right: 10px;
+			background-color: #F8F8F8; color: #666666;
+			text-align: right;
+		}
+		.onoffswitch-switch {
+			width: 35px; margin: 0px;
+			background: #FFFFFF;
+			border: 2px solid #666666; border-radius: 5px;
+			position: absolute; top: 0; bottom: 0; right: 51px;
+			-moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+			-o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+			background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+			background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+			background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+			background-image: linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+			margin-left: 0;
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+			right: 0px; 
+		}
+	</style>-->
+	<script type="text/javascript">
+		function jsonp(datarow){ // Send bid/datarow to server // Use dynamic script injection + jsonp to simulate ajax/xhr/HTTP GET // Reference: http://cjihrig.com/blog/remote-ajax-calls-using-jsonp/
+			var act	   = "https://script.google.com/macros/s/AKfycbzVzJTjZKgrRwmComsKJdjOck9y4VIp-gymZLlJ186RWH2j7gc/exec?"/*Sandbox->* /"https://script.google.com/macros/s/AKfycbx_mgY9DdVYpBA3iGI2CYE0Aq3CbKrCrPQUJZu5S1unVUYaRP0/exec?"*/ + "k=2kpco3hg68eo6alklck6" + "&" + $.param({/*datarow*//*"db_id"*/"item":datarow./*db_id*/item,"MyBid":datarow.MyBid});
+			var head   = document.head;
+			var script = document.createElement( "script"                    );
+			    script           .setAttribute ( "src"   ,  act              );
+				script           .setAttribute ( "type"  , "text/javascript" ); // Reference: https://code.google.com/p/google-caja/issues/detail?id=1703 // Note: MIME type must be defined server side. This setAttribute() might be unnecessary?
+				head             .appendChild  (  script                     );
+				head			 .removeChild  (  script                     );
+		} // function jsonpCallback(data){document.getElementById("jsonp-response").textContent=JSON.stringify(data);} // jsonp("http://www.cjihrig.com/development/jsonp/jsonp.php?callback=jsonpCallback&message=Hello");
+        $(document).ready(function () {	
+			var theme     = "bootstrap"; // getDemoTheme();
+			var source    = {            // Prepare data
+					url		   	: 	"https://script.google.com/macros/s/AKfycbzVzJTjZKgrRwmComsKJdjOck9y4VIp-gymZLlJ186RWH2j7gc/exec?k=8a89179v6fzj7mnayhyp"//Sandbox*/"https://script.google.com/macros/s/AKfycbx_mgY9DdVYpBA3iGI2CYE0Aq3CbKrCrPQUJZu5S1unVUYaRP0/exec?k=5rmywv9gdz0e5mlnoeye" //k=9l4y95xhwwi8q2hbkslp serve_Realtor
+				,	datatype  	:	"jsonp"
+				,   datafields 	:	[ // For ZipRealty // When adding fields, add to (i) val array and (ii) here // 'type': possible values: "string", "date", "number", "bool" // "integer" "float"  // 'format' syntax correct, but not changing display; investigate (i) adding to data table and using hidden field, (ii) .jQuery or (iii) dataAdapter methods
+						{ name 	: "item"                    , type : "string"  				        }
+					,   { name 	: "address" 				, type : "string"  		                }
+				//	,   { name 	: "arv" 					, type : "number"  , cellsformat : "c0" } // Delete from Realtor.com source
+				//	,   { name 	: "dateAuction" 			, type : "string"  		                }
+					,	{ name 	: "MyBid"  		  			, type : "number"  , cellsformat : "c0" }
+					,   { name 	: "useCode"                 , type : "string"  		                }
+					,   { name 	: "notes"                   , type : "string"  		                }
+				//	,	{ name 	: "repairs"                 , type : "number"  , cellsformat : "c0" }
+				//	,   { name 	: "report"                  , type : "string"  				        }
+				//	,	{ name 	: "title"                   , type : "number"  , cellsformat : "c0" }
+				//	,   { name 	: "video"   				, type : "string"  				        }
+            		]
+				,	data	   	:	{
+						featureClass: "P"
+					,	style       : "full"
+					,	maxRows     : 50
+					}
+		            ,   updaterow   :   function(rowid, rowdata, commit){jsonp(rowdata);commit(true)} // Use dynamic script injection + jsonp to simulate ajax/xhr // Reference: http://cjihrig.com/blog/remote-ajax-calls-using-jsonp/
+				};
+    //      var editedRows = []; // array which keeps the indexes of the edited rows.
+            var dataAdapter = new $.jqx.dataAdapter(source,{ // Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxchart/index.htm#demos/jqxchart/javascript_chart_column_series.htm // Reference: http://www.jqwidgets.com/community/topic/bind-chart-with-json-fromajex-request/#post-22612
+					async			: true  // default=true
+				,	autoBind		: false // default=false
+				,	loadError		: function(xhr,status,error){alert('Error loading "' + source.url + '" : ' + error);}
+				});
+	//	    var cellclass = function(row,datafield,value,rowdata){for(var i=0;i<editedRows.length;i++){if(editedRows[i].index==row){return 'editedRow';}}};
+			var lab=[],val=[],t=0;
+	/* For Realtor.com
+	/*0* /	lab[t  ]	= [ "Toprow"  ,   "State"     		, "County"   		, "City"                , "Price"             , "Pct"              , "AVM"           , "StDev"            , "Pop"             , "IA"                 , "GRM"           , "PSF"                                                                                                                    ];
+			val[t++]	= [           ,   "state"     		, "county"   		, "city"                , "price"             , "pct"              , "avm"           , "stdev"            , "pop"             , "ia"                 , "grm"           , "psf"						  	                                                                                          ];
+	/*1* /	lab[t  ]	= [ "Facts"   , [ "photo"     		, ""         		, ""             		, ""                ] , [ "Address:"       , "Zip:"          , "Year Built:"      , "Lot:"			] , [ "&nbsp;"           , "Beds:"         , "Baths:"   , "Sqft:"      ]  	                                                                                          ];
+			val[t++]	= [           , [ "photo"     		, ""         		, ""             		, ""                ] , [ "sa"             , "zip"           , "yearBuilt"        , "lot"			] , [ ""                 , "beds"          , "baths"    , "sf"         ]  	                                                                                          ]; // Must match object property name from server. e.g. data.Zip // Also add to source.datafields.name
+	/*2* /	lab[t  ]	= [ "Data"    , [ "ARV Est:" 		, "Sold for:" 		, "Sold in:"     		, ""                ] , [ "Tax Value:"     , "Annual Taxes:" , ""                 , ""				] , [ "Estimated Rent:"  , ""              , ""         , ""           ]  	                                                                                          ];
+			val[t++]	= [           , [ "autoEst"			, "lastSoldPrice"  	, "lastSoldYear" 		, ""                ] , [ "taxVal"         , "taxAmt"        , ""                 , ""				] , [ "rent"             , ""              , ""         , ""           ]  	                                                                                          ];
+	/*3* /	lab[t  ]	= [ "Links"   , [ "Yahoo"    		, "Zillow"  		, "Z-Details"   		, "ZipRealty"       ] , [ "Eppraisal"      , "Realtor"       , "RealEstate"       , "HomeGain"		] , [ "Trulia"           , "Homes"         , "BofA"     , "Chase" 	   ] , [ "PropertyShark"      , "NeighborhoodScout"      , "ZipSkinny"       , "GoogleMaps" 	] ];
+			val[t++]	= [           , [ "link_yahoo"      , "link_zillow"		, "link_zillowdetails"	, "link_zipRealty"  ] , [ "link_eppraisal" , "link_realtor"  , "link_realEstate"  , "link_homeGain"	] , [ "link_trulia"      , "link_homesCom" , "link_boa" , "link_chase" ] , [ "link_propertyShark" , "link_neighborhoodScout" , "link_zipSkinny"  , "link_googleMap" ] ];
+	/*4* /	lab[t  ]	= [ "Agent"   , [ "ARV:"      		, "Due Dil:" 		, ""             		, ""                ] , [ "Repairs:"       , "Analysis:"     , ""                 , ""              ] , [ "Rent:"            , ""              , ""         , ""           ]  	                                                                                          ]; // go, no, offer, counter, contract, assign, send
+			val[t++]	= [           , [ "arv"       		, "dueDil"   		, ""             		, ""                ] , [ "rep"            , "analysis"      , ""                 , ""				] , [ "rent"             , ""              , ""         , ""           ]  	                                                                                          ];
+	/*5* /	lab[t  ]	= [ "Notes"																																																																				                                                                  ];
+			val[t++]	= [																																																																						                                                                  ];
+	/*6* /	lab[t  ]	= [ "Chart"																																																																		                                                                          ];
+			val[t++]	= [																																																																						                                                                  ];
+	// For ZipRealty
+	//0* /	lab[t  ]	= [ "Toprow"  ,   "State"     		, "County"   		, "City"                , "Price"             , "Pct"              , "AVM"           , "StDev"            , "Pop"              , "IA"                 , "GRM"           , "PSF"                                                                                                                   ];
+	//		val[t++]	= [           ,   "state"     		, "county"   		, "city"                , "price"             , "pct"              , "avm"           , "stdev"            , "pop"              , "ia"                 , "grm"           , "psf"						  	                                                                                          ];
+	/*1*/	lab[t  ]	= [ "Facts"   , [ "photo"     		, ""         		, ""             		, ""                ] , [/*"Address:"      , "Zip:"          , "Year Built:"      , "Lot:"	       */] , [/*"&nbsp;"          , "Beds:"         , "Baths:"   , "Sqft:"     */]  	                                                                                          ];
+			val[t++]	= [           , [ "photo"     		, ""         		, ""             		, ""                ] , [/*"sa"            , "zip"           , "yearBuilt"        , "lot"	       */] , [/*""                , "beds"          , "baths"    , "sf"        */]  	                                                                                          ]; // Must match object property name from server. e.g. data.Zip // Also add to source.datafields.name
+	/*2*/	lab[t  ]	= [ "Data"    , [/*"ARV Est:" 		, "Sold for:" 		, "Sold in:"     		, ""              */] , [/*"Tax Value:"    , "Annual Taxes:" , ""                 , ""		       */] , [/*"Estimated Rent:" , ""              , ""         , ""          */]  	                                                                                          ];
+			val[t++]	= [           , [/*"autoEst"		, "lastSoldPrice"  	, "lastSoldYear" 		, ""              */] , [/*"taxVal"        , "taxAmt"        , ""                 , ""		       */] , [/*"rent"            , ""              , ""         , ""          */]  	                                                                                          ];
+	/*3*/	lab[t  ]	= [ "Links"   , [  "Yahoo"    		, "Zillow"  		, "Z-Details"   		, "ZipRealty"       ] , [  "Eppraisal"     , "Realtor"       , "RealEstate"       , "HomeGain"	     ] , [  "Trulia"          , "Homes"         , "BofA"     , "Chase" 	     ] , [  "PropertyShark"      , "NeighborhoodScout"      , "ZipSkinny"       , "GoogleMaps" 	    ] ];
+			val[t++]	= [           , [  "link_yahoo"     , "link_zillow"		, "link_zillowdetails"	, "link_zipRealty"  ] , [  "link_eppraisal", "link_realtor"  , "link_realEstate"  , "link_homeGain"  ] , [  "link_trulia"     , "link_homesCom" , "link_boa" , "link_chase"  ] , [  "link_propertyShark" , "link_neighborhoodScout" , "link_zipSkinny"  , "link_googleMap"  ] ];
+	/*4*/	lab[t  ]	= [ "Agent"   , [/*"ARV:"      		, "Due Dil:" 		, ""             		, ""              */] , [/*"Repairs:"      , "Analysis:"     , ""                 , ""             */] , [/*"Rent:"           , ""              , ""         , ""          */]  	                                                                                          ]; // go, no, offer, counter, contract, assign, send
+			val[t++]	= [           , [/*"arv"       		, "dueDil"   		, ""             		, ""              */] , [/*"rep"           , "analysis"      , ""                 , ""			   */] , [/*"rent"            , ""              , ""         , ""           */]  	                                                                                          ];
+	/*5*/	lab[t  ]	= [ "Notes"																																																																				                                                                      ];
+			val[t++]	= [																																																																						                                                                      ];
+	/*6*/	lab[t  ]	= [ "Chart"																																																																		                                                                              ];
+			val[t++]	= [																																																																						                                                                      ];
+			var i,li="",div="",len=lab.length;for(i=1;i<len;i++){li+=("<li>"+lab[i][0]+"</li>");div+=("<div class='"+lab[i][0]+"'></div>");}
+			var rowdetails				= "<div style='margin:10px;'><ul style='margin-left:30px;'>"+li+"</ul>"+div; // To make variable tab label...//<li class='title'></li>//if(tabsdiv!=null){var title=tabsdiv.find(".title");title.text("Specs"/*datarecord.firstname*/);}
+			var initrowdetails			= function(index,parentElement,gridElement,datarecord){
+			/*	function drawVisualization() { // Reference: https://developers.google.com/chart/interactive/docs/gallery/candlestickchart?csw=1
+					var data = google.visualization.arrayToDataTable([
+						[ 'Mon' , 20 , 28 , 38 , 45 ]   
+					,	[ 'Tue' , 31 , 38 , 55 , 66 ]   
+					,	[ 'Wed' , 50 , 55 , 77 , 80 ]   
+					,	[ 'Thu' , 77 , 77 , 66 , 50 ]   
+					,	[ 'Fri' , 68 , 66 , 22 , 15 ] ] , true ) , // Treat first row as data as well.
+					options={legend:'none'},chart=new google.visualization.CandlestickChart(document.getElementById('chart_div'+index));
+					chart.draw( data , options ); }
+					google.setOnLoadCallback(drawVisualization);
+			*/	var tabsdiv				= $($(parentElement).children()[0]);
+                if (tabsdiv            != null){
+					var imgurl         	= "https://lh6.googleusercontent.com/-mgWnOS5Td6k/UggYD9_intI/AAAAAAAAIGg/Q9fvS8KPD6Q/s144/house.jpg"; // "https://lh3.googleusercontent.com/-23AleDJ0osk/UauT1e16NkI/AAAAAAAAGtY/yjl2luc_ZWo/s144/5.jpg"; // "https://lh5.googleusercontent.com/-Lcx6hdPa-3A/UgM3WA9BKdI/AAAAAAAAIFs/8z8-QpFvd_Q/s144/0405a8d.jpg"; // + datarecord.firstname.toLowerCase() + '.png';
+				//	var note			= "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+					var information     = tabsdiv.find(".Links"/*".information"*/);
+                    var notes           = tabsdiv.find(".Notes"                  );
+					var cstick          = tabsdiv.find(".Chart"                  );
+                    var con				=[];var container=$('<div style="margin:5px;"></div>');container.appendTo($(information));
+					var i,j,k,col=[],tab=[];for(k=0;k<lab          .length-2;k++){ tab   .push(tabsdiv.find("."+lab[k+1][0]));con[k]=$('<div style="margin:5px;" ></div>') ;con[k].appendTo($(tab[k]  )); // Tabs, k
+							  col[k]    =[];for(i=0;i<lab[k+1]     .length-1;i++){ col[k].push($('<div style="float:left;width:'+ (100/(lab[k+1].length-1)) +'%;"></div>'));con[k].append  (  col[k][i]); // Cols, i
+									        for(j=0;j<lab[k+1][i+1].length  ;j++){                                                                                                                        // Rows, j
+				        if(lab[k+1][i+1][j] == "photo"){
+							var photo        = $('<div class="jqx-rc-all" style="margin:10px;"><b>Photo:</b></div>');col[k][i].append(photo);
+							var img          = $('<img height="60" src="' + function(){if(datarecord.image){return datarecord.image}else{return imgurl}}() + '"/>');
+							var image        = $('<div style="margin-top: 10px;"></div>');image.append(img);image.appendTo(photo);}		 
+					//	else if(lab[k+1][i+1][j] == "Notes"){  div[k][i][j].add(datarecord.notes   )}
+						else{
+																                        if (   datarecord[val[k+1][i+1][j]]){	                 	                                                         
+															                        var temp = datarecord[val[k+1][i+1][j]] }else{var temp = ""          }
+								$(col[k][i]).append($('<div class="jqx-rc-all" style="margin:10px;">'  +  lab[k+1][i+1][j] +  ' '   + temp + '</div>'))}}}}
+                    var containerNotes	= $('<div style="white-space:normal;margin:5px;color:#555555;display:inline-block;width:400px"><span>' + /*note*/datarecord.notes + '</span></div>');$(notes ).append(containerNotes );
+					var containerCstick	= $('<div id="chart_div' + index + '" style="width:500px;height:200px;"></div>'                                   );$(cstick).append(containerCstick);
+                    $(tabsdiv).jqxTabs({width:600,height:250,theme:theme});
+                }
+            };
+            $("#jqxgrid").jqxGrid({
+					source				:	dataAdapter
+				,   theme				:	theme
+				,	width				:	 600
+				,   height              :    600
+			//	, 	pagesize			:	  20
+				,	statusbarheight		:	  50
+				,   selectionmode		:	"singlerow" // "none" // "singlecell" // "multiplerows" // "multiplecellsextended"
+                ,	rowdetailstemplate	:	{ rowdetailsheight : 200 , rowdetails : rowdetails }
+				,	initrowdetails		:	initrowdetails
+			//	,   scrollmode          :   "logical" // "logical" scrolls by row, not by pixel; by pixel is easier for the eyes to track because the scroll increment is smaller
+				,	rowdetails			:	true
+				,   columnsresize		:	true			
+                ,	showfilterrow		:	true
+                ,	filterable			:	true
+			//	,   pageable 			:   true // Adjust properties: pageable, height, autoheight // Bug to fix: Pages after page 1 on rows after row 1 will not accept edit inputs; deleted 'pageable', 'autoheight' and 'pagesize' and added 'height'
+			//	,   autoheight			:	true
+				,   sortable			:	true
+				,   altrows				:	true
+				,   enabletooltips		:	true
+				,   editable			:	true
+				,	showaggregates		:	true
+				,	showstatusbar		:	true
+				,	groupable			:	true
+			//	,	sortcolumn 			:   "ratio"  // "MyBid" // Causes breakage // Maybe need jqx.sort() library // Fixed for now by sorting server side via db.query({foo}}).sortBy("avm.stat.ratio",db.ASCENDING/*DESCENDING*/,db.NUMERIC/*LEXICAL*/)
+			//	,	sortdirection		:	"asc"    // "desc"
+			//	,	groups				: 	["City"] // Creates initial grouping on screen load
+			/*	,	columngroups		: 	[
+							{ name : "Property" , text : "Property" , align: "center" }
+						,	{ name : "Auction"  , text : "Auction"  , align: "center" }
+						]	*/
+				,   columns				:	[ // taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet
+					        { 							 	 datafield : "item"   		, text : "Item"        , editable : false , width    :  95 , hideable   : true , hidden : true  }//                            , aggregates : ["count"    ]}
+            //          ,   { /*columngroup : "Property" ,*/ datafield : "dateAuction"	, text : "Auction Date", editable : false , width    :  90 , filtertype : "checkedlist"         }
+                        ,   { /*columngroup : "Property" ,*/ datafield : "address"   	, text : "Address"     , editable : false , width    : 290 , filtertype : "textbox"                                            , aggregates : ["count"    ]    }
+                        ,   { /*columngroup : "Property" ,*/ datafield : "useCode"   	, text : "Use"         , editable : false , width    :  50 , filtertype : "textbox"                                                                            }
+            //          ,   { /*columngroup : "Property" ,*/ datafield : "report"	    , text : "Report"      , editable : false , width    :  45 , filtertype : "textbox"             }
+            //          ,	{ /*columngroup : "Property" ,*/ datafield : "video"	   	, text : "Video"	   , editable : false , width    :  45 , filtertype : "textbox"             }
+            //          ,   { /*columngroup : "Property" ,*/ datafield : "arv"   		, text : "ARV"         , editable : false , width    :  65 , filtertype : "number"        	                                                                   ,  cellsformat : "c0" , cellsalign : "right"  , align : "right"                                 /* cellclassname: "yellowCell" */ }
+            //          ,	{ /*columngroup : "Auction"  ,*/ datafield : "title"        , text : "Title"       , editable : false , width    :  55 , filtertype : "number"            /*, filtercondition : "EQUAL"    , aggregates : ["sum","avg"] */ ,  cellsformat : "c0" , cellsalign : "right"  , align : "right"  , columntype : "numberinput"   /* cellclassname: "yellowCell" */ } // Possible columntype: "numberinput" "dropdownlist" "checkbox" "datetimeinput" // Reference: http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-cells-editing.htm
+            //          ,	{ /*columngroup : "Auction"  ,*/ datafield : "repairs"      , text : "Repairs"     , editable : false , width    :  55 , filtertype : "number"            /*, filtercondition : "EQUAL"    , aggregates : ["sum","avg"] */ ,  cellsformat : "c0" , cellsalign : "right"  , align : "right"  , columntype : "numberinput"   /* cellclassname: "yellowCell" */ } // Possible columntype: "numberinput" "dropdownlist" "checkbox" "datetimeinput" // Reference: http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-cells-editing.htm
+						,	{ /*columngroup : "Auction"  ,*/ datafield : "MyBid"   		, text : "My Bid"      , editable : true  , width    : 100 , filtertype : "number"              , filtercondition : "EQUAL" /* , aggregates : ["sum","avg"] */ ,  cellsformat : "c0" , cellsalign : "right"  , align : "right"  , columntype : "numberinput"   /* cellclassname: "yellowCell" */ } // Possible columntype: "numberinput" "dropdownlist" "checkbox" "datetimeinput" // Reference: http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-cells-editing.htm
+                    	]
+            });
+		//	$("#jqxGrid"    ).jqxGrid  ("sortby" , "ratio" , "asc"); Does not work // Maybe need jqx.sort() library // Fixed for now by sorting server side via db.query({foo}}).sortBy("avm.stat.ratio",db.ASCENDING/*DESCENDING*/,db.NUMERIC/*LEXICAL*/)
+			$("#button"     ).jqxButton({theme:theme});$("#button"     ).    click          ( function(){$("#jqxgrid").jqxGrid("autoresizecolumns"                                                                       );});
+			$("#expand"     ).jqxButton({theme:theme});$("#expand"     ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("expandgroup"  , groupnum);}});
+            $("#collapse"   ).jqxButton({theme:theme});$("#collapse"   ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("collapsegroup", groupnum);}});
+            $("#expandall"  ).jqxButton({theme:theme});$("#expandall"  ).on("click"         , function(){$("#jqxgrid").jqxGrid("expandallgroups"  );});
+            $("#collapseall").jqxButton({theme:theme});$("#collapseall").on("click"         , function(){$("#jqxgrid").jqxGrid("collapseallgroups");});
+													   $("#jqxgrid"    ).on("groupexpand"   , function(event){var args=event.args;$("#expandedgroup" ).text("Group: " + args.group + ", Level: " + args.level);});
+													   $("#jqxgrid"    ).on("groupcollapse" , function(event){var args=event.args;$("#collapsedgroup").text("Group: " + args.group + ", Level: " + args.level);});
+        //  $("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxGrid").jqxGrid('exportdata','json','jqxGrid',true,null,true/*,"https://script.google.com/macros/s/AKfycbxfJftAHosWic1QXnTdppXJhGNiurtmQIc6QWOdrLXovbW_bQJ6/exec?k=2kpco3hg68eo6alklck6"*/);});
+		});
+    </script>
+</head>
+<body class="default">
+<!--<table style="text-align:center;font-family:arial">
+		<tbody>
+			<tr>
+				<td colspan="2">Non-Binding Offer</td>
+				<td width="75"></td>
+				<td colspan="2">    Binding Offer</td>
+			</tr>
+			<tr>
+				<td>Enable
+			    -- ><div class="onoffswitch"><!--Source: http://proto.io/freebies/onoff/ v.iOS4 | Search: switch button css | Also: http://ios-checkboxes.awardwinningfjords.com/-- >
+						<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
+						<label class="onoffswitch-label" for="myonoffswitch">
+							<div class="onoffswitch-inner"></div>
+							<div class="onoffswitch-switch"></div>
+						</label>
+					</div>
+				<!--<span style="font-size:80%;color:grey;">(reversible)</span>
+				</td>
+				<td>Send
+					<div class="onoffswitch"><!--Source: http://proto.io/freebies/onoff/ v.iOS4 | Search: switch button css | Also: http://ios-checkboxes.awardwinningfjords.com/-- >
+						<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
+						<label class="onoffswitch-label" for="myonoffswitch">
+							<div class="onoffswitch-inner"></div>
+							<div class="onoffswitch-switch"></div>
+						</label>
+					</div>
+					<span style="font-size:80%;color:grey;">(irreversible)</span>
+				</td>
+				<td></td>
+				<td>Enable
+					<div class="onoffswitch"><!--Source: http://proto.io/freebies/onoff/ v.iOS4 | Search: switch button css | Also: http://ios-checkboxes.awardwinningfjords.com/-- >
+						<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
+						<label class="onoffswitch-label" for="myonoffswitch">
+							<div class="onoffswitch-inner"></div>
+							<div class="onoffswitch-switch"></div>
+						</label>
+					</div>
+					<span style="font-size:80%;color:grey;">(reversible)</span>
+				</td>
+				<td>Send
+					<div class="onoffswitch"><!--Source: http://proto.io/freebies/onoff/ v.iOS4 | Search: switch button css | Also: http://ios-checkboxes.awardwinningfjords.com/-- >
+						<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
+						<label class="onoffswitch-label" for="myonoffswitch">
+							<div class="onoffswitch-inner"></div>
+							<div class="onoffswitch-switch"></div>
+						</label>
+					</div>
+					<span style="font-size:80%;color:grey;">(irreversible)</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>-->
+    <div id="jqxWidget" style="font-size: 13px; font-family: Verdana; float: left;">
+		<div style="margin-top: 30px;">
+            <div style="float: left; margin-left: 20px;">
+				<input type="button" id="button"      value="Fit Columns" />
+                <input type="button" id="expandall"   value="Expand All Groups" />
+                <input type="button" id="collapseall" value="Collapse All Groups" style="margin-top: 10px; margin-bottom: 10px;" />
+            </div>
+        </div>
+		<div id="jqxgrid"></div>
+		<div id="chart_div" style="width:500px;height:200px;"></div>
+	<!--<div id="jsonp-response"></div>
+        <div style='margin-top:20px;'>
+            <div style="margin:10px;text-align:center;">
+                <input id='jsonExport' type="button" value="Submit" />
+            </div>
+        </div>
+		<div style="float: left; margin-left: 20px;">
+			<input value="Expand Group" type="button" id='expand' />
+			<br />
+			<input style="margin-top: 10px;" value="Collapse Group" type="button" id='collapse' />
+			<br />
+			<span style="margin-top: 10px;">Group:</span>
+			<input value="1" id="groupnum" style="margin-top: 10px; width: 20px;" type="text" />
+		</div>		
+		<div style="float: left; margin-left: 20px;">
+			<div style="font-weight: bold;">
+				<span>Event Log:</span>
+			</div>
+			<div style="margin-top: 10px;">
+				<span>Expanded Group:</span> <span id="expandedgroup"></span>
+			</div>
+			<div style="margin-top: 10px;">
+				<span>Collapsed Group:</span> <span id="collapsedgroup"></span>
+			</div>
+        </div>
+		<div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+            <div id="cellbegineditevent"></div>
+            <div style="margin-top: 10px;" id="cellendeditevent"></div>
+		</div>
+		-->
+    </div>
+</body>
+</html>

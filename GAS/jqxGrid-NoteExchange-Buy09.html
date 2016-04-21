@@ -1,0 +1,237 @@
+<!DOCTYPE html> <!-- Works with server v.667 — Obfuscate: http://techyzilla.blogspot.com/2012/09/better-javascript-obfuscating-method-to-protect-your-code.html Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm?(bootstrap)#demos/jqxgrid/bindingtojsonp.htm // Our file: jqxGrid-NoteSell01 | http://jsfiddle.net/BDX7e/ // Our file: https://docs.google.com/spreadsheet/ccc?key=0AlLVOoV_2dFtdFp4VmNNcURaN1BvNzdHbEowaHR0OFE&usp=drive_web#gid=0 https://sites.google.com/site/onlinenoteexchange/buy	https://docs.google.com/file/d/0B1LVOoV_2dFtS0VNeHEyaDhocUU/edit?usp=drive_web	0B1LVOoV_2dFtS0VNeHEyaDhocUU	https://googledrive.com/host/0B1LVOoV_2dFtS0VNeHEyaDhocUU	onlinenoteexchange-buy.html	jqxGrid-NoteBuy02	https://www.dropbox.com/s/hkayu0gjmo98di8/jqxGrid-NoteBuy02.html -->
+<!-- Change log: 1. Moved some fields from master list view to detail tabs to create more horizontal space for narrow browsers. -->
+<html lang="en" xstyle="font-family:arial;">
+<head>
+	<meta charset="utf-8"/><title id='Description'>Buy a Note</title>
+	<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtVlJqWDhxUk9hcG8" type="text/css"><!-- Because we parse as XML — Take care not to close with slash before close tag. e.g., "/>" — Update: We don't use XML parser because 'less than' < and 'greater than' > symbols break it. --> <!--xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1"-->
+	<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtNm0yVXh0Z1JQWkU" type="text/css"><!-- Because we parse as XML — Take care not to close with slash before close tag. e.g., "/>" — Update: We don't use XML parser because 'less than' < and 'greater than' > symbols break it. --> <!--xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1"-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://googledrive.com/host/0B1LVOoV_2dFtdGF1Q25haHVEMnM"></script><!-- Keep this code-containing script as the last <script> tag element as that is what is replaced/obfuscated --><!-- Because we parse as XML — Take care not to begin attribute with a number. e.g., "1xsrcx='https://www.example.com/'" --><!-- Replace: https://docs.google.com/file/d/0B0WJjcJEFNzibXRyZWlwNktKcFk/edit?usp=sharing with: https://googledrive.com/host/0B0WJjcJEFNzibXRyZWlwNktKcFk --><!-- src replaced 2xsrc per "using Google Drive to host .css and .js" FOR HOSTING SUCCESS IT IS IMPERATIVE TO 1. INITIALIZE/INITIATE/ORIGINATE THE FILE VIA UPLOAD WITH A .JS EXTENSTION. THIS YIELDS A 28 CHARACTER ID CODE INSTEAD OF A 44 CHARACTER CODE GENERATED WHEN USING A MANUAL "CREATE DOCUMENT" METHOD. AND 2. USE SHARING="PUBLIC ON THE WEB" NOT "ANYONE WITH THE LINK"; Reference: http://www.mybloggerlab.com/2013/04/how-to-host-css-or-javascript-files-in-blogger-using-google-drive.html --><!-- 1xsrc replaced 1xsrc because Chrome has enabled strict MIME type checking and xsrc serves MIME=text/plain instead of the required MIME=text/javascript. Therefore, moved to Gdocs host. Reference: https://code.google.com/p/chromium/issues/detail?id=180007 --> <!--xsrcx2="https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=k7fvbixefxcc1fy4eqr5" xsrcx1="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"-->
+<!--<style type="text/css">.editedRow{color:#b90f0f;font-style:italic;}</style>-->
+	<script type="text/javascript">
+		function jsonp(datarow){ // Send bid/datarow to server // Use dynamic script injection + jsonp to simulate ajax/xhr/HTTP GET // Reference: http://cjihrig.com/blog/remote-ajax-calls-using-jsonp/
+			var p=$.param(datarow);if((p.askRate&&(p.bidRate>p.askRate))&&(p.askPrice&&(p.bidPrice>p.askPrice))){alert("Your rate and points bids exceed the ask. Please correct any errors then resubmit.");return}
+			var act	   = "https://script.google.com/macros/s/AKfycbwT66_MExluhggRGS48QQikDxTzElT7F1WWRImBHoKDqEjFdIs/exec?" + "k=mkqwi0w4kvmm51spgrs9" + "&" + p;
+			var head   = document.head                          ;
+			var script = document.createElement( "script"      );
+				script           .setAttribute ( "src"   , act );
+				head             .appendChild  (  script       );
+				head			 .removeChild  (  script       );
+		} // function jsonpCallback(data){document.getElementById("jsonp-response").textContent=JSON.stringify(data);} // jsonp("http://www.cjihrig.com/development/jsonp/jsonp.php?callback=jsonpCallback&message=Hello");
+		$(document).ready(function () {	
+			var theme     = "bootstrap"; // getDemoTheme();
+			var source    = {            // Prepare data
+					url		   	: 	"https://script.google.com/macros/s/AKfycbwT66_MExluhggRGS48QQikDxTzElT7F1WWRImBHoKDqEjFdIs/exec?k=bhn5yy2m1ngvdo018j2k"		
+				,	datatype  	:	"jsonp"
+				,   datafields 	:	[ // When adding fields, add to (i) val array and (ii) here // 'type': possible values: "string", "date", "number", "bool" // "integer" "float"  // 'format' syntax correct, but not changing display; investigate (i) adding to data table and using hidden field, (ii) .jQuery or (iii) dataAdapter methods
+				//	,   { name 	: "amount"                  , type : "number"  , format : "n0" } // Replaced with balCur (distinct from balBeg)
+						{ name 	: "arv"                     , type : "number"  , format : "n0" }
+					,   { name 	: "askRate"                 , type : "number"  , format : "p2" }
+					,   { name 	: "askPrice"                , type : "number"  , format : "c0" }			
+					,   { name 	: "balBeg"                  , type : "number"  , format : "c0" }
+					,   { name 	: "balCur"                  , type : "number"  , format : "c0" }
+					,   { name 	: "balloon"                 , type : "string"  				   }
+					,   { name 	: "ballAmt"                 , type : "number"  , format : "c0" }
+					,   { name 	: "ballDate_day"            , type : "number"  , format : "n0" }
+					,   { name 	: "ballDate_mo"             , type : "string"  , format : "n0" }
+					,   { name 	: "ballDate_yr"             , type : "number"  , format : "n0" }
+					,   { name 	: "baths"                   , type : "number"  , format : "n2" }
+					,   { name 	: "beds"                    , type : "number"  , format : "n0" }
+					,   { name 	: "bidPrice"                , type : "number"  , format : "c0" }
+					,   { name 	: "bidRate"                 , type : "number"  , format : "p2" }
+					,   { name 	: "borPts"                  , type : "number"  , format : "d2" }
+					,   { name 	: "borRate"                 , type : "number"  , format : "p2" }
+					,   { name 	: "city"                    , type : "string"  				   }
+					,   { name 	: "dateOrig_day"            , type : "number"  , format : "n0" }
+					,   { name 	: "dateOrig_mo"             , type : "string"  , format : "n0" }
+					,   { name 	: "dateOrig_yr"             , type : "number"  , format : "n0" }
+					,   { name 	: "datePaidTo_day"          , type : "number"  , format : "n0" }
+					,   { name 	: "datePaidTo_mo"           , type : "string"  , format : "n0" }
+					,   { name 	: "datePaidTo_yr"           , type : "number"  , format : "n0" }
+					,	{ name 	: "db_id"                   , type : "string"  				   }
+					,   { name 	: "doc_appraisal"           , type : "bool"                    }
+					,   { name 	: "doc_closing"             , type : "bool"                    }
+					,   { name 	: "doc_hazard"              , type : "bool"                    }
+					,   { name 	: "doc_note"                , type : "bool"                    }
+					,   { name 	: "doc_pics"                , type : "bool"                    }
+					,   { name 	: "doc_pmts"                , type : "bool"                    }
+					,   { name 	: "doc_title"               , type : "bool"                    }
+					,   { name 	: "downPmt"                 , type : "number"  , format : "c0" }
+					,   { name 	: "estMethod"               , type : "string"                  }
+					,   { name 	: "estValue"                , type : "number"  , format : "n0" }
+					,   { name 	: "exit"                    , type : "string"  				   }
+					,   { name 	: "fileDoc"                 , type : "string"  				   }
+					,	{ name 	: "filePic"                 , type : "string"  				   }
+					,	{ name 	: "item"                    , type : "string"  				   }
+					,   { name 	: "lienPos"                 , type : "string"  				   }
+					,   { name 	: "loanStatus"              , type : "string"  				   }
+					,   { name 	: "nextDue_day"             , type : "number"  , format : "n0" }
+					,   { name 	: "nextDue_mo"              , type : "string"  , format : "n0" }
+					,   { name 	: "nextDue_yr"              , type : "number"  , format : "n0" }
+					,   { name 	: "notes"                   , type : "string"  				   }
+					,   { name 	: "occ"                     , type : "string"  				   }
+					,   { name 	: "payBad"                  , type : "number"  , format : "n0" }
+					,   { name 	: "payGood"                 , type : "number"  , format : "n0" }
+					,   { name 	: "pctLtv"                  , type : "number"  , format : "n0" }
+					,   { name 	: "pctLtvCur"               , type : "number"  , format : "n0" }
+					,   { name 	: "pctUpb"                  , type : "number"  , format : "n0" }
+					,   { name 	: "pmtAmt"                  , type : "number"  , format : "c0" }
+					,   { name 	: "pmtsLeft"                , type : "number"  , format : "n0" }
+					,   { name 	: "pmtsRecd"                , type : "number"  , format : "n0" }
+					,   { name 	: "purpose"                 , type : "string"  				   }
+					,   { name 	: "purPrice"                , type : "number"  , format : "n0" }
+					,   { name 	: "schedRE"                 , type : "number"  , format : "n0" }
+					,   { name 	: "sa"                      , type : "string"  				   }
+				//	,   { name 	: "sellCarry"               , type : "number"  , format : "n0" }
+					,   { name 	: "sqft"                    , type : "number"  , format : "n0" }
+					,   { name 	: "state"                   , type : "string"  				   }
+					,   { name 	: "term"                    , type : "number"  , format : "n0" }
+					,   { name 	: "use"                     , type : "string"  				   }
+					,   { name 	: "yieldCur"                , type : "number"  , format : "p2" }
+				//	,   { name 	: "ytm"                     , type : "number"  , format : "p2" }
+					,   { name 	: "zip"                     , type : "string"  				   }
+					]
+				,	data	   	:	{
+						featureClass: "P"
+					,	style       : "full"
+					,	maxRows     : 50
+					}
+					,	updaterow	:	function(rowid, rowdata, commit){jsonp(rowdata);commit(true)} // Use dynamic script injection + jsonp to simulate ajax/xhr // Reference: http://cjihrig.com/blog/remote-ajax-calls-using-jsonp/
+				};
+			var dataAdapter = new $.jqx.dataAdapter(source,{ // Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxchart/index.htm#demos/jqxchart/javascript_chart_column_series.htm // Reference: http://www.jqwidgets.com/community/topic/bind-chart-with-json-fromajex-request/#post-22612
+					async			: true  // default=true
+				,	autoBind		: false // default=false
+				,	loadError		: function(xhr,status,error){alert('Error loading "' + source.url + '" : ' + error);}
+				});
+			var lab=[],val=[],t=0;
+	/*0*/	lab[t  ]	= [ "Toprow"  ,   "State"     	  , "County"   		, "City"                , "Price"                , "Pct"              , "AVM"           , "StDev"            , "Pop"             , "IA"     , "GRM"                , "PSF"                                                                                                                                      ];
+			val[t++]	= [           ,   "state"     	  , "county"   		, "city"                , "price"                , "pct"              , "avm"           , "stdev"            , "pop"             , "ia"     , "grm"                , "psf"						  	                                                                                                             ];
+	/*1*/	lab[t  ]	= [ "Facts"   , [ "photo"     	  , ""         		, ""             		, ""                   ] , [ "Address:"       , "Beds:"         , "Baths:"           , "Sqft:"           , "Lot:" ] , [ "&nbsp;"           , "Year Built:"   , ""         , ""           ]  	                                                                                         ];
+			val[t++]	= [           , [ "photo"     	  , ""         		, ""             		, ""                   ] , [ "sa"             , "beds"          , "baths"            , "sqft"            , "lot"  ] , [ ""		            , "yearBuilt"     , ""         , ""           ]  	                                                                                         ]; // Must match object property name from server. e.g. data.Zip // Also add to source.datafields.name
+	/*2* /	lab[t  ]	= [ "Data"    , [ "ARV Est:" 	  , "Sold for:" 	, "Sold in:"     		, ""                   ] , [ "Tax Value:"     , "Annual Taxes:" , ""                 , ""				           ] , [ "Estimated Rent:"  , ""              , ""         , ""           ]  	                                                                                         ];
+			val[t++]	= [           , [ "autoEst"		  , "lastSoldPrice" , "lastSoldYear" 		, ""                   ] , [ "taxVal"         , "taxAmt"        , ""                 , ""				           ] , [ "rent"             , ""              , ""         , ""           ]  	                                                                                         ];
+	/*3* /	lab[t  ]	= [ "Links"   , [ "Yahoo"    	  , "Zillow"  		, "Z-Details"   		, "ZipRealty"          ] , [ "Eppraisal"      , "Realtor"       , "RealEstate"       , "HomeGain"		           ] , [ "Trulia"           , "Homes"         , "BofA"     , "Chase" 	  ] , [ "PropertyShark"      , "NeighborhoodScout"      , "ZipSkinny"       , "GoogleMaps"     ] ];
+			val[t++]	= [           , [ "link_yahoo"    , "link_zillow"	, "link_zillowdetails"	, "link_zipRealty"     ] , [ "link_eppraisal" , "link_realtor"  , "link_realEstate"  , "link_homeGain"	           ] , [ "link_trulia"      , "link_homesCom" , "link_boa" , "link_chase" ] , [ "link_propertyShark" , "link_neighborhoodScout" , "link_zipSkinny"  , "link_googleMap" ] ];
+	/*3*/	lab[t  ]	= [ "Links"   , [ "Underwriting"  , "Yahoo"    		, "Zillow"  		    , "Z-Details"   	   ] , [ "Eppraisal"      , "Realtor"       , "RealEstate"       , "ZipRealty"/*"HomeGain"*/		           ] , [ "Trulia"           , "Homes"         , "BofA"     , "Chase" 	  ] , [ "PropertyShark"      , "NeighborhoodScout"      , "ZipSkinny"       , "GoogleMaps"     ] ];
+			val[t++]	= [           , [ "fileDoc"       , "link_yahoo"    , "link_zillow"		    , "link_zillowdetails" ] , [ "link_eppraisal" , "link_realtor"  , "link_realEstate"  , "link_zipRealty"/*"link_homeGain"*/	           ] , [ "link_trulia"      , "link_homesCom" , "link_boa" , "link_chase" ] , [ "link_propertyShark" , "link_neighborhoodScout" , "link_zipSkinny"  , "link_googleMap" ] ];
+	/*4* /	lab[t  ]	= [ "Agent"   , [ "ARV:"      	  , "Due Dil:" 		, ""             		, ""                   ] , [ "Repairs:"       , "Analysis:"     , ""                 , ""                         ] , [ "Rent:"            , ""              , ""         , ""           ]  	                                                                                         ]; // go, no, offer, counter, contract, assign, send
+			val[t++]	= [           , [ "arv"       	  , "dueDil"   		, ""             		, ""                   ] , [ "rep"            , "analysis"      , ""                 , ""				           ] , [ "rent"             , ""              , ""         , ""           ]  	                                                                                         ];
+	/*5*/	lab[t  ]	= [ "Notes"																																																																				                                                                             ];
+			val[t++]	= [																																																																						                                                                             ];
+	/*6*/ //lab[t  ]	= [ "Chart"																																																																		                                                                                     ];
+		  //val[t++]	= [																																																																						                                                                             ];
+			var i,li="",div="",len=lab.length;for(i=1;i<len;i++){li+=("<li>"+lab[i][0]+"</li>");div+=("<div class='"+lab[i][0]+"'></div>");}
+			var rowdetails				= "<div style='margin:10px;'><ul style='margin-left:30px;'>"+li+"</ul>"+div; // To make variable tab label...//<li class='title'></li>//if(tabsdiv!=null){var title=tabsdiv.find(".title");title.text("Specs"/*datarecord.firstname*/);}
+			var initrowdetails			= function(index,parentElement,gridElement,datarecord){
+				var tabsdiv				= $($(parentElement).children()[0]);
+				if (tabsdiv            != null){
+					var imgurl         	= "https://lh6.googleusercontent.com/-mgWnOS5Td6k/UggYD9_intI/AAAAAAAAIGg/Q9fvS8KPD6Q/s144/house.jpg"; // "https://lh3.googleusercontent.com/-23AleDJ0osk/UauT1e16NkI/AAAAAAAAGtY/yjl2luc_ZWo/s144/5.jpg"; // "https://lh5.googleusercontent.com/-Lcx6hdPa-3A/UgM3WA9BKdI/AAAAAAAAIFs/8z8-QpFvd_Q/s144/0405a8d.jpg"; // + datarecord.firstname.toLowerCase() + '.png';
+					var note			= "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+					var information     = tabsdiv.find(".Links"/*".information"*/);
+					var notes           = tabsdiv.find(".Notes"                  );
+					var cstick          = tabsdiv.find(".Chart"                  );
+					var con				=[];var container=$('<div style="margin:5px;"></div>');container.appendTo($(information));
+					var i,j,k,col=[],tab=[];for(k=0;k<lab          .length-2;k++){ tab   .push(tabsdiv.find("."+lab[k+1][0]));con[k]=$('<div style="margin:5px;" ></div>') ;con[k].appendTo($(tab[k]  )); // Tabs, k
+							  col[k]    =[];for(i=0;i<lab[k+1]     .length-1;i++){ col[k].push($('<div style="float:left;width:'+ (100/(lab[k+1].length-1)) +'%;"></div>'));con[k].append  (  col[k][i]); // Cols, i
+											for(j=0;j<lab[k+1][i+1].length  ;j++){                                                                                                                        // Rows, j
+						if(lab[k+1][i+1][j] == "photo"){
+							var photo        = $('<div class="jqx-rc-all" style="margin:10px;"><b>Photo:</b></div>');col[k][i].append(photo);
+							var img          = $('<img height="60" src="' + function(){if(datarecord.image){return datarecord.image}else{return imgurl}}() + '"/>');
+							var image        = $('<div style="margin-top: 10px;"></div>');image.append(img);image.appendTo(photo);}		 
+					//	else if(lab[k+1][i+1][j] == "Notes"){  div[k][i][j].add(datarecord.notes   )}
+						else{var temp = (datarecord[val[k+1][i+1][j]]) // Drop cell value into table
+									  ? (datarecord[val[k+1][i+1][j]]):"";/*Handle links*/if(/*temp=(lab[k+1][0]=="Links")*/temp.toString().search("http://")==0||temp.toString().search("https://")==0){temp='<a href="'+temp+'" target="_blank">&#10151;</a>'} // Reference: http://ikreator.com/special-characters/#pointers
+					  $(col[k][i]).append($('<div class="jqx-rc-all" style="margin:10px;"><b>'+ lab[k+1][i+1][j] +'</b> ' + temp + '</div>'))}}}}
+					var containerNotes	= $('<div style="white-space:normal;margin:5px;color:#555555"><span>' + (datarecord.notes||note) + '</span></div>');$(notes ).append(containerNotes );
+					var containerCstick	= $('<div id="chart_div' + index + '" style="width:500px;height:200px;"></div>'                                   );$(cstick).append(containerCstick);
+					$(tabsdiv).jqxTabs({width:700,height:250,theme:theme});
+				}
+			};
+			$("#jqxgrid").jqxGrid({
+					source				:	dataAdapter
+				,   theme				:	theme
+				,	width				:	1280
+				, 	pagesize			:	  20
+				,	statusbarheight		:	  50
+				,   selectionmode		:	"singlerow" // "none" // "singlecell" // "multiplerows" // "multiplecellsextended"
+				,	rowdetailstemplate	:	{ rowdetailsheight : 200 , rowdetails : rowdetails }
+				,	initrowdetails		:	initrowdetails
+				,	rowdetails			:	true
+				,   columnsresize		:	true			
+				,	showfilterrow		:	true
+				,	filterable			:	true
+				,   pageable 			:	true
+				,   autoheight			:	true
+				,   sortable			:	true
+				,   altrows				:	true
+				,   enabletooltips		:	true
+				,   editable			:	true
+				,	showaggregates		:	true
+				,	showstatusbar		:	true
+				,	groupable			:	true
+			//	,	sortcolumn 			:	"MyBid"  // Causes breakage 
+			//	,	sortdirection		:	"desc"
+			//	,	groups				: 	["City"] // Creates initial grouping on screen load
+			/*	,	columngroups		: 	[
+							{ name : "Property" , text : "Property" , align: "center" }
+						,	{ name : "Auction"  , text : "Auction"  , align: "center" }
+						]	*/
+				,   columns				:	[ // taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet
+							{ 							 	 datafield : "db_id"   		, text : "ID"       , editable : false , width    : 100 , hideable   : true , hidden : true  }
+						,	{ 							 	 datafield : "item"   		, text : "Item"     , editable : false , width    :  70 , hideable   : true , hidden : false }
+						,	{ /*columngroup : "Property" ,*/ datafield : "state"   		, text : "State"    , editable : false , width    :  50 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "city"	   		, text : "City"	   	, editable : false , width    : 100 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "use" 		    , text : "Use"      , editable : false , width    :  40 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "occ"   	    , text : "N/OO"     , editable : false , width    :  40 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "loanStatus"   , text : "P/NP"     , editable : false , width    :  40 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "lienPos"   	, text : "Pos"      , editable : false , width    :  40 , filtertype : "checkedlist"         }
+						,	{ /*columngroup : "Property" ,*/ datafield : "balCur"   	, text : "UPB"      , editable : false , width    :  60 , filtertype : "number"        	  , filtercondition : "EQUAL" , aggregates : ["sum","avg"]   , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "pctUpb"   	, text : "%UPB"     , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "pctLtv"   	, text : "LTV"      , editable : false , width    :  40 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "pctLtvCur"   	, text : "cLTV"     , editable : false , width    :  40 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "borRate"   	, text : "BorRate"  , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "p2" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "yieldCur"   	, text : "CurYield" , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "p2" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "ytm"      	, text : "YTM"      , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "p2" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "askRate"      , text : "AskRate"  , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "p2" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "bidRate"      , text : "BidRate"  , editable : true  , width 	  :  60 , filtertype : "number"                                                                      , cellsformat : "p2" , cellsalign : "right"  , align : "right"  , columntype : "numberinput" /* , cellclassname: "yellowCell" */ , cellendedit : function(row,datafield,columntype,oldvalue,newvalue){alert("Success! \n Received: "+newvalue)} } // Possible columntype: "numberinput" "dropdownlist" "checkbox" "datetimeinput" // Reference: http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-cells-editing.htm // *DROPDOWN MENU* createeditor: function (row, cellvalue, editor, celltext, cellwidth, cellheight){var dataSource = ['Cappuccino', 'Caramel Latte', 'Caffe Espresso'];editor.jqxDropDownList({source: dataSource });}
+						,	{ /*columngroup : "Property" ,*/ datafield : "askPrice"   	, text : "AskPrice"	, editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						,	{ /*columngroup : "Property" ,*/ datafield : "bidPrice"     , text : "BidPrice" , editable : true  , width 	  :  60 , filtertype : "number"                                                                      , cellsformat : "c0" , cellsalign : "right"  , align : "right"  , columntype : "numberinput" /* , cellclassname: "yellowCell" */ , cellendedit : function(row,datafield,columntype,oldvalue,newvalue){alert("Success! \n Received: "+newvalue)} } // Possible columntype: "numberinput" "dropdownlist" "checkbox" "datetimeinput" // Reference: http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-cells-editing.htm	// *VALIDATION* cellendedit: function (row, datafield, columntype, oldvalue, newvalue) {if(newvalue=="My Value")return false;}					
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "borPts"   	, text : "BorPts"   , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "n2" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "arv"			, text : "ARV"    	, editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "beds"   		, text : "Beds"     , editable : false , width    :  40 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "baths"   		, text : "Baths"	, editable : false , width    :  40 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "estMethod"   	, text : "Method"   , editable : false , width    :  60 , filtertype : "checkedlist"         }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "estValue"   	, text : "EstVal"   , editable : false , width    :  60 , filtertype : "number"        	                                                             , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "payBad"   	, text : "Bad"      , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "payGood"   	, text : "Good"	    , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "purPrice"   	, text : "Purchase" , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "schedRE"   	, text : "SRE"      , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "sellCarry"   	, text : "Carry"	, editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "c0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "sqft"   		, text : "SqFt"     , editable : false , width    :  50 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+					//	,	{ /*columngroup : "Property" ,*/ datafield : "term"   		, text : "Term"     , editable : false , width    :  40 , filtertype : "number"        	                                                             , cellsformat : "n0" , cellsalign : "right"  , align : "right"                               /* , cellclassname: "yellowCell" */ }
+						]
+			});
+			$("#button"     ).jqxButton({theme:theme});$("#button"     ).    click          ( function(){$("#jqxgrid").jqxGrid("autoresizecolumns"                                                                       );});
+			$("#expand"     ).jqxButton({theme:theme});$("#expand"     ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("expandgroup"  , groupnum);}});
+			$("#collapse"   ).jqxButton({theme:theme});$("#collapse"   ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("collapsegroup", groupnum);}});
+			$("#expandall"  ).jqxButton({theme:theme});$("#expandall"  ).on("click"         , function(){$("#jqxgrid").jqxGrid("expandallgroups"  );});
+			$("#collapseall").jqxButton({theme:theme});$("#collapseall").on("click"         , function(){$("#jqxgrid").jqxGrid("collapseallgroups");});
+													   $("#jqxgrid"    ).on("groupexpand"   , function(event){var args=event.args;$("#expandedgroup" ).text("Group: " + args.group + ", Level: " + args.level);});
+													   $("#jqxgrid"    ).on("groupcollapse" , function(event){var args=event.args;$("#collapsedgroup").text("Group: " + args.group + ", Level: " + args.level);});
+		});
+	</script>
+</head>
+<body class="default">
+	<div id="jqxWidget" style="font-size:100%;font-family:verdana;color:lightgrey;float:left;">
+		<div style="margin-top: 30px;">
+			<div style="float: left; margin-left: 20px;">
+				<input type="button" id="button"      value="Fit Columns" />
+				<input type="button" id="expandall"   value="Expand All Groups" />
+				<input type="button" id="collapseall" value="Collapse All Groups" style="margin-top: 10px; margin-bottom: 10px;" />
+			</div>
+		</div>
+		<div id="jqxgrid"></div>
+		<div id="chart_div" style="width:500px;height:200px;"></div>
+	</div>
+</body>
+</html>

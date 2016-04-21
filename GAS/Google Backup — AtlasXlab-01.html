@@ -1,0 +1,601 @@
+<script>
+// Change Log:
+// JSON visualization | viewer: http://chris.photobooks.com/json/default.htm
+// function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
+// Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
+function auth    (){}
+function timer   (){Logger.log(new Date().getTime())}//1388228703613
+function backup  (){var desc="Argenta™ Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print_dbScript(){var desc="Argenta™ Print — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"note"});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"TaxLienExchange Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function size    (){var db=ScriptDb.getMyDb();Logger.log(/*ScriptDb.getMyDb()*/db.query({}).getSize());}
+function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
+function showOne (){Logger.log(/*Utilities.jsonStringify*/JSON.stringify(ScriptDb.getMyDb().query({item:"eXjKqn1"/*/table:"note"/* /"user",user:"atlaslive@gmail.com",seller:true/*,city:"test"*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function showAll (){var db=ScriptDb.getMyDb(),r,results=db.query({});while(results.hasNext()){r=results.next();Logger.log(/*Utilities.jsonStringify*/JSON.stringify(r));return arr}} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2fipwhwd75f9M6jkzvWk4TZmOzH2A4uRg"/*act*/)}
+function print2doc(str,proj,clas){var desc="Backup | "+proj+" | "+clas+" | timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id)}
+//function del     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({xtable:"note"/*,/*source:"fciEx_foo",* /table:db.not("report"),* /timestamp_posted:db.greaterThan(1388548425377),k:"8u0hjrtbd68s3hi1w9kl",/*"36sgd2m257w2j0sn5isa",* /"report"/* /"bid"/*"user"* /,xcity:"test"/*xseller:true,xuser* /,bidder:"atlaslive@gmail.com"*/});while(results.hasNext()){arr.push(results.next().getId());}db.removeByIdBatch(arr,false);} // Replaced: while(results.hasNext()){r=results.next();db.remove(r);}}
+//function mod     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({/*item* /city:true,/*db.not(db.anyValue())/*/xtable:"note"/*,pctLtv:db.between(0,1.1),lienPos:db.not(1)/*,/*use* /lienPos:db.anyOf(["1st"/*false,db.not(db.anyValue())/*"Hospitality"/*"Commercial"/*"Apt","Multifamily"* /])/*"Oth"/* /"bid"*/});while(results.hasNext()){r=results.next();try{r.pctLtv=Math.round(100*r.balCur/r.estValue)}catch(e){r.pctLtv="";Logger.log(e.message)}/*r.lienPos=1;/*LibraryjsUtil.stateConvert(r.state,"abbr");/*.use="X";/*"CRE";/*"MUL";/*r.city=LibraryjsUtil.toCaseTitle(r.city);/*r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));/*if(r.askPrice==""){r.askPrice=0}/* /r.remove=false;r.accepted=false;/*r.askRate=r.buyRate;r.askPrice=r.buyPts;* /r.bids=[];/*r.table="note";r.datePosted=new Date().getTime();* /var i=r.bids.length;while(i--){/*r.bids[i].timestamp=r.bids[i].time;* /r.bids[i].accepted=false;/*r.bids[i].target_id=r.getId();* /r.bids[i].time=""/* /if(r.bids[i].bidder=="atlaslive@gmail.com"){r.bids.splice(i,1)}* /db.save(r);*/arr.push(r);}db.saveBatch(arr,false)}
+//function xdoPost(e){ScriptDb.getMyDb().save(e.parameters);/*return;*/var out=ContentService.createTextOutput();out.setContent(JSON.stringify(e.parameters));return out;} // CreditReady: userId=2472, pswd=p@ssword, url=https://secure.progrexion.com/fsaffiliates/creditready/ // https://developers.google.com/apps-script/uiapp?hl=en#doGetParams // https://developers.google.com/apps-script/content_service?hl=en // Example: // <SCRIPT URL>?start=1325437200&end=1325439000;new Date(Number(request.parameters.start)*1000);new Date(Number(request.parameters.end)*1000));
+function doPost (e){ // function xdoPost(e){return ContentService.createTextOutput("Hello World"/*"User says: "+JSON.stringify(e)*/)} // e.postData.getDataAsString()
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /* receive from fci */ "36sgd2m257w2j0sn5isa" : return receiveScrape (p,"fciEx"     ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from nmp */ "3w34xo2xeuyy8jprgmzg" : return receiveScrape (p,"noteMktPl" ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from ml  */ "8u0hjrtbd68s3hi1w9kl" : return receiveScrape (p,"moolahList") ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+         default                                                 :                                       ; break;}}}
+// function xdoGet (e){return ContentService.createTextOutput("Hello World")}
+// function xdoGet (e){ // References: https://developers.google.com/apps-script/guides/html-service-communication#private_functions // https://sites.google.com/site/appsscripttutorial/miscellaneous/creating-form-elements-dynamically-using-google-apps-script-gas
+ // if(e && e.parameter && e.parameter.jsoncallback){return ContentService.createTextOutput("foo({result:'<strong>Hello World'});").setMimeType(ContentService.MimeType.TEXT);}
+function  doGet (e){ // References : https://developers.google.com/apps-script/uiapp, https://developers.google.com/apps-script/uiapp#ServerHandlers
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /*                      */ "yma7h4455hlcpinom5cv" : var t= HtmlService.createTemplateFromFile("home");t.m=m;return HtmlService.createHtmlOutput/*FromFile*/(t.evaluate().getContent()).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycbywTjbeJyV5aHX_q_iMtOMChqhWyWWK2fkbsjuIQX0AxGu1Inc/exec?k=yma7h4455hlcpinom5cv&m=u5zqt2mpg6vxbie1lghb // Added URL parameter passed to HTML page
+		//  case   /*                      */ "yma7h4455hlcpinom5cv" : return HtmlService.createHtmlOutput/*FromFile*/(HtmlService.createTemplateFromFile("home").evaluate().getContent()               ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // .IFRAME is necessary to make glyphicons work so use this "nesting" approach
+    	//  case   /*                      */ "yma7h4455hlcpinom5cv" : return HtmlService.createTemplateFromFile  ("home.html"                                                                          ).evaluate()                                                     ;break;
+            case   /*                      */ "60s6kgeyb91lkz128c9o" : return HtmlService.createHtmlOutputFromFile("repeater.html"                                                                      ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break;
+	        case   /* table  serve         */ "hyg0hu5umfobawuzwi1f" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveTable           ( )) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+            case   /* table  receive       */ "owos3zj5e6xvcmu6lje1" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveTable         (p)) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+         default                                                     : break;}}
+	if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
+			case   "onlinenoteexchange"            : 
+					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+							case   "sell"          : return HtmlService.createHtmlOutputFromFile("sell.html"            ).setSandboxMode(HtmlService.SandboxMode.NATIVE           );break;
+							case   "buy"           : return HtmlService.createHtmlOutputFromFile("buy.html"             ).setSandboxMode(HtmlService.SandboxMode.NATIVE           );break;
+							case   "sandbox"       : return HtmlService.createHtmlOutputFromFile("sandbox.html"         ).setSandboxMode(HtmlService.SandboxMode.NATIVE           );break;
+							case   "authorize"     : return authorize                           (                       )                                                          ;break;
+						 default                   :                    ;break;}}
+			case   "taxlienexchange"               : 
+					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"          : return HtmlService.createTemplateFromFile  (       "order.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "account"       : return HtmlService.createTemplateFromFile  (     "account.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "charts"        : return HtmlService.createTemplateFromFile  (       "chart.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-up"       : return HtmlService.createTemplateFromFile  (      "signUp.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-in"       : return HtmlService.createTemplateFromFile  (      "signIn.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "home"          : return HtmlService.createHtmlOutputFromFile(       "order.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+                         // case   "authorize"     : return authorize ();break;
+                         default                   :                    ;break;}}
+        //  case   "creditrepairnation"            : // acquire inventory
+		//			if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+        //                  case   "home"          : return HtmlService.createHtmlOutputFromFile(     "collect.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+		//  			 default                   :                    ;break;}}
+         default                                   : break;}}}
+function authorize(){return HtmlService.createHtmlOutput("<div align='center' style='color:#808080;font-family:verdana;color:orange;font-weight:bold;margin-top:15px;'>Authorization successful!<div style='color:#808080;font-size:smaller;font-weight:normal;'>You may now access all features</div><img src='https://lh5.googleusercontent.com/-a81AytXYq0Q/Umtn0FrFdhI/AAAAAAAAIyE/xCYArSNCR1k/s144/orange-check-mark.png' height='100'></div>")}
+function processForm_receiveFundDocs(ob){var i,user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),q={table:"user",seller:true,user:user},r=db.query(q).next();
+    if(!r){r=q;r.record=[];r.emailList={current:[],archive:[]};}r.record.unshift(ob);r.record[0].date=t;r.emailList.current.unshift((t+","+ob.emailListString).split(/[\s,]+/)); // function test(){Logger.log("foo bar, zap-foo, baz bat".split(/[\s,]+/))} // Search term: split string by commar or space // Reference: http://stackoverflow.com/questions/1835032/regexp-split-string-by-commas-and-spaces-but-ignore-hyphenated-words
+    i=r.emailList.current[0].length;while(i---1){if(r.emailList.archive.indexOf(r.emailList.current[i])==-1){r.emailList.archive.push(r.emailList.current[0][i])}}Logger.log(JSON.stringify(r));db.save(r)}
+function processForm_registerSeller(ob){var i,user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),q={table:"user",seller:true,user:user},r=db.query(q).next();
+    if(!r){r=q;r.record=[];r.emailList={current:[],archive:[]};}r.record.unshift(ob);r.record[0].timestamp=t;r.emailList.current.unshift((t+","+ob.emailListString).split(/[\s,]+/)); // function test(){Logger.log("foo bar, zap-foo, baz bat".split(/[\s,]+/))} // Search term: split string by commar or space // Reference: http://stackoverflow.com/questions/1835032/regexp-split-string-by-commas-and-spaces-but-ignore-hyphenated-words
+    i=r.emailList.current[0].length;while(i---1){if(r.emailList.archive.indexOf(r.emailList.current[i])==-1){r.emailList.archive.push(r.emailList.current[0][i])}}Logger.log(JSON.stringify(r));db.save(r)}
+function processForm_addNote(ob){var user=Session.getActiveUser().getEmail(),t=new Date().getTime(),db=ScriptDb.getMyDb(),u=db.query({table:"user",user:user,seller:true}).next(),i,dist=u.emailList.current[0].slice(1),site=SitesApp.getSite("onlinenoteexchange");if(!u.record[0].agreed){Logger.log(user+" did not agree to groundrules.");return}ob.table="note";ob.timestamp_posted=t;ob.seller=user;ob.remove=false;ob.accepted=false;ob.filePic=processPic(ob.filePic);ob.fileDoc=processDoc(ob.fileDoc);if(ob.askPrice==""){ob.askPrice=0};var id=db.save(ob).getId(),r=db.load(id);r.item=LibraryjsUtil.toBase62(Number(id.slice(1)));db.save(r);
+    chromeLogoBlob=UrlFetchApp.fetch("https://lh5.googleusercontent.com/-zCLeer1r3ro/Udnn8thtnmI/AAAAAAAAHys/lWkaQnXPv_Q/s144/Google_Chrome_icon_2011.jpg").getBlob().setName("chromeLogoBlob");
+    i=dist.length;while(i--){try{site.addViewer(dist[i])}catch(e){Logger.log(dist[i]+": "+e.message)}MailApp.sendEmail({to:dist[i],subject:"New loan: "+r.askRate+"%, "+r.askPrice+" points",htmlBody:("<a href='https://sites.google.com/site/onlinenoteexchange/buy'>Click here</a> (item: "+r.item+") <a href='https://www.google.com/intl/en/chrome/browser/'><img src='cid:chromeLogo' height='15' style='text-decoration:none;border:0;outline:none'></a> <a href='https://www.google.com/intl/en/chrome/browser/'>Chrome required</a>.<br><br>Rate: "+r.askRate+"% +"+r.askPrice+" points<br><br>Collateral:<br>"+r.sa+", "+r.city+", "+r.state+" "+r.zip+"<br>"+r.use+", "+r.beds+" beds, "+r.baths+" baths, "+r.sqft+" sqft, "+"<br><br>Loan Type: "+r.purpose+"<br>Unpaid Principal Balance: $"+r.balCur+"<br>Estimated Value: $"+r.estValue+"<br>LTV: "+r.pctLtv/*+"%<br>Term: "+r.term+" months<br>"*/+"<br>Highlights: "+r.notes),name:"atlaslive@gmail.com",inlineImages:{chromeLogo:chromeLogoBlob/*,youtubeLogo:youtubeLogoBlob*/}});}/*Logger.log(JSON.stringify(ob));*/return}
+function sendUserToClient(){var user=Session.getActiveUser().getEmail(),u=ScriptDb.getMyDb().query({table:"user",seller:true,user:user}).next();/*Logger.log(JSON.stringify(r));*/return u;}
+function processDoc(blob){try{var id=DocsList.createFile(blob/*.getAs("application/pdf")*/).getId();}catch(e){Logger.log("Error XpfAg: "+e.message);return "";}DriveApp.getFileById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);return DocsList.getFileById(id).getUrl();} // Reference: https://developers.google.com/apps-script/reference/base/composite-blob#getAs(String) // Reference: https://code.google.com/p/google-apps-script-issues/issues/detail?id=1660 see #37, Oct 13, 2012 // Use DocsList instead of DriveApp which will not allow document to be viewed properly
+function processPic(blob){if(!blob.length){return ""}return "https://drive.google.com/uc?export=view&id="+DriveApp.createFile(blob/*.getAs("image/jpeg")*/).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW).getId()} // Image // Reference: http://stackoverflow.com/questions/10311092/displaying-files-e-g-images-stored-in-google-drive-on-a-website // http://stackoverflow.com/questions/14717426/referencing-project-files-with-html-service > http://googleappsdeveloper.blogspot.in/2012/11/announcing-google-drive-site-publishing.html
+function receiveBuy(p){/*if((p.bidPrice=="")||(p.bidRate=="")){return} — Needs initial "" for first bid */Logger.log(JSON.stringify(p));var db=ScriptDb.getMyDb(),user=Session.getUser().getEmail(),t=new Date().getTime();p.db_id=LibraryjsUtil.rc4Decrypt("DktaE",p.db_id);var r=db.load(p.db_id);if(r.accepted||(r.remove||((r.askRate&&(p.bidRate<r.askRate))&&(r.askPrice&&(p.bidPrice<r.askPrice))))){return} // Bid rate OR pts CAN exceed ask to sweeten offer — but not BOTH
+    if(r.bids==null){r.bids=[]}var accepted=((p.bidRate==r.askRate)&&(p.bidPrice==r.askPrice));r.bids.push({bidder:user,rate:p.bidRate,points:p.bidPrice,target_id:/*LibraryjsUtil.rc4Decrypt("vDMm0",r.getId())/*==*/p.db_id,timestamp:t,accepted:accepted});db.saveBatch([r,{table:"bid",target_id:/*LibraryjsUtil.rc4Decrypt("vDMm0",*/p.db_id/*==r.getId()-->Causes breakage*//*)*/,rate:p.bidRate,points:p.bidPrice,bidder:user,timestamp:t,accepted:accepted}],false);if(accepted){/*Send email*/}return;}
+function receiveSell(p){Logger.log(JSON.stringify(p));var db=ScriptDb.getMyDb(),user=Session.getUser().getEmail(),i,r,rb,t=new Date().getTime();switch(p.k){
+    case "346f7w5jalx8cdwsfc2d"/*Remove*/:p.db_id=LibraryjsUtil.rc4Decrypt("DktaE",p.  db_id           );r=db.load(p.db_id);r.remove  =p.remove  ;r.timestamp_remove  =t;break;
+    case "8u0ghdqoe4bw7ypepi0e"/*Accept*/:p.db_id=LibraryjsUtil.rc4Decrypt("vDMm0",p./*db_id*/target_id);r=db.load(p.db_id);r.accepted=p.accepted;r.timestamp_accepted=t;
+        i=r.bids.length;while(i--){if(r.bids[i].bidder==LibraryjsUtil.rc4Decrypt("WnJ9n",p.bidder)&&r.bids[i].rate==p.rate&&r.bids[i].points==p.points){r.bids[i].accepted=true;break;}}
+        rb=db.query({target_id:p.db_id}).next();rb.accepted=true;rb.accepted_timestamp=t;break;
+    default:break;}db.save(r);return;}
+function receiveReport(p){Logger.log(JSON.stringify(p));var r,db=ScriptDb.getMyDb(),user=Session.getUser().getEmail(),t=new Date().getTime();p.db_id=LibraryjsUtil.rc4Decrypt("DktaE",p.db_id);r=db.load(p.db_id);r.roi.unshift({timestamp:t,amt:p.roi});db.save(r);return;}
+function receiveScrape(p,source){ // Standardize scraped variables
+ // var source=source||"fciEx",p=p||{"k":"36sgd2m257w2j0sn5isa","list":"{\"zip\":\"\",\"sa\":\"\",\"pctUpb\":85,\"ask\":237604.85,\"rateNote\":7.125,\"balCur\":279535.12,\"balBeg\":291600,\"lienPos\":1,\"loanStatus\":\"P\",\"foo\":\"width=\\\"154\\\" height=\\\"19\\\" class=\\\"tborder-left\\\" align=\\\"center\\\"\",\"sellerId\":\"U0001733\",\"link_sellerListings\":\"seller-listings.php?sellerID=1733\",\"state\":\"MI\",\"city\":\"West Bloomfield\",\"prodId\":13017,\"link_details\":\"/MICHIGAN/Residential/Performing/0013017.html\"}","detail":"{\"estPropVal_1\":\"0.00\",\"address\":\"West Bloomfield MI\",\"ask_1\":\"85\",\"foo\":\"id=\\\"c41_ctl\\\"\",\"productId\":\"0013017\",\"lienPos\":\"1\",\"loanStatus\":\"P\",\"paidTo\":\"12/01/2013\",\"loanMaturity\":\"09/01/2034\",\"loanType\":\"SFR\",\"ltvRatio\":\"0.000\",\"balBeg\":\"291600.00\",\"balCur\":\"279535.12\",\"estPropVal_2\":\"0.00\",\"valuationType\":\"Other\",\"valuationDate\":false,\"noteRate\":\"7.125\",\"soldRate\":\"0.000\",\"originationDate\":\"10/08/2003\",\"pmtFrequency\":\"Monthly\",\"pmtNextDue\":\"01/01/2014\",\"pmtMonthlyAmt\":\"2125.64\",\"taxesDue\":\"0.00\",\"loanCharges\":\"0.00\",\"lateChargeDays\":\"15\",\"unpaidInterest\":\"0.00\",\"lateCharge\":\"5.00\",\"ask_2\":\"85\",\"buyNow\":\".\",\"comments\":\"No comments.\",\"state\":\"MI\",\"city\":\"West,Bloomfield\"}"}
+    ;p.list=JSON.parse(p.list);p.detail=JSON.parse(p.detail);//Logger.log(JSON.stringify(p));
+    var ob=p 
+      ; ob.accepted         = false
+      ; ob.arv              = ""
+      ; ob.askPrice         = (function(){try{ switch(source){case "fciEx":return ( p.list.ask                                            );break;case "noteMktPl":return ( p.detail.ask_2  ||  p.list.ask_1                );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error vWCQp: "+e.message);return ""}})()
+      ; ob.askRate          = (function(){try{ switch(source){case "fciEx":return ( p.detail.soldRate||p.detail.noteRate||p.list.rateNote );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error L7R6M: "+e.message);return ""}})()
+      ; ob.balBeg           = (function(){try{ switch(source){case "fciEx":return ( p.detail.balBeg        || p.list.balBeg               );break;case "noteMktPl":return ( p.detail.balBeg                                 );break;case "moolahList":return ( p.detail.amount           || p.list.amount                                            );break;default:return "";break;}}catch(e){Logger.log("Error Z4Ym4: "+e.message);return ""}})()
+      ; ob.balCur           = (function(){try{ switch(source){case "fciEx":return ( p.detail.balCur        || p.list.balCur               );break;case "noteMktPl":return ( p.detail.balCur                                 );break;case "moolahList":return ( p.detail.amount           || p.list.amount                                            );break;default:return "";break;}}catch(e){Logger.log("Error wcQX5: "+e.message);return ""}})()
+      ; ob.ballAmt          = ""
+      ; ob.balloon          = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( p.detail.balloon                                );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error 4IxxQ: "+e.message);return ""}})()
+      ; ob.baths            = ""
+      ; ob.beds             = ""
+      ; ob.borPts           = ""
+      ; ob.borRate          = (function(){try{ switch(source){case "fciEx":return ( p.detail.noteRate      || p.list.rateNote             );break;case "noteMktPl":return ( p.detail.borRate                                );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error v2JrB: "+e.message);return ""}})()
+      ; ob.city             = (function(){try{ switch(source){case "fciEx":return ( p.list.city            || p.detail.city               );break;case "noteMktPl":return ( p.detail.city                                   );break;case "moolahList":return ( p.detail.city                                                                         );break;default:return "";break;}}catch(e){Logger.log("Error yELY4: "+e.message);return ""}})()
+      ; ob.dateMaturity_day = (function(){try{ switch(source){case "fciEx":return ( p.detail.loanMaturity   .day                          );break;case "noteMktPl":return ( p.detail.maturityDate   .day                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error jXEr5: "+e.message);return ""}})()
+      ; ob.dateMaturity_mo  = (function(){try{ switch(source){case "fciEx":return ( p.detail.loanMaturity   .month                        );break;case "noteMktPl":return ( p.detail.maturityDate   .month                  );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error Umkgq: "+e.message);return ""}})()
+      ; ob.dateMaturity_yr  = (function(){try{ switch(source){case "fciEx":return ( p.detail.loanMaturity   .year                         );break;case "noteMktPl":return ( p.detail.maturityDate   .year                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error a90Sq: "+e.message);return ""}})()
+      ; ob.datePaidTo_day   = (function(){try{ switch(source){case "fciEx":return ( p.detail.paidTo         .day                          );break;case "noteMktPl":return ( p.detail.lastPmtDate    .day                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error ZzL60: "+e.message);return ""}})()
+      ; ob.datePaidTo_mo    = (function(){try{ switch(source){case "fciEx":return ( p.detail.paidTo         .month                        );break;case "noteMktPl":return ( p.detail.lastPmtDate    .month                  );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error rXGRu: "+e.message);return ""}})()
+      ; ob.datePaidTo_yr    = (function(){try{ switch(source){case "fciEx":return ( p.detail.paidTo         .year                         );break;case "noteMktPl":return ( p.detail.lastPmtDate    .year                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error 44Uav: "+e.message);return ""}})()
+      ; ob.dateNext_day     = (function(){try{ switch(source){case "fciEx":return ( p.detail.pmtNextDue     .day                          );break;case "noteMktPl":return (""                                               );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error BXltz: "+e.message);return ""}})()
+      ; ob.dateNext_mo      = (function(){try{ switch(source){case "fciEx":return ( p.detail.pmtNextDue     .month                        );break;case "noteMktPl":return (""                                               );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error lYU7Y: "+e.message);return ""}})()
+      ; ob.dateNext_yr      = (function(){try{ switch(source){case "fciEx":return ( p.detail.pmtNextDue     .year                         );break;case "noteMktPl":return (""                                               );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error EwT1t: "+e.message);return ""}})()
+      ; ob.dateOrig_day     = (function(){try{ switch(source){case "fciEx":return ( p.detail.originationDate.day                          );break;case "noteMktPl":return ( p.detail.originationDate.day                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error Oiauo: "+e.message);return ""}})()
+      ; ob.dateOrig_mo      = (function(){try{ switch(source){case "fciEx":return ( p.detail.originationDate.month                        );break;case "noteMktPl":return ( p.detail.originationDate.month                  );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error pimlG: "+e.message);return ""}})()
+      ; ob.dateOrig_yr      = (function(){try{ switch(source){case "fciEx":return ( p.detail.originationDate.year                         );break;case "noteMktPl":return ( p.detail.originationDate.year                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error l2FMa: "+e.message);return ""}})()
+      ; ob.datePosted_day   = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.datePosted.day                                                               );break;default:return "";break;}}catch(e){Logger.log("Error lkReb: "+e.message);return ""}})()
+      ; ob.datePosted_mo    = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.list  .datePosted.split("/")[0] /* Ex. p.list.datePosted.month=="8/9" */            );break;default:return "";break;}}catch(e){Logger.log("Error d2bQk: "+e.message);return ""}})()
+      ; ob.datePosted_yr    = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.datePosted.year                                                              );break;default:return "";break;}}catch(e){Logger.log("Error HavAK: "+e.message);return ""}})()
+      ; ob.doc_appraisal    = true
+      ; ob.doc_closing      = true
+      ; ob.doc_hazard       = true
+      ; ob.doc_note         = true
+      ; ob.doc_pics         = true
+      ; ob.doc_pmts         = true
+      ; ob.doc_title        = true
+      ; ob.downPmt          = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.availDown                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error 9GcvY: "+e.message);return ""}})()
+      ; ob.estDate_day      = (function(){try{ switch(source){case "fciEx":return ( p.detail.valuationDate  .day                          );break;case "noteMktPl":return ( p.detail.valuationDate  .day                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error nNDdI: "+e.message);return ""}})()
+      ; ob.estDate_mo       = (function(){try{ switch(source){case "fciEx":return ( p.detail.valuationDate  .month                        );break;case "noteMktPl":return ( p.detail.valuationDate  .month                  );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error XwCFR: "+e.message);return ""}})()
+      ; ob.estDate_yr       = (function(){try{ switch(source){case "fciEx":return ( p.detail.valuationDate  .year                         );break;case "noteMktPl":return ( p.detail.valuationDate  .year                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error CvZD6: "+e.message);return ""}})()
+      ; ob.estMethod        = (function(){try{ switch(source){case "fciEx":return ( p.detail.valuationType                                );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error rHE5W: "+e.message);return ""}})()
+      ; ob.estValue         = (function(){try{ switch(source){case "fciEx":return ( p.detail.estPropVal_2  || p.detail.estPropVal_1       );break;case "noteMktPl":return ( p.detail.propVal                                );break;case "moolahList":return ( p.detail.collateralValue                                                              );break;default:return "";break;}}catch(e){Logger.log("Error Pfrrq: "+e.message);return ""}})()
+      ; ob.exit             = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.exitPlan                                                                     );break;default:return "";break;}}catch(e){Logger.log("Error lHcPk: "+e.message);return ""}})()
+      ; ob.fileDoc          = ""
+      ; ob.filePic          = ""
+   // ; ob.item             = ""
+      ; ob.lienPos          = (function(){try{ switch(source){case "fciEx":return ( p.detail.lienPos       || p.list.lienPos              );break;case "noteMktPl":return ( p.detail.lienPosition                           );break;case "moolahList":return ( p.detail.lienPos  || p.list.lienPos                                                   );break;default:return "";break;}}catch(e){Logger.log("Error LTAL9: "+e.message);return ""}})()
+      ; ob.loanStatus       = (function(){try{ switch(source){case "fciEx":return ( p.detail.loanStatus    || p.list.loanStatus           );break;case "noteMktPl":return ( p.list.loanStatus                               );break;case "moolahList":return ( "A"                                                                                   );break;default:return "";break;}}catch(e){Logger.log("Error J2xVe: "+e.message);return ""}})()
+      ; ob.notes            = (function(){try{ switch(source){case "fciEx":return ( p.list.comments                                       );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( "Exit:<br>" + p.detail.exitPlan + "<br><br>Funds used for:<br>" + p.detail.useOfFunds );break;default:return "";break;}}catch(e){Logger.log("Error 1S2yI: "+e.message);return ""}})()
+      ; ob.occ              = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( p.detail.ownerOccupied                          );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error pyVar: "+e.message);return ""}})()
+      ; ob.payBad           = ""
+      ; ob.payGood          = ""
+      ; ob.pctLtv           = (function(){try{ switch(source){case "fciEx":return ( p.detail.ltvRatio                                     );break;case "noteMktPl":return ( Math.round(100*p.detail.balCur/p.detail.propVal));break;case "moolahList":return ( p.detail.ltv      || p.list.ltv                                                       );break;default:return "";break;}}catch(e){Logger.log("Error o9kiy: "+e.message);return ""}})()
+      ; ob.pctUpb           = (function(){try{ switch(source){case "fciEx":return ((p.detail.ask_2 || p.detail.ask_1) || p.list.pctUpb    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error MMJJM: "+e.message);return ""}})()
+      ; ob.pmtAmt           = (function(){try{ switch(source){case "fciEx":return ( p.detail.pmtMonthlyAmt                                );break;case "noteMktPl":return ( p.detail.pmtNote                                );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error G6HvR: "+e.message);return ""}})()
+   // ; ob.pmtsLeft         = ""
+   // ; ob.pmtsRecd         = ""
+      ; ob.purpose          = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.loanType || p.list.loanType                                                  );break;default:return "";break;}}catch(e){Logger.log("Error h6gpy: "+e.message);return ""}})()
+      ; ob.purPrice         = ""
+      ; ob.remove           = false
+      ; ob.rent             = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( p.detail.rent                                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error 7X5F7: "+e.message);return ""}})()
+      ; ob.sa               = (function(){try{ switch(source){case "fciEx":return ( p.list.sa                                             );break;case "noteMktPl":return ( ""                                              );break;case "moolahList":return ( p.detail.sa                                                                           );break;default:return "";break;}}catch(e){Logger.log("Error bbF5g: "+e.message);return ""}})()
+      ; ob.schedRE          = ""
+      ; ob.seller           = (function(){try{ switch(source){case "fciEx":return ( "fciEx_"+p.list.prodId || "fciEx_"+p.detail.productId );break;case "noteMktPl":return ( p.detail.link_details_2||p.list.link_details_1  );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error QqeYq: "+e.message);return ""}})()
+      ; ob.source           = (function(){try{ switch(source){case "fciEx":return ( "fciEx_"+p.list.sellerId                              );break;case "noteMktPl":return ( "noteMktPl_"+p.list.sellerId                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error wZjUY: "+e.message);return ""}})()
+      ; ob.sqft             = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( p.detail.sqft                                   );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error 3rgiy: "+e.message);return ""}})()
+      ; ob.sqftLot          = (function(){try{ switch(source){case "fciEx":return ( ""                                                    );break;case "noteMktPl":return ( p.detail.sqftLot                                );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error uDr7j: "+e.message);return ""}})()
+      ; ob.state            = (function(){try{ switch(source){case "fciEx":return ( p.detail.state         || p.list.state                );break;case "noteMktPl":return ( p.detail.state                                  );break;case "moolahList":return ( p.detail.state    || p.list.state                                                     );break;default:return "";break;}}catch(e){Logger.log("Error lBDV3: "+e.message);return ""}})()
+      ; ob.table            = "note"
+   // ; ob.term             = ""
+      ; ob.timestamp_posted = new Date().getTime()
+      ; ob.use              = (function(){try{ switch(source){case "fciEx":return ( p.detail.loanType                                     );break;case "noteMktPl":return ( p.detail.propertyType                           );break;case "moolahList":return ( p.detail.propertyType || p.list.propertyType                                          );break;default:return "";break;}}catch(e){Logger.log("Error 64IzN: "+e.message);return ""}})()
+      ; ob.zip              = (function(){try{ switch(source){case "fciEx":return ( p.list.zip                                            );break;case "noteMktPl":return ( p.detail.zip                                    );break;case "moolahList":return ( ""                                                                                    );break;default:return "";break;}}catch(e){Logger.log("Error Z6a5P: "+e.message);return ""}})()
+   // Calculations follow
+      ; ob.pctLtvCur        = (function(){try{ return  Math.round(ob.pctLtv *ob.askPrice/ob.balCur) || Math.round(100*ob.askPrice/ob.estValue)}catch(e){Logger.log("Error ymo6h: "+e.message);return ""}})()
+      ; ob.pctUpb           = (function(){try{ return                                    ob.pctUpb  || Math.round(100*ob.askPrice/ob.balCur  )}catch(e){Logger.log("Error bon5V: "+e.message);return ""}})()
+      ; ob.yieldCur         = (function(){try{ return (Math.round(1000*ob.borRate*ob.balCur/ob.askPrice)) / 1000                              }catch(e){Logger.log("Error K4R0D: "+e.message);return ""}})()
+   // ; ob.ytm              = (function(){try{               Complex calculation goes here                                                    }catch(e){Logger.log("Error nx4TR: "+e.message);return ""}})()
+	  ;/*Logger.log(JSON.stringify(ob));*/var db=ScriptDb.getMyDb(),id=db.save(ob).getId(),r=db.load(id);r.item=LibraryjsUtil.toBase62(Number(id.slice(1)));db.save(r);/*Logger.log(JSON.stringify(r));*/return;}
+// --------------------------- Serve Outside GAS ---------------------------
+function serveSellers(){var ob=[],arr=[],i,j,k,r,t=[],zil=[],user=Session.getUser().getEmail(),out={"totalResultsCount":0,"records":[]},db=ScriptDb.getMyDb(),q={table:"note",remove:false};if(user!="atlaslive@gmail.com"){q.seller=user}var results=db.query(q);while(results.hasNext()){r=results.next();i=out.totalResultsCount++;
+    try{out.records[i]={db_id:LibraryjsUtil.rc4Encrypt("DktaE",r.getId())}}catch(e){Logger.log("Error BDhqq: "+e.message)}try{var currentBids=LibraryjsUtil.getCurrentBids(r.bids)||[],m=0;}catch(e){Logger.log("Error Fr10a: "+e.message)}try{m=currentBids.length}catch(e){Logger.log("Error lum87: "+e.message)}while(m--){currentBids[m].bidder=LibraryjsUtil.rc4Encrypt("WnJ9n",currentBids[m].bidder);currentBids[m].target_id=LibraryjsUtil.rc4Encrypt("vDMm0",currentBids[m].target_id);}var currentBidsLength=(currentBids)?currentBids.length:0;
+	ob[i] = {
+		"nolink"                         : {
+                "accepted"               : function(){try{return                 r.accepted                                              }catch(e){Logger.log("Error BJrJb: "+e.message);return "";}}() //
+            ,   "arv"                    : function(){try{return                 r.arv                                                   }catch(e){Logger.log("Error qEpyI: "+e.message);return "";}}() //
+            ,   "askRate"                : function(){try{return                 r.askRate                                               }catch(e){Logger.log("Error XY3SN: "+e.message);return "";}}() //
+            ,   "askPrice"               : function(){try{return                 r.askPrice                                              }catch(e){Logger.log("Error BbYOH: "+e.message);return "";}}() //
+            ,   "baths"                  : function(){try{return                 r.baths                                                 }catch(e){Logger.log("Error iyWpu: "+e.message);return "";}}() //
+            ,   "bidCount"               :                                         currentBidsLength
+            ,   "bids"                   :                                         currentBids
+            ,   "beds"                   : function(){try{return                 r.beds                                                  }catch(e){Logger.log("Error LuskC: "+e.message);return "";}}() //
+            ,   "borRate"                : function(){try{return                 r.borRate                                               }catch(e){Logger.log("Error JLSLy: "+e.message);return "";}}() //
+            ,   "borPts"                 : function(){try{return                 r.borPts                                                }catch(e){Logger.log("Error A8eEm: "+e.message);return "";}}() //
+            ,   "city"                   : function(){try{return                 r.city                                                  }catch(e){Logger.log("Error xLGcf: "+e.message);return "";}}() //
+            ,   "estMethod"              : function(){try{return                 r.estMethod                                             }catch(e){Logger.log("Error pVPll: "+e.message);return "";}}() //
+            ,   "estValue"               : function(){try{return                 r.estValue                                              }catch(e){Logger.log("Error Dmg6z: "+e.message);return "";}}() //
+            ,   "exit"                   : function(){try{return                 r.exit                                                  }catch(e){Logger.log("Error DjKI9: "+e.message);return "";}}() //
+            ,   "fileDoc"                : function(){try{return                 r.fileDoc                                               }catch(e){Logger.log("Error nezPL: "+e.message);return "";}}() //
+            ,   "filePic"                : function(){try{return                 r.filePic                                               }catch(e){Logger.log("Error B3b29: "+e.message);return "";}}() //
+            ,   "item"                   : function(){try{return                 r.item                                                  }catch(e){Logger.log("Error 5hpm9: "+e.message);return "";}}() //
+            ,   "notes"                  : function(){try{return                 r.notes                                                 }catch(e){Logger.log("Error 2x3QK: "+e.message);return "";}}() //
+            ,   "payBad"                 : function(){try{return                 r.payBad                                                }catch(e){Logger.log("Error Vjx8Z: "+e.message);return "";}}() //
+            ,   "payGood"                : function(){try{return                 r.payGood                                               }catch(e){Logger.log("Error HoQPl: "+e.message);return "";}}() //
+            ,   "pctLtv"                 : function(){try{return                 r.pctLtv                                                }catch(e){Logger.log("Error VfbpT: "+e.message);return "";}}() //
+            ,   "purpose"                : function(){try{return                 r.purpose                                               }catch(e){Logger.log("Error kmACu: "+e.message);return "";}}() //
+            ,   "purPrice"               : function(){try{return                 r.purPrice                                              }catch(e){Logger.log("Error tXdxn: "+e.message);return "";}}() //
+			,   "remove"                 : function(){try{return                 r.remove                                                }catch(e){Logger.log("Error wGy6P: "+e.message);return "";}}() //					   
+            ,   "rent"                   : function(){try{return                 r.rent                                                  }catch(e){Logger.log("Error 8pAi5: "+e.message);return "";}}() //
+            ,   "sa"                     : function(){try{return                 r.sa                                                    }catch(e){Logger.log("Error unh8c: "+e.message);return "";}}() //
+            ,   "schedRE"                : function(){try{return                 r.schedRE                                               }catch(e){Logger.log("Error 8cItd: "+e.message);return "";}}() //
+         // ,   "sellCarry"              : function(){try{return                 r.sellCarry                                             }catch(e){Logger.log("Error 2jqDq: "+e.message);return "";}}() //
+            ,   "sqft"                   : function(){try{return                 r.sqft                                                  }catch(e){Logger.log("Error NbtEx: "+e.message);return "";}}() //
+            ,   "sqftLot"                : function(){try{return                 r.sqftLot                                               }catch(e){Logger.log("Error XILuW: "+e.message);return "";}}() //
+            ,   "state"                  : function(){try{return                 r.state                                                 }catch(e){Logger.log("Error bp1Y9: "+e.message);return "";}}() //
+            ,   "term"                   : function(){try{return                 r.term                                                  }catch(e){Logger.log("Error lLMzH: "+e.message);return "";}}() //
+            ,   "use"                    : function(){try{return                 r.use                                                   }catch(e){Logger.log("Error QC8lk: "+e.message);return "";}}() //
+            ,   "zip"                    : function(){try{return                 r.zip                                                   }catch(e){Logger.log("Error kPZtm: "+e.message);return "";}}() //
+                                         // Below added from "comprehensive" form
+            ,   "balBeg"                 : function(){try{return                 r.balBeg                                                }catch(e){Logger.log("Error hUgqK: "+e.message);return "";}}() //
+            ,   "balCur"                 : function(){try{return                 r.balCur                                                }catch(e){Logger.log("Error T20mK: "+e.message);return "";}}() //
+            ,   "balloon"                : function(){try{return                 r.balloon                                               }catch(e){Logger.log("Error Gu3BG: "+e.message);return "";}}() //
+            ,   "ballAmt"                : function(){try{return                 r.ballAmt                                               }catch(e){Logger.log("Error EtGlv: "+e.message);return "";}}() //
+            ,   "dateMaturity_day"       : function(){try{return                 r.dateMaturity_day                                      }catch(e){Logger.log("Error k8sgQ: "+e.message);return "";}}() //
+            ,   "dateMaturity_mo"        : function(){try{return                 r.dateMaturity_mo                                       }catch(e){Logger.log("Error ZvK5p: "+e.message);return "";}}() //
+            ,   "dateMaturity_yr"        : function(){try{return                 r.dateMaturity_yr                                       }catch(e){Logger.log("Error 78IS5: "+e.message);return "";}}() //
+            ,   "dateOrig_day"           : function(){try{return                 r.dateOrig_day                                          }catch(e){Logger.log("Error wgi3D: "+e.message);return "";}}() //
+            ,   "dateOrig_mo"            : function(){try{return                 r.dateOrig_mo                                           }catch(e){Logger.log("Error umJ5V: "+e.message);return "";}}() //
+            ,   "dateOrig_yr"            : function(){try{return                 r.dateOrig_yr                                           }catch(e){Logger.log("Error 4SzNU: "+e.message);return "";}}() //
+            ,   "datePaidTo_day"         : function(){try{return                 r.datePaidTo_day                                        }catch(e){Logger.log("Error 3t6gE: "+e.message);return "";}}() //
+            ,   "datePaidTo_mo"          : function(){try{return                 r.datePaidTo_mo                                         }catch(e){Logger.log("Error oI3d7: "+e.message);return "";}}() //
+            ,   "datePaidTo_yr"          : function(){try{return                 r.datePaidTo_yr                                         }catch(e){Logger.log("Error aW7iI: "+e.message);return "";}}() //
+            ,   "doc_appraisal"          : function(){try{return                 r.doc_appraisal                                         }catch(e){Logger.log("Error lM8Rh: "+e.message);return "";}}() //
+            ,   "doc_closing"            : function(){try{return                 r.doc_closing                                           }catch(e){Logger.log("Error RPjQ4: "+e.message);return "";}}() //
+            ,   "doc_hazard"             : function(){try{return                 r.doc_hazard                                            }catch(e){Logger.log("Error beDcp: "+e.message);return "";}}() //
+            ,   "doc_note"               : function(){try{return                 r.doc_note                                              }catch(e){Logger.log("Error OdOtT: "+e.message);return "";}}() //
+            ,   "doc_pics"               : function(){try{return                 r.doc_pics                                              }catch(e){Logger.log("Error kcR84: "+e.message);return "";}}() //
+            ,   "doc_pmts"               : function(){try{return                 r.doc_pmts                                              }catch(e){Logger.log("Error UtVlc: "+e.message);return "";}}() //
+            ,   "doc_title"              : function(){try{return                 r.doc_title                                             }catch(e){Logger.log("Error XqmY9: "+e.message);return "";}}() //
+            ,   "downPmt"                : function(){try{return                 r.downPmt                                               }catch(e){Logger.log("Error dbdi6: "+e.message);return "";}}() //
+            ,   "lienPos"                : function(){try{return                 r.lienPos                                               }catch(e){Logger.log("Error ZeQtV: "+e.message);return "";}}() //
+            ,   "loanStatus"             : function(){try{return                 r.loanStatus                                            }catch(e){Logger.log("Error R4vCp: "+e.message);return "";}}() //
+            ,   "nextDue_day"            : function(){try{return                 r.nextDue_day                                           }catch(e){Logger.log("Error VlULN: "+e.message);return "";}}() //
+            ,   "nextDue_mo"             : function(){try{return                 r.nextDue_mo                                            }catch(e){Logger.log("Error u5t9E: "+e.message);return "";}}() //
+            ,   "nextDue_yr"             : function(){try{return                 r.nextDue_yr                                            }catch(e){Logger.log("Error v0AQd: "+e.message);return "";}}() //
+            ,   "occ"                    : function(){try{return                 r.occ                                                   }catch(e){Logger.log("Error VXTKH: "+e.message);return "";}}() //
+            ,   "pmtAmt"                 : function(){try{return                 r.pmtAmt                                                }catch(e){Logger.log("Error DVOz2: "+e.message);return "";}}() //
+            ,   "pmtsLeft"               : function(){try{return                 r.pmtsLeft                                              }catch(e){Logger.log("Error jxMGp: "+e.message);return "";}}() //
+            ,   "pmtsRecd"               : function(){try{return                 r.pmtsRecd                                              }catch(e){Logger.log("Error 6iRdj: "+e.message);return "";}}() //
+                                           }
+     /* ,   "link"                       : {
+			,	"link_boa"               : function(){try{return  /*ok* /        r.link.boa                                              }catch(e){Logger.log("Error SCgK1: "+e.message);return "";}}() //
+			,	"link_chase"             : function(){try{return  /*ok* /        r.link.chase                                            }catch(e){Logger.log("Error MqQEZ: "+e.message);return "";}}() //
+            ,	"link_eppraisal"         : function(){try{return  /*L1* /        r.avm.dataset.eppraisal.link                            }catch(e){Logger.log("Error u7F2J: "+e.message);return "";}}() // Errors: L1 local; L2 site suspected; L3 site confirmed; OK works; ok works but must copy/paste address
+				"link_googleMap"         : function(){try{return  /*OK* /        r.link.gmap                                             }catch(e){Logger.log("Error XqSd4: "+e.message);return "";}}() //
+			,	"link_homeGain"          : function(){try{return  /*L3* /        r.avm.dataset.homeGain.link                             }catch(e){Logger.log("Error XqSd4: "+e.message);return "";}}() //
+			,	"link_homesCom"          : function(){try{return  /*ok* /        r.link.homesCom                                         }catch(e){Logger.log("Error KmlFz: "+e.message);return "";}}() //
+			,	"link_neighborhoodScout" : function(){try{return  /*ok* /        r.link.neighborhoodScout                                }catch(e){Logger.log("Error A9rGd: "+e.message);return "";}}() //
+			,	"link_propertyShark"     : function(){try{return  /*ok* /        r.link.propertyShark                                    }catch(e){Logger.log("Error tAFdc: "+e.message);return "";}}() //
+			,	"link_realEstate"        : function(){try{return  /*OK* /        r.avm.dataset.realEstate.link                           }catch(e){Logger.log("Error kxgjs: "+e.message);return "";}}() //
+			,	"link_realtor"           : function(){try{return  /*OK* /        r.avm.dataset.realtor.link                              }catch(e){Logger.log("Error guA6g: "+e.message);return "";}}() //
+			,	"link_trulia"            : function(){try{return  /*OK* /        r.avm.dataset.trulia.link                               }catch(e){Logger.log("Error dpR2i: "+e.message);return "";}}() //
+			,	"link_yahoo"             : function(){try{return  /*OK* /        r.link.yahoo	   				                         }catch(e){Logger.log("Error 5nBQT: "+e.message);return "";}}() //
+			,	"link_zillow"            : function(){try{return  /*OK* /        r.link.zillow                                           }catch(e){Logger.log("Error eqDM0: "+e.message);return "";}}() //
+			,	"link_zillowdetails"     : function(){try{return  /*OK* /        zil[i].links.homedetails.Text                           }catch(e){Logger.log("Error boXfk: "+e.message);return "";}}() //
+			,	"link_zipRealty"         : function(){try{return                 ""                                                      }catch(e){Logger.log("Error 9IGmd: "+e.message);return "";}}() //            
+			,	"link_zipSkinny"         : function(){try{return  /*ok* /        r.link.zipSkinny                                        }catch(e){Logger.log("Error CsFnp: "+e.message);return "";}}() //
+										   } */
+	} // db_id MyBid // arv rep cof com city state zip sa useCode beds baths sf sf_round lot lot_round yearBuilt taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet // link_googleMap link_yahoo link_zillow link_zillowdetails link_eppraisal link_realtor link_realEstate link_homeGain link_trulia link_propertyShark link_neighborhoodScout link_zipSkinny link_chase link_boa link_homesCom
+	var keys=Object.keys(ob[i].nolink),z=keys.length;while(z--){out.records[i][keys[z]]=              ob[i].nolink[keys[z]]                                   }
+     // keys=Object.keys(ob[i].  link),z=keys.length;while(z--){out.records[i][keys[z]]='<a href="' + ob[i].  link[keys[z]] + '" target="_blank">&#10151;</a>'}Logger.log(JSON.stringify(out.records[i]));
+	}return out;}
+function serveBuyers(){var out=[],r,ob=LibraryjsUtil.str2obj((LibraryjsUtil.doc2str("1WKKhUdq9DXbVQMs14yqKcISLflgi1D0wTD24Dz0Lq00"))),ar=LibraryjsUtil.portfolioObj2arr(ob.data),i=ar.length;while(i--){r=ar[i];
+	out.push({
+                "ask"                    : function(){try{return    (r.ask==r.ask*1) ? r.ask : r.balCur                                  }catch(e){Logger.log("Error yRAyQ: "+e.message);return "";}}() //
+        //  ,   "askF"                   : function(){try{return LibraryjsUtil.num2cur(r.ask    ,0,"$","") || ""                         }catch(e){Logger.log("Error yRAyQ: "+e.message);return "";}}() // Formatting was failed attempt at FuelUX Repeater implementation
+            ,   "balBeg"                 : function(){try{return                       r.balBeg                                          }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+        //  ,   "balBegF"                : function(){try{return LibraryjsUtil.num2cur(r.balBeg ,0,"$","") || ""                         }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "balCur"                 : function(){try{return                       r.balCur                                          }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+        //  ,   "balCurF"                : function(){try{return LibraryjsUtil.num2cur(r.balCur ,0,"$","") || ""                         }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "city"                   : function(){try{return                       r.city                                            }catch(e){Logger.log("Error SUbA2: "+e.message);return "";}}() //
+            ,   "lienPos"                : function(){try{return                       r.lienPos                                         }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "loanStatus"             : function(){try{return                       r.loanStatus                                      }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "pctUpb"                 : function(){try{return         ( r.pctUpb == r.pctUpb * 1 ) ? r.pctUpb : 100                   }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "rateNote"               : function(){try{return                       r.rateNote                                        }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "state"                  : function(){try{return                       r.state                                           }catch(e){Logger.log("Error ljckt: "+e.message);return "";}}() //
+            ,   "yieldCur"               : function(){try{return      (100*r.rateNote/((r.pctUpb==r.pctUpb*1)?r.pctUpb:100)).toFixed(2)  }catch(e){Logger.log("Error ljckt: "+e.message);return "";}}() //
+        /* Not yet implemented    
+            ,   "arv"                    : function(){try{return                 r.arv                                                   }catch(e){Logger.log("Error 0kR70: "+e.message);return "";}}() //
+            ,   "askRate"                : function(){try{return                 r.askRate                                               }catch(e){Logger.log("Error 742Ho: "+e.message);return "";}}() //
+            ,   "baths"                  : function(){try{return                 r.baths                                                 }catch(e){Logger.log("Error 4zKoo: "+e.message);return "";}}() //
+            ,   "beds"                   : function(){try{return                 r.beds                                                  }catch(e){Logger.log("Error qAPG7: "+e.message);return "";}}() //
+        //  ,   "bidPrice"               :                                         bidPrice
+        //  ,   "bidRate"                :                                         bidRate
+        //  ,   "bidTime"                :                                         bidTime
+            ,   "borPts"                 : function(){try{return                 r.borPts                                                }catch(e){Logger.log("Error uuT8p: "+e.message);return "";}}() //
+            ,   "borRate"                : function(){try{return                 r.borRate                                               }catch(e){Logger.log("Error 0dkMZ: "+e.message);return "";}}() //
+            ,   "estValue"               : function(){try{return                 r.estValue                                              }catch(e){Logger.log("Error vvsvJ: "+e.message);return "";}}() //
+            ,   "estMethod"              : function(){try{return                 r.estMethod                                             }catch(e){Logger.log("Error 5aTX1: "+e.message);return "";}}() //
+			,   "exit"                   : function(){try{return                 r.exit                                                  }catch(e){Logger.log("Error vuQlW: "+e.message);return "";}}() //
+            ,   "filePic"                : function(){try{return                 r.filePic                                               }catch(e){Logger.log("Error 3aGMP: "+e.message);return "";}}() //
+            ,   "fileDoc"                : function(){try{return                 r.fileDoc                                               }catch(e){Logger.log("Error KelFd: "+e.message);return "";}}() //
+            ,   "item"                   : function(){try{return                 r.item                                                  }catch(e){Logger.log("Error WWwZS: "+e.message);return "";}}() //
+            ,   "notes"                  : function(){try{return                 r.notes                                                 }catch(e){Logger.log("Error LJ2Ji: "+e.message);return "";}}() //
+            ,   "payBad"                 : function(){try{return                 r.payBad                                                }catch(e){Logger.log("Error 2KNwa: "+e.message);return "";}}() //
+            ,   "payGood"                : function(){try{return                 r.payGood                                               }catch(e){Logger.log("Error mAIv8: "+e.message);return "";}}() //
+            ,   "purPrice"               : function(){try{return                 r.purPrice                                              }catch(e){Logger.log("Error y28d6: "+e.message);return "";}}() //
+            ,   "pctLtv"                 : function(){try{return                 r.pctLtv                                                }catch(e){Logger.log("Error aCV5h: "+e.message);return "";}}() //
+            ,   "pctLtvCur"              : function(){try{return                 r.pctLtvCur                                             }catch(e){Logger.log("Error DIzg5: "+e.message);return "";}}() //
+            ,   "pctUpb"                 : function(){try{return                 r.pctUpb                                                }catch(e){Logger.log("Error v9ABL: "+e.message);return "";}}() //
+            ,   "rent"                   : function(){try{return                 r.rent                                                  }catch(e){Logger.log("Error 3Q3mf: "+e.message);return "";}}() //
+            ,   "sa"                     : function(){try{return                 r.sa                                                    }catch(e){Logger.log("Error yJ4Ld: "+e.message);return "";}}() //
+            ,   "schedRE"                : function(){try{return                 r.schedRE                                               }catch(e){Logger.log("Error ZmwlY: "+e.message);return "";}}() //
+         // ,   "sellCarry"              : function(){try{return                 r.sellCarry                                             }catch(e){Logger.log("Error HPfzp: "+e.message);return "";}}() //
+            ,   "term"                   : function(){try{return                 r.term                                                  }catch(e){Logger.log("Error qVFj6: "+e.message);return "";}}() //
+            ,   "use"                    : function(){try{return                 r.use                                                   }catch(e){Logger.log("Error lvWPA: "+e.message);return "";}}() //
+            ,   "sqft"                   : function(){try{return                 r.sqft                                                  }catch(e){Logger.log("Error PLhJh: "+e.message);return "";}}() //
+            ,   "sqftLot"                : function(){try{return                 r.sqftLot                                               }catch(e){Logger.log("Error B1JSW: "+e.message);return "";}}() //
+            ,   "yieldCur"               : function(){try{return                 r.yieldCur                                              }catch(e){Logger.log("Error wWXwH: "+e.message);return "";}}() //
+        //  ,   "ytm"                    : function(){try{return                 r.ytm                                                   }catch(e){Logger.log("Error USixk: "+e.message);return "";}}() //
+            ,   "zip"                    : function(){try{return                 r.zip                                                   }catch(e){Logger.log("Error C3Agp: "+e.message);return "";}}() //
+        /*  Below added from "comprehensive" form
+            ,   "purpose"                : function(){try{return                 r.purpose                                               }catch(e){Logger.log("Error vUVKq: "+e.message);return "";}}() //
+            ,   "balBeg"                 : function(){try{return                 r.balBeg                                                }catch(e){Logger.log("Error 8Z3u2: "+e.message);return "";}}() //
+            ,   "balCur"                 : function(){try{return                 r.balCur                                                }catch(e){Logger.log("Error yikFu: "+e.message);return "";}}() //
+            ,   "ballAmt"                : function(){try{return                 r.ballAmt                                               }catch(e){Logger.log("Error IWozK: "+e.message);return "";}}() //
+            ,   "balloon"                : function(){try{return                 r.balloon                                               }catch(e){Logger.log("Error CnjWT: "+e.message);return "";}}() //
+            ,   "dateOrig_mo"            : function(){try{return                 r.dateOrig_mo                                           }catch(e){Logger.log("Error ibLvh: "+e.message);return "";}}() //
+            ,   "dateOrig_day"           : function(){try{return                 r.dateOrig_day                                          }catch(e){Logger.log("Error hQyCX: "+e.message);return "";}}() //
+            ,   "dateOrig_yr"            : function(){try{return                 r.dateOrig_yr                                           }catch(e){Logger.log("Error WQ0OE: "+e.message);return "";}}() //
+            ,   "datePaidTo"             : function(){try{return                 r.datePaidTo                                            }catch(e){Logger.log("Error Uj7Op: "+e.message);return "";}}() //
+            ,   "dateMaturity"           : function(){try{return                 r.dateMaturity                                          }catch(e){Logger.log("Error RWkOW: "+e.message);return "";}}() //
+            ,   "doc_appraisal"          : function(){try{return                 r.doc_appraisal                                         }catch(e){Logger.log("Error yU2J6: "+e.message);return "";}}() //
+            ,   "doc_closing"            : function(){try{return                 r.doc_closing                                           }catch(e){Logger.log("Error tW7O4: "+e.message);return "";}}() //
+            ,   "doc_hazard"             : function(){try{return                 r.doc_hazard                                            }catch(e){Logger.log("Error dVVZI: "+e.message);return "";}}() //
+            ,   "doc_note"               : function(){try{return                 r.doc_note                                              }catch(e){Logger.log("Error TD1WW: "+e.message);return "";}}() //
+            ,   "doc_pics"               : function(){try{return                 r.doc_pics                                              }catch(e){Logger.log("Error z5Qc2: "+e.message);return "";}}() //
+            ,   "doc_pmts"               : function(){try{return                 r.doc_pmts                                              }catch(e){Logger.log("Error dvy7J: "+e.message);return "";}}() //
+            ,   "doc_title"              : function(){try{return                 r.doc_title                                             }catch(e){Logger.log("Error EGC0J: "+e.message);return "";}}() //
+            ,   "downPmt"                : function(){try{return                 r.downPmt                                               }catch(e){Logger.log("Error O2cuy: "+e.message);return "";}}() //
+            ,   "lienPos"                : function(){try{return                 r.lienPos                                               }catch(e){Logger.log("Error O3FV4: "+e.message);return "";}}() //
+            ,   "loanStatus"             : function(){try{return                 r.loanStatus                                            }catch(e){Logger.log("Error dNB1K: "+e.message);return "";}}() //
+            ,   "nextDue"                : function(){try{return                 r.nextDue                                               }catch(e){Logger.log("Error 3mqXN: "+e.message);return "";}}() //
+            ,   "occ"                    : function(){try{return                 r.occ                                                   }catch(e){Logger.log("Error Wv53u: "+e.message);return "";}}() //
+            ,   "pmtAmt"                 : function(){try{return                 r.pmtAmt                                                }catch(e){Logger.log("Error ja3Oe: "+e.message);return "";}}() //
+            ,   "pmtsLeft"               : function(){try{return                 r.pmtsLeft                                              }catch(e){Logger.log("Error YrLFV: "+e.message);return "";}}() //
+            ,   "pmtsRecd"               : function(){try{return                 r.pmtsRecd                                              }catch(e){Logger.log("Error PtIqd: "+e.message);return "";}}() //
+		*/  })}return out}
+function serveBuyers1(){var ob=[],arr=[],i,j,k,r,t=[],zil=[],bidRate="",bidPrice="",bidTime=0,user=Session.getUser().getEmail(),out={"totalResultsCount":0,"records":[]},db=ScriptDb.getMyDb(),results=db.query({table:"note",remove:false,accepted:false});while(results.hasNext()){r=results.next();i=out.totalResultsCount++;bidRate="";bidPrice="";bidTime=0;
+	try{out.records[i]={db_id:LibraryjsUtil.rc4Encrypt("DktaE",r.getId())};}catch(e){Logger.log("Error WZ6bM: "+e.message)};try{j=r.bids.length;while(j--){if(r.bids[j].bidder==user&&(r.bids[j].timestamp>bidTime)){bidRate=r.bids[j].rate;bidPrice=r.bids[j].points;bidTime=r.bids[j].timestamp;break;}}}catch(e){Logger.log("Error rRblA: "+e.message);} // try{if(r.bids){arr[i]=r.bids;j=arr[i].length;while(j--){t[j]=0;if(arr[i][j].bidder==user&&(arr[i][j].time>t[j])/*&&(!arr[i][j].confirmed)*/){t[j]=arr[i][j].time;out.records[i].MyBid=arr[i][j].balCur}}             }}catch(e){Logger.log("Error soF2q: "+e.message)}; // "MyBid"
+	ob[i] = { //vol={SFR:1246,Other:298,CRE:269,X:101,MUL:52,Land:32,Date:new Date().setFullYear(2014,1,1),Sources:["fciEx","NoteMktPl","moolahList"]}
+		"nolink"                         : {
+                "amount"                 : function(){try{return                 r.balCur                                                }catch(e){Logger.log("Error 5HyYI: "+e.message);return "";}}() //
+            ,   "arv"                    : function(){try{return                 r.arv                                                   }catch(e){Logger.log("Error 0kR70: "+e.message);return "";}}() //
+            ,   "askPrice"               : function(){try{return                 r.askPrice                                              }catch(e){Logger.log("Error yRAyQ: "+e.message);return "";}}() //
+            ,   "askRate"                : function(){try{return                 r.askRate                                               }catch(e){Logger.log("Error 742Ho: "+e.message);return "";}}() //
+            ,   "baths"                  : function(){try{return                 r.baths                                                 }catch(e){Logger.log("Error 4zKoo: "+e.message);return "";}}() //
+            ,   "beds"                   : function(){try{return                 r.beds                                                  }catch(e){Logger.log("Error qAPG7: "+e.message);return "";}}() //
+            ,   "bidPrice"               :                                         bidPrice
+            ,   "bidRate"                :                                         bidRate
+            ,   "bidTime"                :                                         bidTime
+            ,   "borPts"                 : function(){try{return                 r.borPts                                                }catch(e){Logger.log("Error uuT8p: "+e.message);return "";}}() //
+            ,   "borRate"                : function(){try{return                 r.borRate                                               }catch(e){Logger.log("Error 0dkMZ: "+e.message);return "";}}() //
+            ,   "city"                   : function(){try{return                 r.city                                                  }catch(e){Logger.log("Error SUbA2: "+e.message);return "";}}() //
+            ,   "estValue"               : function(){try{return                 r.estValue                                              }catch(e){Logger.log("Error vvsvJ: "+e.message);return "";}}() //
+            ,   "estMethod"              : function(){try{return                 r.estMethod                                             }catch(e){Logger.log("Error 5aTX1: "+e.message);return "";}}() //
+            ,   "exit"                   : function(){try{return                 r.exit                                                  }catch(e){Logger.log("Error vuQlW: "+e.message);return "";}}() //
+            ,   "filePic"                : function(){try{return                 r.filePic                                               }catch(e){Logger.log("Error 3aGMP: "+e.message);return "";}}() //
+            ,   "fileDoc"                : function(){try{return                 r.fileDoc                                               }catch(e){Logger.log("Error KelFd: "+e.message);return "";}}() //
+            ,   "item"                   : function(){try{return                 r.item                                                  }catch(e){Logger.log("Error WWwZS: "+e.message);return "";}}() //
+            ,   "notes"                  : function(){try{return                 r.notes                                                 }catch(e){Logger.log("Error LJ2Ji: "+e.message);return "";}}() //
+            ,   "payBad"                 : function(){try{return                 r.payBad                                                }catch(e){Logger.log("Error 2KNwa: "+e.message);return "";}}() //
+            ,   "payGood"                : function(){try{return                 r.payGood                                               }catch(e){Logger.log("Error mAIv8: "+e.message);return "";}}() //
+            ,   "purPrice"               : function(){try{return                 r.purPrice                                              }catch(e){Logger.log("Error y28d6: "+e.message);return "";}}() //
+            ,   "pctLtv"                 : function(){try{return                 r.pctLtv                                                }catch(e){Logger.log("Error aCV5h: "+e.message);return "";}}() //
+            ,   "pctLtvCur"              : function(){try{return                 r.pctLtvCur                                             }catch(e){Logger.log("Error DIzg5: "+e.message);return "";}}() //
+            ,   "pctUpb"                 : function(){try{return                 r.pctUpb                                                }catch(e){Logger.log("Error v9ABL: "+e.message);return "";}}() //
+            ,   "rent"                   : function(){try{return                 r.rent                                                  }catch(e){Logger.log("Error 3Q3mf: "+e.message);return "";}}() //
+            ,   "sa"                     : function(){try{return                 r.sa                                                    }catch(e){Logger.log("Error yJ4Ld: "+e.message);return "";}}() //
+            ,   "schedRE"                : function(){try{return                 r.schedRE                                               }catch(e){Logger.log("Error ZmwlY: "+e.message);return "";}}() //
+         // ,   "sellCarry"              : function(){try{return                 r.sellCarry                                             }catch(e){Logger.log("Error HPfzp: "+e.message);return "";}}() //
+            ,   "state"                  : function(){try{return                 r.state                                                 }catch(e){Logger.log("Error ljckt: "+e.message);return "";}}() //
+            ,   "term"                   : function(){try{return                 r.term                                                  }catch(e){Logger.log("Error qVFj6: "+e.message);return "";}}() //
+            ,   "use"                    : function(){try{return                 r.use                                                   }catch(e){Logger.log("Error lvWPA: "+e.message);return "";}}() //
+            ,   "sqft"                   : function(){try{return                 r.sqft                                                  }catch(e){Logger.log("Error PLhJh: "+e.message);return "";}}() //
+            ,   "sqftLot"                : function(){try{return                 r.sqftLot                                               }catch(e){Logger.log("Error B1JSW: "+e.message);return "";}}() //
+            ,   "yieldCur"               : function(){try{return                 r.yieldCur                                              }catch(e){Logger.log("Error wWXwH: "+e.message);return "";}}() //
+        //  ,   "ytm"                    : function(){try{return                 r.ytm                                                   }catch(e){Logger.log("Error USixk: "+e.message);return "";}}() //
+            ,   "zip"                    : function(){try{return                 r.zip                                                   }catch(e){Logger.log("Error C3Agp: "+e.message);return "";}}() //
+        //  Below added from "comprehensive" form
+            ,   "purpose"                : function(){try{return                 r.purpose                                               }catch(e){Logger.log("Error vUVKq: "+e.message);return "";}}() //
+            ,   "balBeg"                 : function(){try{return                 r.balBeg                                                }catch(e){Logger.log("Error 8Z3u2: "+e.message);return "";}}() //
+            ,   "balCur"                 : function(){try{return                 r.balCur                                                }catch(e){Logger.log("Error yikFu: "+e.message);return "";}}() //
+            ,   "ballAmt"                : function(){try{return                 r.ballAmt                                               }catch(e){Logger.log("Error IWozK: "+e.message);return "";}}() //
+            ,   "balloon"                : function(){try{return                 r.balloon                                               }catch(e){Logger.log("Error CnjWT: "+e.message);return "";}}() //
+            ,   "dateOrig_mo"            : function(){try{return                 r.dateOrig_mo                                           }catch(e){Logger.log("Error ibLvh: "+e.message);return "";}}() //
+            ,   "dateOrig_day"           : function(){try{return                 r.dateOrig_day                                          }catch(e){Logger.log("Error hQyCX: "+e.message);return "";}}() //
+            ,   "dateOrig_yr"            : function(){try{return                 r.dateOrig_yr                                           }catch(e){Logger.log("Error WQ0OE: "+e.message);return "";}}() //
+            ,   "datePaidTo"             : function(){try{return                 r.datePaidTo                                            }catch(e){Logger.log("Error Uj7Op: "+e.message);return "";}}() //
+            ,   "dateMaturity"           : function(){try{return                 r.dateMaturity                                          }catch(e){Logger.log("Error RWkOW: "+e.message);return "";}}() //
+            ,   "doc_appraisal"          : function(){try{return                 r.doc_appraisal                                         }catch(e){Logger.log("Error yU2J6: "+e.message);return "";}}() //
+            ,   "doc_closing"            : function(){try{return                 r.doc_closing                                           }catch(e){Logger.log("Error tW7O4: "+e.message);return "";}}() //
+            ,   "doc_hazard"             : function(){try{return                 r.doc_hazard                                            }catch(e){Logger.log("Error dVVZI: "+e.message);return "";}}() //
+            ,   "doc_note"               : function(){try{return                 r.doc_note                                              }catch(e){Logger.log("Error TD1WW: "+e.message);return "";}}() //
+            ,   "doc_pics"               : function(){try{return                 r.doc_pics                                              }catch(e){Logger.log("Error z5Qc2: "+e.message);return "";}}() //
+            ,   "doc_pmts"               : function(){try{return                 r.doc_pmts                                              }catch(e){Logger.log("Error dvy7J: "+e.message);return "";}}() //
+            ,   "doc_title"              : function(){try{return                 r.doc_title                                             }catch(e){Logger.log("Error EGC0J: "+e.message);return "";}}() //
+            ,   "downPmt"                : function(){try{return                 r.downPmt                                               }catch(e){Logger.log("Error O2cuy: "+e.message);return "";}}() //
+            ,   "lienPos"                : function(){try{return                 r.lienPos                                               }catch(e){Logger.log("Error O3FV4: "+e.message);return "";}}() //
+            ,   "loanStatus"             : function(){try{return                 r.loanStatus                                            }catch(e){Logger.log("Error dNB1K: "+e.message);return "";}}() //
+            ,   "nextDue"                : function(){try{return                 r.nextDue                                               }catch(e){Logger.log("Error 3mqXN: "+e.message);return "";}}() //
+            ,   "occ"                    : function(){try{return                 r.occ                                                   }catch(e){Logger.log("Error Wv53u: "+e.message);return "";}}() //
+            ,   "pmtAmt"                 : function(){try{return                 r.pmtAmt                                                }catch(e){Logger.log("Error ja3Oe: "+e.message);return "";}}() //
+            ,   "pmtsLeft"               : function(){try{return                 r.pmtsLeft                                              }catch(e){Logger.log("Error YrLFV: "+e.message);return "";}}() //
+            ,   "pmtsRecd"               : function(){try{return                 r.pmtsRecd                                              }catch(e){Logger.log("Error PtIqd: "+e.message);return "";}}() //
+										   }
+     /* ,   "link"                       : {
+				"link_boa"               : function(){try{return  /*ok* /        r.link.boa                                              }catch(e){Logger.log("Error Zd0Y2: "+e.message);return "";}}() //
+			,	"link_chase"             : function(){try{return  /*ok* /        r.link.chase                                            }catch(e){Logger.log("Error WMju3: "+e.message);return "";}}() //
+            ,	"link_eppraisal"         : function(){try{return  /*L1* /        r.avm.dataset.eppraisal.link                            }catch(e){Logger.log("Error lrEOS: "+e.message);return "";}}() // Errors: L1 local; L2 site suspected; L3 site confirmed; OK works; ok works but must copy/paste address
+			,	"link_googleMap"         : function(){try{return  /*OK* /        r.link.gmap                                             }catch(e){Logger.log("Error gtC5Q: "+e.message);return "";}}() //
+			,	"link_homeGain"          : function(){try{return  /*L3* /        r.avm.dataset.homeGain.link                             }catch(e){Logger.log("Error paj87: "+e.message);return "";}}() //
+			,	"link_homesCom"          : function(){try{return  /*ok* /        r.link.homesCom                                         }catch(e){Logger.log("Error oabbc: "+e.message);return "";}}() //
+			,	"link_neighborhoodScout" : function(){try{return  /*ok* /        r.link.neighborhoodScout                                }catch(e){Logger.log("Error Q14RH: "+e.message);return "";}}() //
+			,	"link_propertyShark"     : function(){try{return  /*ok* /        r.link.propertyShark                                    }catch(e){Logger.log("Error YRZsy: "+e.message);return "";}}() //
+			,	"link_realEstate"        : function(){try{return  /*OK* /        r.avm.dataset.realEstate.link                           }catch(e){Logger.log("Error 0olDz: "+e.message);return "";}}() //
+			,	"link_realtor"           : function(){try{return  /*OK* /        r.avm.dataset.realtor.link                              }catch(e){Logger.log("Error mtD5d: "+e.message);return "";}}() //
+			,	"link_trulia"            : function(){try{return  /*OK* /        r.avm.dataset.trulia.link                               }catch(e){Logger.log("Error WKlaS: "+e.message);return "";}}() //
+			,	"link_yahoo"             : function(){try{return  /*OK* /        r.link.yahoo	   				                         }catch(e){Logger.log("Error 1m0uk: "+e.message);return "";}}() //
+			,	"link_zillow"            : function(){try{return  /*OK* /        r.link.zillow                                           }catch(e){Logger.log("Error vL9KJ: "+e.message);return "";}}() //
+			,	"link_zillowdetails"     : function(){try{return  /*OK* /        zil[i].links.homedetails.Text                           }catch(e){Logger.log("Error 6Jafy: "+e.message);return "";}}() //
+			,	"link_zipRealty"         : function(){try{return                 ""                                                      }catch(e){Logger.log("Error dvNJt: "+e.message);return "";}}() //            
+			,	"link_zipSkinny"         : function(){try{return  /*ok* /        r.link.zipSkinny                                        }catch(e){Logger.log("Error d4sTP: "+e.message);return "";}}() //
+										   } */
+            } // db_id MyBid // arv rep cof com city state zip sa useCode beds baths sf sf_round lot lot_round yearBuilt taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet // link_googleMap link_yahoo link_zillow link_zillowdetails link_eppraisal link_realtor link_realEstate link_homeGain link_trulia link_propertyShark link_neighborhoodScout link_zipSkinny link_chase link_boa link_homesCom
+	var keys=Object.keys(ob[i].nolink),z=keys.length;while(z--){out.records[i][keys[z]]=              ob[i].nolink[keys[z]]                                   }
+     // keys=Object.keys(ob[i].  link),z=keys.length;while(z--){out.records[i][keys[z]]='<a href="' + ob[i].  link[keys[z]] + '" target="_blank">&#10151;</a>'}Logger.log(JSON.stringify(out.records[i]));
+	}return out}
+function dataTableConstructor(){//var LOAD=["https://sites.google.com/site/itr5k9zw23yzmxuaf5nb399c0ywb98/home/jsLoad.js","googleScripts"];eval(UrlFetchApp.fetch(LOAD[0]).getContentText());var files=load(LOAD[1]);var i=files.length;while(i---1){eval(UrlFetchApp.fetch(files[i]).getContentText())};
+    var db=ScriptDb.getMyDb(),d=new Date().getTime(),user=Session.getUser().getEmail(),dt={},i=1,notelink,link,own,r,result;if(user=="atlaslive@gmail.com"||user=="benharvill@gmail.com"){result=db.query({table:"leads"})}else{result=db.query({table:"leads",owner:user/*"jrcamf@gmail.com"*/})}
+    dt.cols=[{id:"ID"         ,label:"ID"         ,type:"number"}
+            ,{id:"Link"       ,label:"Link"       ,type:"string"}
+            ,{id:"Own"        ,label:"Own"        ,type:"string"}
+         // ,{id:"Region"     ,label:"Region"     ,type:"string"}
+            ,{id:"Pre"        ,label:"Pre"        ,type:"number"}
+            ,{id:"E"          ,label:"E"          ,type:"number"}
+            ,{id:"Nex"        ,label:"Nex"        ,type:"number"}
+            ,{id:"T"          ,label:"T"          ,type:"string"}
+            ,{id:"Disposition",label:"Disposition",type:"string"}
+            ,{id:"Company"    ,label:"Company"    ,type:"string"}
+            ,{id:"Phone"      ,label:"Phone"      ,type:"string"}
+            ,{id:"City"       ,label:"City"       ,type:"string"}
+            ,{id:"Geo"        ,label:"St"         ,type:"string"}
+         // ,{id:"Geo"        ,label:"Geo"        ,type:"string"}
+            ,{id:"Notes"      ,label:"Notes"      ,type:"string"}];
+    dt.rows=[];while(result.hasNext()){r=result.next();if(r.owner){own=r.owner.slice(0,4)}else{/*continue;*/own="none";}link="<a target='_blank' title='"+r.history+"' href='https://sites.google.com/site/gosalespro/products/mojo?z="+r.getId().rc4Encrypt("IDQfyT21I1").hexEncode()+"'>click</a>";if(r.history){notelink=link+"<span title='"+r.history+"'> "+r.history.slice(0,100)+"</span>"}else{notelink=""}//dt=[['Country code','Population','Density'],['CN',1322970000,137],['IN',1130130000,336],['US',303605941,31],['ID',231627000,117],['BR',186315468,22],['PK',162652500,198],['BD',158665000,1045],['NG',148093000,142],['RU',141933955,8.4],['JP',127790000,339]];//dt=[['Country code','Population','Density'],['CA',36553215,83.85],['TX',23904380,30.75],['NY',19297729,155.18],['FL',18251243,114.43],['IL',12852548,86.27],['PA',12432792,105.8],['OH',11466917,107.05],['MI',10071822,67.55],['GA',9544750,54.59],['NC',9061032,63.8]];
+    dt.rows.push({c:[{v:                 i++                                          }     // ID
+                    ,{v:                 link                                         }     // Link
+                    ,{v:                 own                                          }     // Own
+                 // ,{v:               r.regionName                                   }     // Region
+                    ,{v:(Math.floor((d-r.latestSubmit)/(1000*60*60*24))||-1)          }     // Pre
+                    ,{v:(Math.floor((d-r.latestEmail )/(1000*60*60*24))||-1)          }     // E
+                    ,{v:(Math.floor((  r.callback-d  )/(1000*60*60*24))|| 0)          }     // Nex
+                    ,{v:               r.temperature                   ||""           }     // Temperature
+                    ,{v:               r.disposition                   ||""           }     // Disposition
+                    ,{v:               r.name                                         }     // Company
+                    ,{v:               r.phone                                        }     // Phone
+                    ,{v:               r.city                                         }     // City
+                    ,{v:         "US-"+r.state                              ,f:r.state}     // St
+                 // ,{v:         "US-"+r.state                                        }     // Geo
+                    ,{v:                 notelink                                     }]})} // Notes
+    return ContentService.createTextOutput("drawVisualization("+JSON.stringify(dt)+")").setMimeType(ContentService.MimeType.JSON)} // return ContentService.createTextOutput("google.visualization.Query.setResponse({version:'0.6',status:'ok',table:"+JSON.stringify(dt)+"})").setMimeType(ContentService.MimeType.JSON)} // var temp="// Data table response"+"/n"+"google.visualization.Query.setResponse({\"version\":\"0.6\",\"status\":\"ok\",\"sig\":\"1664774139\",\"table\":{\"cols\":[{\"id\":\"A\",\"label\":\"A - Name\",\"type\":\"string\",\"pattern\":\"\"},{\"id\":\"B\",\"label\":\"B - Department\",\"type\":\"string\",\"pattern\":\"\"},{\"id\":\"C\",\"label\":\"C - Country\",\"type\":\"string\",\"pattern\":\"\"},{\"id\":\"D\",\"label\":\"D - Continenet\",\"type\":\"string\",\"pattern\":\"\"},{\"id\":\"E\",\"label\":\"E - Expanes\",\"type\":\"number\",\"pattern\":\"#0.###############\"},{\"id\":\"F\",\"label\":\"Revenue\",\"type\":\"number\",\"pattern\":\"#0.###############\"},{\"id\":\"G\",\"label\":\"G - Adoption\",\"type\":\"number\",\"pattern\":\"#0.###############\"}],\"rows\":[{\"c\":[{\"v\":\"Josh\"},{\"v\":\"Food\"},{\"v\":\"China\"},{\"v\":\"Asia\"},{\"v\":5000.0,\"f\":\"5000\"},{\"v\":12000.0,\"f\":\"12000\"},{\"v\":58.0,\"f\":\"58\"}]},{\"c\":[{\"v\":\"Joe\"},{\"v\":\"Food\"},{\"v\":\"India\"},{\"v\":\"Asia\"},{\"v\":6500.0,\"f\":\"6500\"},{\"v\":52000.0,\"f\":\"52000\"},{\"v\":89.0,\"f\":\"89\"}]},{\"c\":[{\"v\":\"Gili\"},{\"v\":\"Cloths\"},{\"v\":\"United States\"},{\"v\":\"America\"},{\"v\":5900.0,\"f\":\"5900\"},{\"v\":36900.0,\"f\":\"36900\"},{\"v\":97.0,\"f\":\"97\"}]},{\"c\":[{\"v\":\"Peter\"},{\"v\":\"Food\"},{\"v\":\"Indonesia\"},{\"v\":\"Asia\"},{\"v\":2300.0,\"f\":\"2300\"},{\"v\":12000.0,\"f\":\"12000\"},{\"v\":65.0,\"f\":\"65\"}]},{\"c\":[{\"v\":\"Moshes\"},{\"v\":\"Food\"},{\"v\":\"Brazil\"},{\"v\":\"America\"},{\"v\":2980.0,\"f\":\"2980\"},{\"v\":50222.0,\"f\":\"50222\"},{\"v\":59.0,\"f\":\"59\"}]},{\"c\":[{\"v\":\"Gram\"},{\"v\":\"Food\"},{\"v\":\"Pakistan\"},{\"v\":\"Asia\"},{\"v\":2700.0,\"f\":\"2700\"},{\"v\":89777.0,\"f\":\"89777\"},{\"v\":80.0,\"f\":\"80\"}]},{\"c\":[{\"v\":\"Nickol\"},{\"v\":\"Cloths\"},{\"v\":\"Bangladesh\"},{\"v\":\"Asia\"},{\"v\":6500.0,\"f\":\"6500\"},{\"v\":58000.0,\"f\":\"58000\"},{\"v\":89.0,\"f\":\"89\"}]},{\"c\":[{\"v\":\"Avraham\"},{\"v\":\"Food\"},{\"v\":\"Nigeria\"},{\"v\":\"Africa\"},{\"v\":9000.0,\"f\":\"9000\"},{\"v\":32000.0,\"f\":\"32000\"},{\"v\":83.0,\"f\":\"83\"}]},{\"c\":[{\"v\":\"Dani\"},{\"v\":\"Cloths\"},{\"v\":\"Russia\"},{\"v\":\"Asia\"},{\"v\":7000.0,\"f\":\"7000\"},{\"v\":69000.0,\"f\":\"69000\"},{\"v\":87.0,\"f\":\"87\"}]},{\"c\":[{\"v\":\"Mili\"},{\"v\":\"Cloths\"},{\"v\":\"Japan\"},{\"v\":\"Asia\"},{\"v\":3240.0,\"f\":\"3240\"},{\"v\":64000.0,\"f\":\"64000\"},{\"v\":80.0,\"f\":\"80\"}]},{\"c\":[{\"v\":\"Toni\"},{\"v\":\"Food\"},{\"v\":\"England\"},{\"v\":\"Europe\"},{\"v\":2100.0,\"f\":\"2100\"},{\"v\":12000.0,\"f\":\"12000\"},{\"v\":95.0,\"f\":\"95\"}]},{\"c\":[{\"v\":\"Bill\"},{\"v\":\"Food\"},{\"v\":\"Franch\"},{\"v\":\"Europe\"},{\"v\":0.0,\"f\":\"0\"},{\"v\":98000.0,\"f\":\"98000\"},{\"v\":45.0,\"f\":\"45\"}]},{\"c\":[{\"v\":\"Tivoli\"},{\"v\":\"Food\"},{\"v\":\"Sudan\"},{\"v\":\"Africa\"},{\"v\":3290.0,\"f\":\"3290\"},{\"v\":18000.0,\"f\":\"18000\"},{\"v\":80.0,\"f\":\"80\"}]}]}});";//return ContentService.createTextOutput(temp).setMimeType(ContentService.MimeType.JSON)}
+function serveCalendar(){var START_YR=2006,ARR=[,"January","February","March","April","May","June","July","August","September","October","November","December"],d=new Date(),yr=d.getFullYear(),mo=d.getMonth()+1,ob=[],i,q,r,id,record,user=Session.getUser().getEmail(),db=ScriptDb.getMyDb(),out={"totalResultsCount":0,"records":[]};
+    while(yr>START_YR){if(!--mo){mo=12;yr--;}q={table:"report",source:user/*Replace with company_id*/,year:yr,monthNum:mo};
+        if(db.query(q).getSize()){r=db.query(q).next();}else{q.monthStr=ARR[mo];q.sortBy=1000*yr+mo;q.roi=[{timestamp:d.getTime(),amt:""}];r=db.load(db.save(q).getId());}
+        out.records.push({
+                    "db_id"              : function(){try{return LibraryjsUtil.rc4Encrypt("DktaE",r.getId())                             }catch(e){Logger.log("Error iurCY: "+e.message);return "";}}() //
+                ,   "sortBy"             : function(){try{return                                  r.sortBy                               }catch(e){Logger.log("Error RMvQM: "+e.message);return "";}}() //
+                ,   "year"               : function(){try{return                                  r.year                                 }catch(e){Logger.log("Error 3hBxC: "+e.message);return "";}}() //
+                ,   "monthNum"           : function(){try{return                                  r.monthNum                             }catch(e){Logger.log("Error 4xnhC: "+e.message);return "";}}() //
+                ,   "monthStr"           : function(){try{return                                  r.monthStr                             }catch(e){Logger.log("Error tqRYj: "+e.message);return "";}}() //
+                ,   "roi"                : function(){try{return                                  r.roi[0].amt                           }catch(e){Logger.log("Error RdKOP: "+e.message);return "";}}() //
+		        });}out.totalResultsCount=out.records.length;Logger.log(JSON.stringify(out));return out;}
+function t_serveCalendar(){var START_YR=2006,ARR=[,"January","February","March","April","May","June","July","August","September","October","November","December"],d=new Date(),t=d.getTime(),yr=d.getFullYear(),mo=d.getMonth()+1,ob=[],i,q,qr,rq,r,id,out={"totalResultsCount":0,"records":[]},user=Session.getUser().getEmail(),db=ScriptDb.getMyDb(),q={table:"report",source:user/*Replace with company_id*/},results=db.query(q);while(results.hasNext()){rq=results.next();
+    while(yr>START_YR){if(!--mo){mo=12;yr--;}
+        /*try{*/if(rq.year==yr&rq.monthNum==mo){r=rq}/*}*catch(e)*/else{qr=q;qr.monthStr=ARR[mo];qr.sortBy=1000*yr+mo;qr.roi=[{timestamp:t,amt:""}];r=db.load(db.save(qr).getId());}
+        out.records.push({
+                    "db_id"              : function(){try{return LibraryjsUtil.rc4Encrypt("DktaE",r.getId())                             }catch(e){Logger.log("Error St5Tf: "+e.message);return "";}}() //
+                ,   "sortBy"             : function(){try{return                                  r.sortBy                               }catch(e){Logger.log("Error SDdnN: "+e.message);return "";}}() //
+                ,   "year"               : function(){try{return                                  r.year                                 }catch(e){Logger.log("Error ETGkj: "+e.message);return "";}}() //
+                ,   "monthNum"           : function(){try{return                                  r.monthNum                             }catch(e){Logger.log("Error Ekqld: "+e.message);return "";}}() //
+                ,   "monthStr"           : function(){try{return                                  r.monthStr                             }catch(e){Logger.log("Error mG5t6: "+e.message);return "";}}() //
+                ,   "roi"                : function(){try{return                                  r.roi[0].amt                           }catch(e){Logger.log("Error 7WCWD: "+e.message);return "";}}() //
+		        });}}out.totalResultsCount=out.records.length;/*Logger.log(JSON.stringify(out));*/return out;}
+function serveMarquee(){}
+-------------------------------------- form.html (a template kit for implementing forms; must be unpacked) --------------------------------------
+function processForm(formObject){var formBlob=formObject.myFile,driveFile=DriveApp.createFile(formBlob);return driveFile.getUrl()} // Goes in Code.gs // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+<form id="myForm"><input name="myFile" type="file"><input type="button" value="Submit" onclick="google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()"></form><div id="output"></div><script>function updateUrl(url){document.getElementById("output").innerHTML='<a href="'+url+'">Got it!</a>'}</script><!--Goes in index.html; Reference: https://developers.google.com/apps-script/guides/html/communication#forms--></script>
+---------------------------------- home.html -----------------------------------------------
+<!DOCTYPE html><html lang="en"> <!-- Source: http://ironsummitmedia.github.io/startbootstrap-stylish-portfolio/# --> <!-- Copy/pasted sections. Navigation section breaks. -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Atlas X-lab</title>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="//ironsummitmedia.github.io/startbootstrap-stylish-portfolio/css/bootstrap.min.css" xhref="css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="//ironsummitmedia.github.io/startbootstrap-stylish-portfolio/css/stylish-portfolio.css" xhref="css/stylish-portfolio.css">
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" type="text/css" href="//ironsummitmedia.github.io/startbootstrap-stylish-portfolio/font-awesome/css/font-awesome.min.css" xhref="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" xhref="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- Header -->
+    <header id="top" class="header">
+        <div class="text-vertical-center">
+            <h1>Atlas X-lab</h1>
+            <h3>Digital Marketplaces &amp; Office Automation Solutions</h3>
+            <br>
+            <a href="#about" class="btn btn-dark btn-lg">View Our Portfolio</a>
+        </div>
+    </header>
+    <!-- About -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Go to market with us</h2>
+                    <p class="lead">Let us build your product or you manage ours. For equity.</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+    <!-- Services -->
+    <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+    <section id="services" class="services bg-primary">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <h2>Our Portfolio</h2>
+                    <hr class="small">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="service-item">
+                                <span  class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-cloud fa-stack-1x text-primary"></i>
+                                </span>
+                                <h4>
+                                    <strong>MovieFinder&trade;</strong>
+                                </h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <a href="#" class="btn btn-light">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="service-item">
+                                <span  class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-compass fa-stack-1x text-primary"></i>
+                                </span>
+                                <h4>
+                                    <strong>Argenta!&trade;</strong>
+                                </h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <a href="#" class="btn btn-light">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="service-item">
+                                <span  class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-flask fa-stack-1x text-primary"></i>
+                                </span>
+                                <h4>
+                                    <strong>NoteExchange&trade;</strong>
+                                </h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <a href="#" class="btn btn-light">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="service-item">
+                                <span  class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-shield fa-stack-1x text-primary"></i>
+                                </span>
+                                <h4>
+                                    <strong>Service Name</strong>
+                                </h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <a href="#" class="btn btn-light">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.col-lg-10 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+</body>
+</html>

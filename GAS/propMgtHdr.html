@@ -1,0 +1,69 @@
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+        html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    * / input    {padding:7px 10px;border-radius:5px;margin-bottom:3px;xcolor-blue-button-primary:#428bca;xcolor-blue-button-hover:#3071a9;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+       <div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" style="border-left-style:solid;border-left-width:5px;border-left-color:#f0ad4e" role="alert"></div>
+    */ .alert        {border-left-width:5px ; border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+       .alert-default{border-left-color:#777   } /* User-created */
+       .alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+       .alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+       .alert-info   {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+       .alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+       .alert-danger {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */
+	</style>
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Send proposals now. <img height="70" src="https://lh5.googleusercontent.com/-lx7EdvDXUus/VOEaX8ek1DI/AAAAAAAANfw/F6a3A2QlA1c/s144/house-roof-md.png"></h1><!-- https://lh4.googleusercontent.com/-w8sztA08rYk/VOEWjiSc5-I/AAAAAAAANfg/dbz3-gyEu0U/s144/house-roof-md.png -->
+    </div>
+</div>
+<div class="container container-fluid">
+	<div class="xwell xwell-sm xwell-lg alert xalert-success alert-info xalert-warning xalert-danger" role="alert">
+		<p>
+			<strong>Attention Property Managers:</strong>
+			<abbr title="Atlas Group is a real estate investment company based in Seattle, WA.">We seek</abbr>
+			to acquire a <abbr title="We are seeking to make a value play on Class B and C assets. We are doing preliminary due diligence on opportunities that meet our investment criteria.">subset</abbr> of
+			<abbr title="">this portfolio</abbr> and hire a
+			<abbr title="We need local management because we are located out of state.">local property management company</abbr>
+			like you to manage them.
+			Please make <abbr title="by entering numbers in the cells of the below table">financial projections</abbr>
+			for each subject you wish to manage.
+			To &ldquo;<strong><abbr title="Any properties you don’t wish to manage, enter one or more zeroes in the columns">No-Bid</abbr></strong>,&rdquo;
+			please enter zeroes.
+			<strong><abbr title="Gross Scheduled Income. Total units x Avg rent/month x 12 Months">GSI</abbr></strong>
+			and <strong><abbr title="Net Operating Income">NOI</abbr></strong> are annualized.
+		</p>
+	</div>
+	<div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" role="alert">
+		<p> <a class="alert-link" target="_blank" href="https://www.google.com/intl/en/chrome/browser/desktop/index.html"><abbr title="The below table we supply to receive your projections only works in the Chrome browser by Google.">Use Chrome</abbr></a>.
+			Firefox bugs are documented
+			<a class="alert-link" target="_blank" href="https://support.mozilla.org/en-US/questions/986513">here</a>,
+			<a class="alert-link" target="_blank" href="https://support.mozilla.org/en-US/questions/954828">here</a> and
+			<a class="alert-link" target="_blank" href="https://bugzilla.mozilla.org/show_bug.cgi?id=654072">here</a>.
+			And if you still use IExplorer, you might want to
+			<a class="alert-link" target="_blank" href="http://www.howtogeek.com/howto/32372/htg-explains-why-do-so-many-geeks-hate-internet-explorer/">read this</a> then
+			<a class="alert-link" target="_blank" href="https://www.google.com/intl/en/chrome/browser/desktop/index.html">get Chrome</a>.
+			<a class="alert-link" target="_blank" href="http://www.w3schools.com/browsers/browsers_stats.asp">
+				<abbr title="Broswer popularity chart">
+				<!--<img height="12" width="18" src="https://lh6.googleusercontent.com/-gQl-BzlSZhw/VNm8TzZ9Q2I/AAAAAAAANd8/5pIWrnJdH5c/s144/chart2.png">-->
+					<img height="15" width="18" src="https://lh3.googleusercontent.com/-LD9MR6vj3bg/Ud0onwKWCZI/AAAAAAAAH1I/mou6PCwSXcc/s144/ra.png">
+				</abbr>
+			</a>
+		</p>
+	</div>
+</div>
+</body></html>

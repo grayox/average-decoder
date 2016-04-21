@@ -1,0 +1,63 @@
+<!DOCTYPE html> <!-- -------------------------------------- AvmReport.html (incorporated into application as <iframe> This version works best with GAS: argenta v.349 and backup v.02 ) -------------------------------------- -->
+<html>
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','table']}]}"></script>
+<style>html{font-family:sans-serif;color:gray;xtext-align:center;margin:auto}</style>
+<script>
+(function(){ // References: http://api.jquery.com/append/ | http://api.jquery.com/jQuery.getJSON/ See example: "Loads the four most recent pictures of Mount Rainier from the Flickr JSONP API."
+             // var act = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?"                                           , ob = {tags:"mount rainier",tagmode:"any",format:"json"}
+                var act = "https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?jsoncallback=?" , ob = {k:"3bc9cpv6wb54gyqv6kl3",m:document.URL}
+                $.getJSON(act,ob).done(function(data){
+   	var dataBar = google.visualization.arrayToDataTable(data.dataBar)
+  /*var dataBar = google.visualization.arrayToDataTable([
+                  [ "Source"     , "Estimate"    , "Low range"   , { role  : "style" }                               , "High range"  , { role  : "style" }                               ]
+                , [ "Median"     , 433844-110491 , 110491        ,               "stroke-width:1;stroke-color:white" , 110491        ,               "stroke-width:1;stroke-color:white" ]
+                , [ "Zillow"     , 597220        , 628653-597220 , "color:#cccccc;stroke-width:1;stroke-color:white" , 660086-628653 , "color:#cccccc;stroke-width:1;stroke-color:white" ]
+                , [ "Trulia"     , 509000-110491 , 110491        , "color:#cccccc;stroke-width:1;stroke-color:white" , 110491        , "color:#cccccc;stroke-width:1;stroke-color:white" ] // If no range, use population stdDev
+                , [ "DataQuick"  , 396149        , 511356-396149 , "color:#cccccc;stroke-width:1;stroke-color:white" , 626562-511356 , "color:#cccccc;stroke-width:1;stroke-color:white" ]
+                , [ "SmartZip"   , 300104        , 326200-300104 , "color:#cccccc;stroke-width:1;stroke-color:white" , 352296-326200 , "color:#cccccc;stroke-width:1;stroke-color:white" ]
+                , [ "Eppraisal"  , 304884        , 358687-304884 , "color:#cccccc;stroke-width:1;stroke-color:white" , 412490-358687 , "color:#cccccc;stroke-width:1;stroke-color:white" ]
+                , [ "RealEstate" , 347631-110491 , 110491        , "color:#cccccc;stroke-width:1;stroke-color:white" , 110491        , "color:#cccccc;stroke-width:1;stroke-color:white" ] // If no range, use population stdDev
+        ])*/
+ 	  , dataTable = google.visualization.arrayToDataTable(data.dataTable)
+    /*, dataTable = google.visualization.arrayToDataTable([
+                  [ "Source"     , "Estimate"    , "Low range"   , "High range"  ]
+                , [ "Median"     , 433844        , 433844-110491 , 433844+110491 ]
+                , [ "Zillow"     , 628653        , 597220        , 660086        ]
+                , [ "Trulia"     , 509000        , 509000-110491 , 509000+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+                , [ "DataQuick"  , 511356        , 396149        , 626562        ] //,  "color : #0044ff"  ]
+                , [ "SmartZip"   , 326200        , 300104        , 352296        ] //,  "color : #006cff"  ]
+                , [ "Eppraisal"  , 358687        , 304884        , 412490        ] //,  "color : #0044ff"  ]
+                , [ "RealEstate" , 347631        , 347631-110491 , 347631+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+        ])*/
+      , options = data.options;
+    /*, options = {
+        title     : "Value estimates for 5115 Longfellow St, Los Angeles, CA 90042"
+      , isStacked : true
+	  , stroke-width:1
+	  , stroke-color:white
+      , series    : {0:{"color":"transparent"},1:{"color":"#428bca"},2:{"color":"#428bca"}} //, intervals : { "lineWidth" : 2 , "barWidth" : 0.618 } // 0.618 = "Golden Ratio"
+    }*/
+		$("#spinner").remove();var X={"gmap":"Google","homeSnap":"Snap","zillow":"Zillow","propertyShark":"Shark","neighborhoodScout":"Scout","zipSkinny":"Skinny","chase":"Chase","boa":"BOA","homesCom":"Homes","trulia":"Trulia"," realEstate":"RealEstate"," realtor":"Realtor","photo":"Photo"};//,j=X.length;
+		$("#charts") .append(drawChart(dataBar,dataTable,options))
+        $.each(data.link,function(i,link){$("<a>"   ).attr("href",link).attr("target","_blank").html(X[i] ).appendTo("#links") // Note the index, i, is the (string) name of the object's property (e.g.,zipSkinny,homesCom,etc.), not an iterating integer // Reference: http://stackoverflow.com/questions/4260308/javascript-getting-the-objects-property-name
+		       /*;if(j--){return false};*/$("<span>")                                          .html(" | ").appendTo("#links")/*;if(i===3){return false}*/}) })})() //.append("test")})})()
+function drawChart(dataBar,dataTable,options){
+ // new google.visualization.NumberFormat({prefix:"$",negativeColor:"red",negativeParens:true,pattern:"#,###"}).format(dataTable,1).format(dataTable,2).format(dataTable,3); // Reference: https://developers.google.com/chart/interactive/docs/reference#numberformatter
+    new google.visualization.BarChart(document.getElementById("chartBar"  )).draw(dataBar  ,options);
+    new google.visualization.Table   (document.getElementById("chartTable")).draw(dataTable,{showRowNumber:true});
+}
+</script>
+    <div id="charts">
+	    <div id="spinner" style="text-align:center">
+		        Please wait while we create your report.
+			<br><img src="https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif">
+			<br>This will take several minutes.
+		</div>
+        <div id="links" style="text-align:center"></div>
+        <div id="chartBar"   style="width:900px;height:400px;margin:auto"></div>
+        <div id="chartTable" style="width:400px;height:300px;margin:auto"></div>
+	</div>
+</body>
+</html>

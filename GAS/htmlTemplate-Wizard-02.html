@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- Reference: http://www.bootply.com/70095 To get source code: 1. In Chrome, "view frame source," copy/paste 2. Delete $(document).ready(function() { -->
+<!-- Includes proper .css and .js for radio buttons and wizards -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Bootply.com - Bootstrap FuelUX Bootstrap Radio Button Group issue</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--[if lt IE 9]>
+          <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <link rel="shortcut icon" href="/bootstrap/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <link href="//fuelcdn.com/fuelux/2.3.1/css/fuelux.css" type="text/css" rel="stylesheet">
+    <link href="//fuelcdn.com/fuelux/2.3/css/fuelux-responsive.css" type="text/css" rel="stylesheet">
+    <!-- CSS code from Bootply.com editor -->
+    <style type="text/css">
+    /* I would've normally not used the fixed class. */
+    /* I would've just used the step-content class.  */
+    /* But for demo purposes this was the way to go. */
+    
+    .fuelux .fixed .active .btn-group .active {
+        display: inline-block;
+    }
+    </style>
+</head>
+<!-- HTML code from Bootply.com editor -->
+
+<body class="fuelux">
+    <div class="well wizard-example">
+        <div id="MyWizard" class="wizard">
+            <ul class="steps">
+                <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Broken Button Group<span class="chevron"></span> </li>
+                <li data-target="#step2"><span class="badge">2</span>Magically Fixed<span class="chevron"></span> </li>
+                <li data-target="#step3"><span class="badge">3</span>Thats all folks<span class="chevron"></span> </li>
+            </ul>
+            <div class="actions">
+                <button class="btn btn-mini btn-prev"> <i class="icon-arrow-left"></i>Prev</button>
+                <button class="btn btn-mini btn-next" data-last="Finish">Next<i class="icon-arrow-right"></i> </button>
+            </div>
+        </div>
+        <div class="step-content">
+            <div class="step-pane active" id="step1">
+                <h2 class=""><i class="icon-magic"> </i></h2>
+                <p>See radio button group below....</p>
+                <p>Click on them to see they fall out of alignment</p>
+                <div class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-primary">Left</button>
+                    <button type="button" class="btn btn-primary">Middle</button>
+                    <button type="button" class="btn btn-primary">Right</button>
+                </div>
+            </div>
+        </div>
+        <div class="step-content fixed">
+            <div class="step-pane" id="step2">
+                <h2 class="">Fixed</h2>
+                <p>Now we fixed it, take a look at the CSS for the fix.</p>
+                <p>Click on the buttons and you will see that they are still aligned properly.</p>
+                <div class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-primary">Left</button>
+                    <button type="button" class="btn btn-primary">Middle</button>
+                    <button type="button" class="btn btn-primary">Right</button>
+                </div>
+            </div>
+            <div class="step-pane" id="step3">
+                <h2 class="">That's All Folks!!</h2> Now you are at the 3rd step of this wizard example.
+                <br class=""> </div>
+        </div>
+        <br class="">
+        <input type="button" class="btn" id="btnWizardPrev" value="Back">
+        <input type="button" class="btn btn-primary" id="btnWizardNext" value="Next"> </div>
+    <!-- /well -->
+    <hr class="">
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type='text/javascript' src="//fuelcdn.com/fuelux/2.3.1/loader.min.js"></script>
+<!--<script type='text/javascript' src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>--> <!--Included with <script src="...loader.js">-->
+    <!-- JavaScript jQuery code from Bootply.com editor  -->
+    <script type='text/javascript'>
+    $('#MyWizard').on('change', function(e, data) {
+        console.log('change');
+        if (data.step === 3 && data.direction === 'next') {
+            // return e.preventDefault();
+        }
+    });
+    $('#MyWizard').on('changed', function(e, data) {
+        console.log('changed');
+    });
+    $('#MyWizard').on('finished', function(e, data) {
+        console.log('finished');
+    });
+    $('#btnWizardPrev').on('click', function() {
+        $('#MyWizard').wizard('previous');
+    });
+    $('#btnWizardNext').on('click', function() {
+        $('#MyWizard').wizard('next', 'foo');
+    });
+    $('#btnWizardStep').on('click', function() {
+        var item = $('#MyWizard').wizard('selectedItem');
+        console.log(item.step);
+    });
+    $('#MyWizard').on('stepclick', function(e, data) {
+        console.log('step' + data.step + ' clicked');
+        if (data.step === 1) {
+            // return e.preventDefault();
+        }
+    });
+    // optionally navigate back to 2nd step
+    $('#btnStep2').on('click', function(e, data) {
+        $('[data-target=#step2]').trigger("click");
+    });
+    </script>
+</body>
+
+</html>

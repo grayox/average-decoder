@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--Change Log: v02: Uses CacheService() to manage user login status.-->
+<html class="fuelux">
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+</head>
+<body>
+<?var S="Please sign in",user=(Session.getActiveUser().getEmail())?Session.getActiveUser().getEmail():"disabled",u=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"user",obid:"oNweYCKVG3"})/*,sortBy:"-createdAt"}).results[0]*/||{name:S,phone:S,company:S}?>
+<div class="container container-fluid fuelux">
+<?!=LibraryjsUtil.signInMsg()?>
+	<div  class="col-xs-2  col-xs-offset-4">
+		<div xclass="col-xs-2  col-xs-offset-4"> <!-- Sign In -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Sign In
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Sign in to your existing account here. If you don’t yet have an account, use Sign Up panel. If you can’t remember your password, use Reset Password panel.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="signIn">
+						<div class="form-group col-xs-12">
+							<label for="name" hidden class="control-label">Username</label>
+							<input autocomplete="off" <?="user"?> type="text" class="form-control" name="username" id="username" placeholder="Username" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="phone" hidden class="control-label">Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="password" id="password" placeholder="Password" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Sign In</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block xbtn-default btn-primary" role="button" xclass="blue|#428bca" id="submitButton" value="Sign In" onclick="if(<?=user?>=='disabled'){alert('Please sign in')}else{myFunction_userUpdate();alert('Success!')}" title="">Sign In</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign Up</a> for a new account.</div>-->					
+					</form>
+				</div>
+			</div>
+		</div>
+		<div xclass="col-xs-2 xcol-xs-offset-5"> <!-- Reset Password -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Forgot Password
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Use this form if you forgot your password.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="signIn">
+						<div class="form-group col-xs-12">
+							<label for="phone" hidden class="control-label">Email</label>
+							<input autocomplete="off" <?="user"?> type="email" class="form-control" name="email" id="email" placeholder="Email" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Reset Password</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton" value="Reset Password" onclick="if(<?=user?>=='disabled'){alert('Please sign in')}else{myFunction_userUpdate();alert('Success!')}" title="">Reset Password</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign Up</a> for a new account.</div>-->			
+					</form>
+				</div>
+			</div>
+		</div>
+		<div xclass="col-xs-2 xcol-xs-offset-5"> <!-- Sign Up -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Sign Up
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Sign up here for a new account.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="signUp">
+						<div class="form-group col-xs-12">
+							<label for="name" hidden class="control-label">Email</label>
+							<input autocomplete="off" <?="user"?> type="email" class="form-control" name="email" id="email" placeholder="Email" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="name" hidden class="control-label">Username</label>
+							<input autocomplete="off" <?="user"?> type="text" class="form-control" name="username" id="username" placeholder="Username" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="phone" hidden class="control-label">Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="password1" id="password1" placeholder="Password" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="phone" hidden class="control-label">Repeat Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="password2" id="password2" placeholder="Repeat Password" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Sign Up</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton" value="Sign Up" onclick="if(<?=user?>=='disabled'){alert('Please sign in')}else{myFunction_userUpdate();alert('Success!')}" title="">Sign Up</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign In</a> to your account.</div>-->	
+					</form>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="col-xs-2 xcol-xs-offset-5"> <!-- My Account -->
+        <div class="panel panel-default">
+            <div class="panel-heading">My Account
+			<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+                <img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Use this form to update your account information.">
+			</div>
+            <div class="panel-body">
+                <form class="form xform-inline xform-horizontal" role="form" id="userUpdate">
+                    <div class="form-group col-xs-12">
+                        <label for="name" xhidden class="control-label">Your Name</label>
+                        <input autocomplete="off" <?=user?> type="text" class="form-control" name="name" id="name" placeholder="First and Last" value="<?=u.name?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="phone" xhidden class="control-label">Phone</label>
+                        <input autocomplete="off" <?=user?> type="text" class="form-control" name="phone" id="phone" placeholder="10-digits" value="<?=u.phone?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="company" xhidden class="control-label">Company Name</label>
+                        <input autocomplete="off" <?=user?> type="text" class="form-control" name="company" id="company" placeholder="Your company" value="<?=u.company?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="emailList" xhidden class="control-label">Email List
+                            <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+                            <img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Invite your current trading partners by entering one or more email addresses separated by commas.">
+                        </label>
+                        <textarea autocomplete="off" <?=user?> class="form-control placard-field" form="userUpdate" name="emailList" id="emailList" rows="7" placeholder="per1@example.com, per2@example.com, ..."></textarea>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="submitButton" hidden class="control-label">Submit Button</label>
+                        <button autocomplete="off" xdisabled=<?=user?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton" value="Update" onclick="if(<?=user?>=='disabled'){alert('Please sign in')}else{myFunction_userUpdate();alert('Success!')}" title="">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script>
+function myFunction_userUpdate(){var r=document.getElementById("userUpdate")//alert(/*document.forms["referral"]["cFullName"].value/*"Hello world"*/);document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).userUpdate_receive(r/*this.parentNode*/)}//*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+//$('#myComponent1').component1(); // Initializes components from FuelUx // Example: $('#mySpinbox').spinbox();
+//$('#myComponent2').component2();
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<html> <!-- Obfuscate: http://techyzilla.blogspot.com/2012/09/better-javascript-obfuscating-method-to-protect-your-code.html @http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxtree/index.htm?(web)#demos/jqxtree/navigation.htm @http://jsfiddle.net/wVtdA/9/ --> <!-- Note: Clear internet browsing history if scripts/splitter windows/tree animations stop functioning -->
+<head>
+    <title id='Description'>Navigation with jqxTree</title>
+    <link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtVlJqWDhxUk9hcG8" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1" type="text/css" />
+	<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtNm0yVXh0Z1JQWkU" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://googledrive.com/host/0B1LVOoV_2dFtdGF1Q25haHVEMnM" 2xsrcx="https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=k7fvbixefxcc1fy4eqr5" 1xsrcx="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script> <!-- src replaced 2xsrc per "using Google Drive to host .css and .js" Reference: http://www.mybloggerlab.com/2013/04/how-to-host-css-or-javascript-files-in-blogger-using-google-drive.html --><!-- 1xsrc replaced 1xsrc because Chrome has enabled strict MIME type checking and xsrc serves MIME=text/plain. Reference: https://code.google.com/p/chromium/issues/detail?id=180007 -->
+<!--<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1" type="text/css" />
+    <link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/gettheme.js?attredirects=0&d=1"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.8.3.min.js?attredirects=0&d=1"></script>-- >
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcore.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxbuttons.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxscrollbar.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxpanel.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxtree.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxexpander.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxsplitter.js?attredirects=0&d=1"></script>-->
+	<script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            var theme = "bootstrap"/*getDemoTheme()*/,
+            urlMap = { "account"     		: "g8h2j7kdhkztj0awyeii"
+					 , "registration"   	: "oquov5gxksujhxuyljfu"
+					 , "map"     			: "gdslw113lzfsc6wa2v1n"
+					 , "comp-plan"     		: "girawkl6om80ywfhro2s"
+					 , "authorization"		: "q9aifudq5q3vqqb3yui9"
+					 , "taxdocs"			: "51ttwqmx6wht8b0bapck"
+					 , "tax-instructions"	: "64kpc143tlc75mf9al07"
+					 , "citizen-us"			: "xdot5r4nqoizy1jzndqc"
+					 , "citizen-nonus"		: "8nhrwzvarn8kazpflpp3"
+					 , "w9-eSign"			: "a3t7giowyqxihx6f132k"
+					 , "w9-pdf"				: "5bpixbf4mhokjsdh311t"
+					 , "w8-eSign"			: "t2t0902k7zl65ygxei91"
+					 , "w8-pdf"				: "ydl609qvq0eacb4ntbut"
+					 , "paycheck"     		: "bhd16ci0wr2lxxnm29bg"
+					 , "products"     		: "a8nw1s8xtje7ssg27143"
+					 , "training-manual"	: "wlrvffv3rnk88txtwiwb"
+					 , "mojo"     			: "cx8q5r0wmtovarzgozpz"
+					 , "mj-training"     	: "72it6dil9bg2g0ca3o3b"
+					 , "mj-leads"     		: "6j1irvdgpny8s85tmyle"
+					 , "leadbank"     		: "ivqd7wb6jw18lagrdutv"
+					 , "lb-training"     	: "9iuhimtmdtl6olzj2hby"
+					 , "lb-leads"       	: "bzldlnqvltnc9g6e0xij"
+					 , "dealdigger"     	: "a11f766les5e63wig66o"
+					 , "dd-training"     	: "k44vvesra4juvvcxggll"
+					 , "dd-leads"     		: "j2hsapogqnfps6u9qu6e"
+					 , "mondo"				: "ifcfzujugtzcf4ey1a51"
+					 , "mt-training"     	: "8opdkclgo6yjk4bjkirv"
+					 , "mt-leads"     		: "eymqott0sqqznq9sjqfp"
+					 , "wellhaven"     		: "gthmlsn250rt3l2pt2rj"
+					 , "wh-training"     	: "66fyw8nzurcyfm3169ki"
+					 , "wh-leads"     		: "c58znini41mzpy5sw909"
+					 , "recruit"     		: "rrfzp7oum5ucoxem78iq"
+					 , "recruit-send"     	: "vdi4dog0uxzw2hp3qijr"
+					 , "recruit-track"     	: "q9bg6cghxv47y8q3bsp3"
+					 , "communicate"     	: "hcqa5px07ykh0xuivr1h"
+					 , "teleconference"     : "refjdofdwhebuvm1hy5o"
+					 , "announcements"     	: "pcc1qdkz8msvmyrhp7qv"
+					 , "reports" 			: "70clhluv4thq5sa8e0r7"
+					 , "reports-dash" 		: "6przyjigmlb482rcvj9h"
+					 , "reports-ratios" 	: "h6nhxx95ddaiyapps92d"
+					 , "sp-dashboard" 		: "9rxj1f5i6pacjmvlsy8o"
+					 , "mj-compensation" 	: "wcpl6sip4o3ckbsn7s35"
+					 , "mj-ratios" 			: "22vi5w7p5w9axkmzboug"
+					};
+            // Create jqxTree
+            $("#splitter").jqxSplitter({theme:theme,width:'100%',height:1400,panels:[{size:215}]});
+            $('#jqxTree').jqxTree({theme:theme,height:'100%',width:'100%'});
+            $('#jqxTree').on('select',function(event){
+			    $.getJSON('https://script.google.com/macros/s/AKfycbx83OcznDFybxxaGdwzoH2FY_Cylv_4dIz7Je-ovdKN5bu0TMM/exec?jsoncallback=?',{k:urlMap[event.args.element.id]}).done(function(data){$('#ContentPanel').html(data.result);}) // Reference: http://api.jquery.com/jQuery.getJSON/ // jQuery automatically appends jsoncallback value (e.g. "jquery000123") to url as a parameter so server must parse it and return it as function name (e.g., "jquery000123({object data goes here})")
+			});
+        });
+    </script>
+</head>
+<body class='default'>
+    <div id="splitter">
+        <div>
+            <div style="border: none;" id='jqxTree'>
+                <ul>
+                    <li id="account"          item-expanded='true' ><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Account       </span>
+						<ul>
+					<li id="registration"     item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh5.googleusercontent.com/-9vpRnqzxLHo/Uddv2hhT-QI/AAAAAAAAHZw/sk9Paq4x1yQ/s144/Gear-icon.png' height='16' ><span item-title="true">Registration      </span></li>
+					<li id="map"              item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-Rhex-ZghsvI/Udj1Azpg9-I/AAAAAAAAHtw/0ALaygvwvlg/s144/mp.png' height='16' width='12' ><span item-title="true">Map  </span></li>
+                    <li id="taxdocs"          item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Tax Documents </span>
+							<ul>
+					<li id="tax-instructions" item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Instructions  </span></li>
+					<li id="citizen-us"       item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/--Iu-6wCJsrc/UdejysfkktI/AAAAAAAAHhw/xMe5AkLIs4o/s144/gf.png' height='15' width='16' ><span item-title="true">United States </span>
+								<ul>
+					<li id="w9-pdf"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Print + Sign </span></li>
+					<li id="w9-eSign"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Sign Online </span></li>
+								</ul></li>
+                    <li id="citizen-nonus"    item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/--Iu-6wCJsrc/UdejysfkktI/AAAAAAAAHhw/xMe5AkLIs4o/s144/gf.png' height='15' width='16' ><span item-title="true">Non U.S.  </span>
+								<ul>
+					<li id="w8-pdf"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Print + Sign </span></li>
+					<li id="w8-eSign"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Sign Online </span></li>
+								</ul></li>
+							</ul></li>
+					<li id="paycheck"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh5.googleusercontent.com/-hg_1z9m2pUo/UdgyuEwYL0I/AAAAAAAAHlw/YqrvprLjlpE/s800/tb.png' height='16'           ><span item-title="true">Paycheck       </span></li>
+						</ul>
+					</li>
+					<li id="communicate"      item-expanded='true' ><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Communicate</span>
+						<ul>
+					<li id="teleconference"   item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-nkvYubBCe2o/UdjxEmrNy6I/AAAAAAAAHtM/L_TACcQFJlo/s144/sd.png' height='16' ><span item-title="true">Teleconference        </span></li>
+					<li id="announcements"    item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-AXnmnTd9fgQ/Udkkyi-LU8I/AAAAAAAAHx0/7_2a7CM1tLw/s144/sv.png' height='16' ><span item-title="true">Announcements         </span></li>
+						</ul>
+					</li>
+                    <li id="products"         item-expanded='true' ><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Products      </span>
+						<ul>
+				<!--<li id="sp-dashboard"     item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-XE0iB8P4xRE/Ud0olCrKrYI/AAAAAAAAH0w/bQbyWt677E8/s800/da.png' height='16' xwidth='16' ><span item-title="true">Dashboard    </span></li> -->
+					<li id="training-manual"  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Training     </span></li>
+					<li id="mojo"             item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh5.googleusercontent.com/-CTfdTMyeEIU/UdiKk2ElJUI/AAAAAAAAHnU/2bbzJTWmy-s/s800/mo.png' height='16' xwidth='16'><span item-title="true">Mojo™        </span>
+							<ul>
+				<!--<li id="mj-comp-plan"     item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'          ><span item-title="true">Comp Plan    </span></li> -->
+					<li id="mj-ratios"   	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-LD9MR6vj3bg/Ud0onwKWCZI/AAAAAAAAH1I/mou6PCwSXcc/s144/ra.png' height='16' >          <span item-title="true">Ratios          </span></li>
+					<li id="mj-training"      item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-k8xNRC6VKX0/Udej0A0en_I/AAAAAAAAHhs/1nP-4JL1Z4U/s144/yt.png' height='14' width='15'><span item-title="true">Product Training</span></li>
+					<li id="mj-leads"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-6qFUD4D2F20/Udgp4mC9itI/AAAAAAAAHk0/4wJu-5pysik/s800/gl.png' height='16'           ><span item-title="true">Leads + Scripts </span></li>
+							</ul>
+					</li>
+					<li id="leadbank"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-fb72Gh-2LPE/UdiKkjKo4nI/AAAAAAAAHnI/GUeulGPJsFM/s800/lb.png' height='16' xwidth='16'><span item-title="true">LeadBank™     </span>
+							<ul>
+					<li id="lb-training"      item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-k8xNRC6VKX0/Udej0A0en_I/AAAAAAAAHhs/1nP-4JL1Z4U/s144/yt.png'  height='14' width='15'><span item-title="true">Product Training</span></li>
+					<li id="lb-leads"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-6qFUD4D2F20/Udgp4mC9itI/AAAAAAAAHk0/4wJu-5pysik/s800/gl.png' height='16'           ><span item-title="true">Leads + Scripts </span></li>
+							</ul>
+					</li>
+					<li id="dealdigger"       item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-mNFuRpfVnR8/UdiKki2gk0I/AAAAAAAAHm8/0tAQoiVr96I/s800/dd.png' height='16' xwidth='16'><span item-title="true">DealDigger™   </span>
+							<ul>
+					<li id="dd-training"      item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-k8xNRC6VKX0/Udej0A0en_I/AAAAAAAAHhs/1nP-4JL1Z4U/s144/yt.png' height='14' width='15'><span item-title="true">Product Training</span></li>
+					<li id="dd-leads"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-6qFUD4D2F20/Udgp4mC9itI/AAAAAAAAHk0/4wJu-5pysik/s800/gl.png' height='16'           ><span item-title="true">Leads + Scripts </span></li>
+							</ul>
+					</li>
+					<li id="mondo"            item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-aUWrVenvJKc/UdiKklsJS3I/AAAAAAAAHnM/8CFHYHpsf94/s144/md.png' height='16' width='16' ><span item-title="true">Mondo™         </span>
+							<ul>
+					<li id="mt-training"      item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-k8xNRC6VKX0/Udej0A0en_I/AAAAAAAAHhs/1nP-4JL1Z4U/s144/yt.png' height='14' width='15'><span item-title="true">Product Training</span></li>
+					<li id="mt-leads"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-6qFUD4D2F20/Udgp4mC9itI/AAAAAAAAHk0/4wJu-5pysik/s800/gl.png' height='16'           ><span item-title="true">Leads + Scripts </span></li>
+							</ul>
+					</li>
+					<li id="wellhaven"        item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-kF3_zDk6vg0/UdiKlDHj3aI/AAAAAAAAHnY/GqkqLb5Ic9k/s144/wh.png' height='16' xwidth='16' ><span item-title="true">Wellhaven™   </span>
+							<ul>
+					<li id="wh-training"      item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-k8xNRC6VKX0/Udej0A0en_I/AAAAAAAAHhs/1nP-4JL1Z4U/s144/yt.png' height='16' width='15'><span item-title="true">Product Training</span></li>
+					<li id="wh-leads"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-6qFUD4D2F20/Udgp4mC9itI/AAAAAAAAHk0/4wJu-5pysik/s800/gl.png' height='16'           ><span item-title="true">Leads + Scripts </span></li>
+							</ul>
+					</li>
+						</ul>
+					</li>
+				</ul>
+            </div>
+        </div>
+        <div id="ContentPanel"></div>
+    </div>
+</body>
+</html>
+

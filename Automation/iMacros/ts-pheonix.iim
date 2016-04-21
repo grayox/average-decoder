@@ -1,0 +1,50 @@
+VERSION BUILD=8961227 RECORDER=FX
+
+'RegEx pattern of result: https://regex101.com/r/iT6fL3/1
+',re=/
+'alignCenter.*?itemRow.*?SaleDate\"\">(\d{1,2}\/\d{1,2}\/\d{4}).*?<\/.*?<td.*?>\s*(\S*)\s*<\/.*?<td.*?>\s*(\d{1,2}\/\d{1,2}\/\d{4})\s*<\/.*?<td.*?>\s*(.*?)\s{2,}<\/.*?<td.*?>\s*(\S*)\s*<\/.*?<td.*?>\s*(.*?)\s{2,}<\/.*?<tr\s.*?SaleTime\"\">(.*?)<\/.*?<a\s.*?address=(.*?)'.*?>(.*?)<\/.*?<td.*?>\s*(?:\S*)\s*<\/.*?<td.*?>\s*(\S*)\s*<\/.*?SaleLoc\"\">(.*?)<\/.*?<td.*?>\s*(.*?)\s{2,}<\/
+'/g
+
+
+'Setup
+'Enable looping "imacros negative loop trick"
+'SET !LOOP -48
+'To get a positive looping counting variable
+'SET !VAR1 49
+'ADD !VAR1 {{!LOOP}}
+'Disable testing popups
+SET !EXTRACT_TEST_POPUP NO
+SET !ERRORIGNORE YES
+'Name to save file
+SET !VAR2 "ts-pheonix.txt"
+'Wait seconds - random portion
+SET !VAR3 2
+'Wait seconds - fixed portion
+SET !VAR4 1
+
+TAB OPEN
+TAB T=2
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+URL GOTO=http://fs.tblaw.com/Sales/PendingSales.aspx
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Set maximum record count per page
+TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlNumRows CONTENT=%300
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+

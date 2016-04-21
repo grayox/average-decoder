@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!--Instructions: 1. Copy paste this file into a GAS HTML file named account.html 2. In the script section at the bottom, copy/paste that into a .gs file called Account.gs -->
+<!--Change Log: v02: Uses CacheService() to manage user login status.-->
+<html class="fuelux">
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+</head>
+<body>
+<?var S="",user="x",u=cache2user(),disabled=u?"":"disabled"//LibraryjsUtil.cache2user() fails because can't access cache from a library function?
+    , siteName=SitesApp.getActiveSite().getName(),docs=LibraryjsUtil.googleSite2docLinks(siteName);?>
+<div class="container container-fluid fuelux">
+<!--<?!=LibraryjsUtil.signInMsg()?>-->
+	<div  class="col-xs-2  col-xs-offset-5" style="text-align:center">
+		<div class="panel panel-default">
+			<div class="panel-heading">Status
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-- >
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="">-->
+			</div>
+			<div class="panel-body">
+				<?if(u){?>
+					<button autocomplete="off" role="button" class="btn btn-default btn-xs" onClick="myFunction_signOut()" name="signOut" title="">Sign Out</button>
+					<br>You are signed in as:<br><?=u.username?>
+				<?}else{?>
+					You are not signed in.<br>Please sign in or sign up.<?=S?>
+				<?}?>
+			</div>
+		</div>
+	</div>
+<?if(!u){?>
+	<div  class="col-xs-2  col-xs-offset-5">
+		<div xclass="col-xs-2  col-xs-offset-4"> <!-- Sign In -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Sign In
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Sign in here. If you don’t have an account, Sign Up below. If you can’t remember your password, use Reset Password.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="signIn">
+						<div class="form-group col-xs-12">
+							<label for="username" hidden class="control-label">Username</label>
+							<input autocomplete="off" <?="user"?> type="text" class="form-control" name="username" id="username1" placeholder="Username" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="password" hidden class="control-label">Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="password" id="password1" placeholder="Password" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Sign In</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block xbtn-default btn-primary" role="button" xclass="blue|#428bca" id="submitButton1" value="Sign In" onclick="myFunction_signIn()" title="">Sign In</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign Up</a> for a new account.</div>-->					
+					</form>
+				</div>
+			</div>
+		</div>
+		<div xclass="col-xs-2 xcol-xs-offset-5"> <!-- Reset Password -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Reset Password
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Use this form if you forgot your password.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="resetPw">
+						<div class="form-group col-xs-12">
+							<label for="email" hidden class="control-label">Email</label>
+							<input autocomplete="off" <?="user"?> type="email" class="form-control" name="email" id="email2" placeholder="Email" xvalue="<?=u.phone?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Reset Password</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton2" value="Reset Password" onclick="myFunction_resetPw()" title="">Reset Password</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign Up</a> for a new account.</div>-->			
+					</form>
+				</div>
+			</div>
+		</div>
+		<div xclass="col-xs-2 xcol-xs-offset-5"> <!-- Sign Up -->
+			<div class="panel panel-default">
+				<div class="panel-heading">Sign Up
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Sign up here for a new account.">
+				</div>
+				<div class="panel-body">
+					<form class="form xform-inline xform-horizontal" role="form" id="signUp">
+						<div class="form-group col-xs-12">
+							<label for="email" hidden class="control-label">Email</label>
+							<input autocomplete="off" <?="user"?> type="email" class="form-control" name="email" id="email3" placeholder="Email" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="username" hidden class="control-label">Username</label>
+							<input autocomplete="off" <?="user"?> type="text" class="form-control" name="username" id="username3" placeholder="Username" xvalue="<?=u.name?>">
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="password" hidden class="control-label">Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="password" id="password3" xname="pw1" xid="pw1" placeholder="Password" xvalue="<?=u.phone?>">
+						</div>
+					<!--<div class="form-group col-xs-12">
+							<label for="pw2" hidden class="control-label">Repeat Password</label>
+							<input autocomplete="off" <?="user"?> type="password" class="form-control" name="pw2" id="pw2" placeholder="Repeat Password" xvalue="<?=u.phone?>">
+						</div>-->
+					<!--<div class="checkbox">
+							<label>
+							    <input type="checkbox">I have read and agree to the <a href="<?=docs.terms?>" target="_blank">Terms of Use</a>.
+							</label>
+						</div>-->
+						<div class="form-group col-xs-12">
+							By clicking Sign Up you agree to our <a href="<?=docs.terms?>"   target="_blank">Terms</a>
+                                                             and <a href="<?=docs.privacy?>" target="_blank">Privacy Policy</a>.
+						</div>
+						<div class="form-group col-xs-12">
+							<label for="submitButton" hidden class="control-label">Sign Up</label>
+							<button autocomplete="off" xdisabled=<?="user"?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton3" value="Sign Up" onclick="myFunction_signUp()" title="">Sign Up</button>
+						</div>
+					<!--<div>Or <a href="< ?=LibraryjsUtil.signup2signin()?>" target="_blank">Sign In</a> to your account.</div>-->	
+					</form>
+				</div>
+			</div>
+		</div>
+    </div>
+<?}else{?>
+    <div class="col-xs-2 col-xs-offset-5"> <!-- My Info -->
+        <div class="panel panel-default">
+            <div class="panel-heading">My Info
+			    <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+                <img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Use this form to update your account information.">
+			</div>
+            <div class="panel-body">
+                <form class="form xform-inline xform-horizontal" role="form" id="userUpdate">
+                    <div class="form-group col-xs-12">
+					    <label for="username" hidden class="control-label">Username</label>
+                        <input autocomplete="off" <?=disabled?> type="hidden" class="form-control" name="username" id="username4" placeholder="Username" value="<?=u.username||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="email" xhidden class="control-label">Email</label>
+                        <input autocomplete="off" disabled type="text" class="form-control" name="email" id="email4" placeholder="Email" value="<?=u.email||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="nameFull" xhidden class="control-label">Your Name
+							<!--<span class="glyphicon glyphicon-question-sign"></span> -->
+							<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Make sure to enter your name so your invitees will recognize you on their invitation and open their email instead of trashing it.">
+						</label>
+                        <input autocomplete="off" <?=disabled?> type="text" class="form-control" name="nameFull" id="nameFull4" placeholder="First and Last" value="<?=u.nameFull||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="phone" xhidden class="control-label">Phone</label>
+                        <input autocomplete="off" <?=disabled?> type="text" class="form-control" name="phone" id="phone4" placeholder="10-digits" value="<?=u.phone||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="company" xhidden class="control-label">Company Name
+						    <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+                            <img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Enter the full legal name in which you take title.">
+						</label>
+                        <input autocomplete="off" <?=disabled?> type="text" class="form-control" name="company" id="company4" placeholder="Your company" value="<?=u.company||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="emailList" xhidden class="control-label">Email List
+                            <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+                            <img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Invite your current trading partners by entering one or more email addresses separated by commas.">
+                        </label>
+                        <textarea autocomplete="off" <?=disabled?> class="form-control placard-field" form="userUpdate" name="emailList" id="emailList4" rows="7" placeholder="per1@example.com, per2@example.com, ..."></textarea>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="submitButton" hidden class="control-label">Submit Button</label>
+                        <button autocomplete="off" xhidden xdisabled=<?=user?> type="button" class="btn btn-block btn-default xbtn-primary" role="button" xclass="blue|#428bca" id="submitButton4" value="Update" onclick="myFunction_userUpdate()" title="">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?}?>
+</div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script> // Resources: Google Search Terms: google apps script success handler examples // Reference: http://www.mousewhisperer.co.uk/drivebunny/talking-to-the-server-from-apps-scripts-html-service/
+function emailValidate(str){return /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i.test(str/*email*/)} //@return{boolean} True if str is valid email address //@param{string} str The string to be tested // Should be copy/pasted to client-side JS // function test(){var ar=["random@example","random@example.com","randomexample.com"],i=ar.length,out=[];while(i--){out.push(emailValidate(ar[i]))}Logger.log(out)} // Sample call: if(!LibraryjsUtil.emailValidate(email)){alert("Enter valid email address.");return} // References: http://www.regular-expressions.info/email.html | http://www.regexmagic.com/patterns.html // Note: Since this function is usually called client-side, we might want to copy/paste; a sample call might resemble this: if(!/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i.test(email)){alert("Enter valid email address.");return}
+function phoneStrip(str)   {return str.replace(/\D/gmi,"")} // Strips phone number of all non-digit characters // Should be copy/pasted to client-side JS. // function test(){(Logger.log(phoneStrip("(555) 555-1212;!")))}
+function onSuccess(callback){if(Boolean(callback && callback.error)){alert(callback.error)}}
+function onFailure_signUp(){}
+function onSuccess_signUp(callback){var msg=callback.error?("Error: "+callback.error+".\nPlease try again."):("Success!\nWelcome, "+callback.username+".\nPlease check your email.\nThen refresh browser or browse to next page.");alert(msg)}
+function onFailure_signIn(){}
+function onSuccess_signIn(callback){if(callback){alert('Welcome, '+callback.username+'!\nRefresh browser or browse your next page.')}else{alert('Password does not match username.\nTry again or reset password.')}}
+function myFunction_signIn(){var r=document.getElementById("signIn");//alert(/*document.forms["referral"]["cFullName"].value)/*"Hello world"*/;document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure_signIn()).withSuccessHandler(onSuccess_signIn).receive_signIn(r/*this.parentNode*/);/*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+function myFunction_resetPw(){var r=document.getElementById("resetPw");//alert(/*document.forms["referral"]["cFullName"].value)/*"Hello world"*/;document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receive_resetPw(r/*this.parentNode*/);/*this.parentNode*/r.reset();alert('Success! Check email.')}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+function myFunction_signUp(){var r=document.getElementById("signUp"),email=document.getElementById("email3"   ).value;if(!email             .length  ){alert("Please enter your email."  );return} // Check: Entered email //document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+                             var                                     pw   =document.getElementById("password3").value;if(!pw                .length  ){alert("Please select a password." );return} // Check: Entered password // Possibly, during testing, lack of password field caused observed new class being created named “User” but not the Parse-defined User class.
+                                                                                                                      if(!emailValidate(email)       ){alert("Enter valid email address.");return} // Check: Valid email address
+							 var L=4,M=25,                           user =document.getElementById("username3").value;if(user.length<L||user.length>M){alert("Username must be between "+L+"-"+M+" characters.\nPlease try again.");return} // Check: Username length
+	                      // var match=false,v=SitesApp.getActiveSite().getViewers(),i=v.length;while(i--){if(email==v[i].getEmail()){match=true;break}}if(!match){alert(email+" is not on the invitation list.\nPlease enter the email address where you received your invitation.");return}} // Check: Email on invitation list // Fails right now
+	//if(r.pw1==r.pw2){r.password=r.pw1;delete r.pw1;delete r.pw2}else{alert("Passwords don’t match.");return} // r does not appear to be an object that can be manipulated
+	google.script.run.withFailureHandler(onFailure_signUp).withSuccessHandler(onSuccess_signUp).receive_signUp(r/*this.parentNode*/);/*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+function myFunction_userUpdate(){
+         var el    = document.getElementById("emailList4"),str=el.value,ar=str.split(/( |,|;)+/gmi);el.value="";//alert(ar);//alert(str);//function test(){Logger.log("cooldude8@suremail.info,cooldude9@suremail.info,cooldude10@suremail.info, cooldude6@suremail.info, cooldude5@suremail.info,".split(/( |,|;)+/gmi))}
+		 var r     = document.getElementById("userUpdate");//alert(/*document.forms["referral"]["cFullName"].value)/*"Hello world"*/;document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+	     var email = document.getElementById("email4").value;if(email.length && !emailValidate(email)      ){alert("Enter valid email address.");return} // Check: Valid email address
+		 var phone = document.getElementById("phone4").value,ps=phoneStrip(phone),len=ps.length;if(!len==10){alert("The phone number should have 10 digits.\n"+phone+" has "+len+" digits.\nPlease double check the phone number and try again.");return} // Check: Phone number has 10 digits
+	google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receive_emailList(ar);
+	google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receive_userUpdate(r/*this.parentNode*/);alert("Success! Form data received.")}//*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+function myFunction_signOut(){//var r=document.getElementById("signIn");//alert(/*document.forms["referral"]["cFullName"].value)/*"Hello world"*/;document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receive_signOut();alert('You are now signed out. Refresh screen or exit.')}//r/*this.parentNode*/);/*this.parentNode*/r.reset();document.getElementById("userUpdate").reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+/* ---------- Code.gs (Copy and paste the following into the Account.gs file) ---------- // Store cache files locally (i.e., in a .gs file, not in a library)
+function userFields(){return ["obid","objectId","username","email","company","phone","nameFull"]}
+function receive_emailList (ar){var u=cache2user(),i=ar.length;while(i--){if(LibraryjsUtil.emailValidate(ar[i])){return receive_invite({email:ar[i],referrer:u.username})}}} // LATER VERSIONS MUST CLEANUP/MERGE DUPLICATE INVITATIONS // receive_invite() method is located in Invite.gs file and referenced by invite.html template and file (htmlTemplate-Invite-xx.html) 
+function receive_signOut   (  ){CacheService.getUserCache().removeAll(userFields())}
+function receive_userUpdate(ob){                                      var u=LibraryjsUtil.dbParse({verb:"put"  ,project:LibraryjsUtil.googleSite2parseApp(SitesApp.getActiveSite().getName()),className:"User",ob:ob,obid:cache2user().objectId});user2cache(ob);                       return u}  // function test(){Logger.log(JSON.stringify(receive_userUpdate({name:"x",phone:"y",company:"z",emailList:"a,b,c",obid:"jUEp6HTjUv"})))} // returns: {"updatedAt":"2014-12-18T02:55:59.117Z"}
+function receive_signIn    (ob){ob.username=ob.username.toLowerCase();var u=LibraryjsUtil.dbParse({verb:"get"  ,project:LibraryjsUtil.googleSite2parseApp(SitesApp.getActiveSite().getName()),className:"User",ob:ob});if(u.error){return false}else{user2cache(u);                     return u}} // function test(){Logger.log(JSON.stringify(receive_signIn({username:"cooldude6",password:"teleworm1"})))}                               // returns: {"email":"atlaslive@gmail.com","objectId":"oNweYCKVG3","sessionToken":"SCAEaM99PJTc9qbd1BWUSXkp2","username":"cooldude6"}
+function receive_resetPw   (ob){                                      var u=LibraryjsUtil.dbParse({verb:"reset",project:LibraryjsUtil.googleSite2parseApp(SitesApp.getActiveSite().getName()),className:"User",ob:ob})                                                                          }  // function test(){Logger.log(JSON.stringify(receive_resetPw({email:"atlaslive@gmail.com"})))}                                           // returns: undefined
+function receive_signUp    (ob){ob.username=ob.username.toLowerCase();var                                       m,pname=LibraryjsUtil.googleSite2parseApp(SitesApp.getActiveSite().getName());                                                                                                     // Check: Username taken: // var s=LibraryjsUtil.dbParse({verb:"count",project:pname,className:"User",query:{username:ob.username}});if(s.count){return {error:("Username "+ob.username+" is taken.\nIf you are "+ob.username+", please Sign In.\nIf you are not "+ob.username+", please select a different username")}} // Checks username is available // Necessary because dbParseBatch() does not return error if in use (although dbParse() does... which is alternate code in comment section of same line as dbParseBatch() and should be used if you do not want to check against invitation list... which makes double post unnecessary... which in turn makes dbParseBatch() unnecessary and we can use dbParse() which returns error if username is in use, as previously mentioned)
+			                                                          var r=LibraryjsUtil.dbParse({verb:"count",project:pname,className:"invite",query:{email:ob.email},limit:1});if(!r.count){return {error:"That email is not on our guest list.\nPlease enter email where we first contacted you"}}else{m=r.results[0]} // Check: Invite guest list // This line verifies email is on invitation list in invite class // Comment it out if you do not wish to use this feature // Note: Posts to User are not supported in batch operations
+	                                                                  var u=LibraryjsUtil.dbParse({verb:"post" ,project:pname,className:"User",ob:ob});if(!u.error){user2cache(u);user2cache(ob);u.username=ob.username;LibraryjsUtil.inviteUpdate(pname,ob.email,ob.username);}
+	                                                                  var s=LibraryjsUtil.dbParse({verb:"get"  ,project:pname,className:"invite",query:{username:m.referrer}}).results[0]                                               
+	var str=('New Member: '+ob.username+' | Referrer: '+m.referrer+'. To opt out of future notifications, reply to this email with the phrase "Opt Out" in the subject.')
+    ;MailApp.sendEmail(s.email,("You have a new member in your network at "+LibraryjsUtil.capitalize(pname)),str);return u} // function test(){Logger.log(JSON.stringify(receive_signUp({username:"cooldude6",password:"p_n7!-e8",email:"atlaslive@gmail.com"})))} // returns: {"objectId":"GNsC2EqFaC","sessionToken":"KSMjeVVDnBsx3pBerimoykjcA"}
+function cache2user(){var ar=userFields(),cache=CacheService.getUserCache(),out=cache.getAll(ar);if(Object.keys(out).length){user2cache(out);return out}else{return false}} // @return{object or boolean} User cache key value pairs or false (if none with a key in var ar[]). // function test(){Logger.log(JSON.stringify(cache2user()))} // function test2(){CacheService.getUserCache().removeAll(["obid","objectId","username","email","company","phone","nameFull"])} // function test3(){CacheService.getUserCache().putAll({objectId:"jUEp6HTjUv",obid:"jUEp6HTjUv"})}
+function user2cache(u,sec){sec=sec||21600//,u=u||LibraryjsUtil.dbParse({verb:"get",project:LibraryjsUtil.googleSite2parseApp(SitesApp.getActiveSite().getName()),className:"user",objectId:"oNweYCKVG3"})//;Logger.log(JSON.stringify(u))}
+         ; var cache=CacheService.getUserCache(),ar=["createdAt","updatedAt","emailVerified"]//"email","objectId","sessionToken",
+         , i=ar.length;while(i--){delete u[ar[i]]}cache.putAll(u,sec)}
+   -------------------------- End Code.gs (copy and paste) -------------------------- */
+//$('#myComponent1').component1(); // Initializes components from FuelUx // Example: $('#mySpinbox').spinbox();
+//$('#myComponent2').component2();
+</script>
+</body>
+</html>

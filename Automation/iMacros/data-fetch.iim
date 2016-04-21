@@ -1,0 +1,14 @@
+VERSION BUILD=8961227 RECORDER=FX
+SET !VAR2 "data-fetch.txt"
+SET !EXTRACT_TEST_POPUP NO
+TAB T=1
+TAB CLOSEALLOTHERS
+URL GOTO=https://radiant-heat-5197.firebaseio.com/test/imacros.json?auth=aSTFfsEjDq3GLtBP8rKqKtDqadooRvEkDP6zSaLr
+'URL GOTO=https://radiant-heat-5197.firebaseio.com/test/imacros/-KDr8Ef3VbD0Ny5ZuwaM/3/city.json?auth=aSTFfsEjDq3GLtBP8rKqKtDqadooRvEkDP6zSaLr
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=TXTALL
+'SET !VAR1 EVAL("var s=\"{{!EXTRACT}}\"; s")
+SET temp EVAL("var s=\"{{!EXTRACT}}\".replace(/(\\\")/g,\"'\"), ob=JSON.parse(s); ob.test.imacros[\"-KDr8Ef3VbD0Ny5ZuwaM\"][3][\"city\"]")
+'Errors are caused by newline characters and other HTML markup.
+'Should be handled (via replacement) prior to saving to server.
+PROMPT {{temp}}
+'SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}

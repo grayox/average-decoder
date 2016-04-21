@@ -1,0 +1,683 @@
+<script>
+/* http://goo.gl/7izKbm | https://script.google.com/macros/s/AKfycbwlkeAjSW0xcvSwZNtftJqzsbDRAnufIghPvsA_rqL8BkohEE0/exec?k=gc8i31dz7ex5489472lm
+Change Log:
+v02. Added back genre descriptions; fixed bug causing first tab to disappear after first time clicking a different tab;
+
+The best way to find movies near you.
+
+The three major alternatives, Fandango, Movifone and Flixter have the following problems.
+1. They force you to scroll from theater to theater, keeping track of movie showtimes in you head.
+2. If you don’t already have a movie selected, you have to bounce from site to site to find movie quality scores.
+3. You have to click multiple screens to read the movie descriptions.
+4. They don’t sort by movie quality.
+5. You can spend a lot of time researching movies that aren’t showing near you anyway.
+
+We let you find your movie and showing location on one screen with one click of the button. You can find it quickly and easily.
+
+* We show you ALL the movies playing near you.
+* We show you ONLY the movies playing near you.
+* You can sort movies in three different ways:
+  1. By movie quality score.
+  2. By title.
+  3. By release date.
+* We show you all the movie show times in one location. Making it much easier to plan your date.
+*/
+// JSON visualization | viewers: http://chris.photobooks.com/json/default.htm | http://www.jsoneditoronline.org/
+// function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
+// Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
+function auth    (){}
+function print2doc(str,proj,clas){var desc="Backup | "+proj+" | "+clas+" | timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id)}
+function getRottenTomatoes(){var PMAX=50,API_KEY="2aq2cdfgbc5k9mwuvzvke4bg",page=1,ar=[],i,act,pmax,ob,total,STEM="http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit="+PMAX+"&apikey="+API_KEY+"&page="//+page // Reference: http://developer.rottentomatoes.com/docs/json/v10/In_Theaters_Movies
+    // Code is to the right -->                                                                                 // http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?page_limit=
+   ;do{act=STEM+page;ob=JSON.parse(UrlFetchApp.fetch(act).getContentText());ar=ar.concat(ob.movies);if(page++==1){total=ob.total}total-=PMAX}while(total>0)i=ar.length;while(i--){try{ar[i].movieTitleCodename=LibraryjsUtil.str2codename(ar[i].title)}catch(e){Logger.log("Error IZaXP: "+e.message)}}return ar}//function test(){/*Logger.log*/print2doc(JSON.stringify(getRottenTomatoes()))}
+function getFandangoDetail(str,dat/*tid*/){
+    var KEY = [ , "movieFandangoLink"      , "moviePoster" , "movieTitle"            , "movieId"   , "movieRating"    , "movieRuntime"    , "movieGenre"            /*, "foo"                 */, "movieTimesListString" ]
+	,   QUE = [ , "showtimes-movie-poster" , "<img"        , "showtimes-movie-title" , "data-id="  , "Display rating" , "Display runtime" , "showtimes-movie-genre" /*, "showtimes-amenities" */, 'showtimes-times"'     ]
+	,   BEG = [ , 'href="'                 , 'src="'       , ">"                     , '"'         , ">"              , ">"               , ">"                     /*, ">"                   */, ">"                    ]
+	,   END = [ , '"'                      , '"'           , "<"                     , '"'         , "<"              , "<"               , "<"                     /*, "<"                   */, "</div>"               ]
+	,   DEL = [ , null                     , null          , null                    , null        , [","]            , null              , null                    /*, null                  */, null                   ]
+	,   INS = [ , null                     , null          , null                    , null        , [""]             , null              , null                    /*, null                  */, null                   ]
+	, i,out = LibraryjsUtil._scrapeDataset(str,KEY,QUE,BEG,END,DEL,INS,true);delete out.foo;try{out.movieTimes=out.movieTimesListString.split("datetime").slice(1)
+    ;   i   = out.movieTimes.length;while(i--){out.movieTimes[i]=LibraryjsUtil._scrapeDataset(out.movieTimes[i],[,"codeTime","displayTime"],[,"="," "],[,'"',">"],[,'"',"<"],[],[],true)
+	; out.movieTimes[i].tid              =dat.tid
+	; out.movieTimes[i].theaterName      =dat.theaterName
+	; out.movieTimes[i].theaterAddyString=dat.theaterAddyString
+	; out.movieTimes[i].milTime=out.movieTimes[i].codeTime.match(/T(\D|\d)*-/g)[0].replace(/(\D)/g,"")}
+	}catch(e){Logger.log(out.movieTitle+": "+e.message)}delete out.movieTimesListString;try{out.movieTitleCodename=LibraryjsUtil.str2codename(out.movieTitle)}catch(e){Logger.log("Error wciu8: "+e.message+"\n"+JSON.stringify(out))}return out}
+function getFandango(q){var page=1,ob,ar,arr,x,y,z,data=[],theaters=[],out=[{},/*because if(y) conditional returns false for first element*/],i,j,act,rt=getRottenTomatoes()//@param{string} q 5-digit zip code
+    ,   KEY = [ , "theaterLink" , "theaterName" , "foo"                       , "theaterAddyLink" , "theaterAddyString" ]
+	,   QUE = [ , "href"        , ""            , "<"                         , "href"            , ""                  ]
+	,   BEG = [ , '"'           , ">"           , ">"                         , '"'               , ">"                 ]
+	,   END = [ , '"'           , "<"           , "showtimes-theater-address" , '"'               , "<"                 ]
+ // ,   DEL = [ , null          , null          , null    ]
+ // ,   INS = [ , null          , null          , null    ]
+    ;do{act="http://www.fandango.com/"+q+"_movietimes?q="+q+"&pn="+(page++) //"http://www.fandango.com/98108_movietimes?q=98108&pn=2" // Alternate showtime data sources: http://www.imdb.com/showtimes/US/90210 | West World Media
+	;   ar=UrlFetchApp.fetch(act).getContentText().split("showtimes-theater-title").slice(1);i=ar.length;while(i--){
+	    data[i]             = LibraryjsUtil._scrapeDataset(ar[i],KEY,QUE,BEG,END,[,"&nbsp;"],[," "],true);delete data[i].foo
+	;	data[i].theaterLink = data[i].theaterLink    .split("?")   [0]
+	;	data[i].tid         = data[i].theaterAddyLink.split("tid=")[1]
+    ;   data[i].showings    = {}
+    ;   arr=ar[i].split("showtimes-movie-container").slice(1);j=arr.length;while(j--){
+            ob=getFandangoDetail(arr[j],data[i]/*.tid*/);if(!ob.movieTitle){continue}
+		    y=LibraryjsUtil.queryArray(out,{movieId:ob.movieId},"POSITION","FIRST")//pseudocode: out[x]=out.contains(ob.movieId)
+            if(y){out[y].movieTimes=out[y].movieTimes.concat(ob.movieTimes).sort(function(a,b){var x="milTime";return(a[x]-b[x])})//.reverse()*/;Logger.log(ar);
+			    ;data[i]["showings"][ob.movieTitleCodename]={movieId:ob.movieId,showcount:ob.movieTimes.length} // Populate showings data for each theather
+			}else{ob.rt=LibraryjsUtil.queryArray(rt,{movieTitleCodename:ob.movieTitleCodename/*title:ob.movieTitle*/},"RETURN_ALL","FIRST");try{ob.score=0.5*(ob.rt.ratings.audience_score+((ob.rt.ratings.critics_score<0)?ob.rt.ratings.audience_score:ob.rt.ratings.critics_score))}catch(e){ob.score=0}
+				;out.push(ob)}}}theaters=theaters.concat(data)}while(ar.length);out.shift();
+	return {theaters:theaters,movies:out.sort(function(a,b){var x="score";return(b[x]-a[x])})}}//function test(){/*Logger.log*/print2doc(JSON.stringify(getFandango("98148")),"DateNight","Movies")}
+function doGet (e){ // References: https://developers.google.com/apps-script/guides/html-service-communication#private_functions // https://sites.google.com/site/appsscripttutorial/miscellaneous/creating-form-elements-dynamically-using-google-apps-script-gas
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput("                                      foo({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);} // https://developers.google.com/apps-script/reference/base/mime-type
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput("jQuery164024488894315436482_1409647426359({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);} // Must inspect http requests and responses
+ // if(e && e.parameter && e.parameter.jsoncallback){              return ContentService.createTextOutput(e.parameter.jsoncallback     +           "({result:'<strong>Hello</strong> World'});").setMimeType(ContentService.MimeType./*TEXT*/JAVASCRIPT);}
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+           case   /* Url Shortener    */ "gc8i31dz7ex5489472lm"  : return HtmlService.createHtmlOutputFromFile("home.html"                                                                             ).setSandboxMode(HtmlService.SandboxMode.IFRAME)         ;break; // http://goo.gl/7izKbm | https://script.google.com/macros/s/AKfycbwlkeAjSW0xcvSwZNtftJqzsbDRAnufIghPvsA_rqL8BkohEE0/exec?k=gc8i31dz7ex5489472lm
+ //        case   /* serve AVM report */ "3bc9cpv6wb54gyqv6kl3"  : return ContentService.createTextOutput(e.parameter.jsoncallback+"(" + JSON.stringify(movieReportServeData (m.split("?a=")[1])) + ")").setMimeType(ContentService.MimeType./*JSON*/JAVASCRIPT);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+ //        case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return movieReportServeData2html(decodeURIComponent(m),"HTML").htm                                                                   .setSandboxMode(HtmlService.SandboxMode.IFRAME)         ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return HtmlService.createTemplateFromFile  ("result.html"  ).evaluate()                                                                                                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve AVM to GAS */ "gx2epzjbq9893vfon6yj"  : return ContentService.createTextOutput("Hello " + m + " World")                                                                                                                              ;break; // Reference: https://developers.google.com/apps-script/guides/html/templates#calling_apps_script_functions_from_a_template // Target: https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?k=gx2epzjbq9893vfon6yj&m=foo
+ //        case   /* serve marquee    */ "rv8eqwuvdm11f66c431g"  : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveMarquee       (                 )) + ")").setMimeType(ContentService.MimeType./*JSON*/JAVASCRIPT)  ;break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+        default                                                  : break;}}
+	if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
+            case    ( "datenightmoviefinder" || "moviesnearme" ) :
+                    if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"                        : return HtmlService.createHtmlOutputFromFile("home.html"     ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                         // case   "sandbox"                     : return HtmlService.createHtmlOutputFromFile("sandbox.html"  ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break; // For Gviz charts to appear (but also causes Bootstrap tables to misalign... but not when inside a .tab), use IFRAME SetSandboxMode e.g., HtmlService.createHtmlOutputFromFile("index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME); References: https://developers.google.com/apps-script/reference/html/sandbox-mode | https://developers.google.com/apps-script/guides/html/templates#pushing_variables_to_templates
+                         // case   "signup"                      : return HtmlService.createHtmlOutputFromFile("signup.html"   ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "order"                       : return HtmlService.createHtmlOutputFromFile("order.html"    ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "result"                      : return HtmlService.createHtmlOutputFromFile("result.html"   ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                         // case   "fill"                        : return HtmlService.createHtmlOutputFromFile("fill.html"     ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "authorize"                   : return authorize                           (                )                                               ;break;
+                         // case   "account"                     : return HtmlService.createTemplateFromFile  ("account.html"  ).evaluate()                                    ;break;
+                         // case   "account"                     : var h=HtmlService.createTemplateFromFile("ssExport")/*;h.m=m Parameter*/;return h.evaluate()                ;break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON*/);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+			             default                                 :                                                                                                              break;}}
+        /*  case   "argentabpo"                                  :
+                    if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"                        : return HtmlService.createHtmlOutputFromFile("home.html"     ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                            case   "sandbox"                     : return HtmlService.createHtmlOutputFromFile("sandbox.html"  ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break; // For Gviz charts to appear (but also causes Bootstrap tables to misalign... but not when inside a .tab), use IFRAME SetSandboxMode e.g., HtmlService.createHtmlOutputFromFile("index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME); References: https://developers.google.com/apps-script/reference/html/sandbox-mode | https://developers.google.com/apps-script/guides/html/templates#pushing_variables_to_templates
+                         // case   "signup"                      : return HtmlService.createHtmlOutputFromFile("signup.html"   ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "order"                       : return HtmlService.createHtmlOutputFromFile("order.html"    ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "result"                      : return HtmlService.createHtmlOutputFromFile("result.html"   ).setSandboxMode(HtmlService.SandboxMode.IFRAME);break;
+                         // case   "fill"                        : return HtmlService.createHtmlOutputFromFile("fill.html"     ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+                         // case   "authorize"                   : return authorize                           (                )                                               ;break;
+                         // case   "account"                     : return HtmlService.createTemplateFromFile  ("account.html"  ).evaluate()                                    ;break;
+                         // case   "account"                     : var h=HtmlService.createTemplateFromFile("ssExport")/*;h.m=m Parameter* /;return h.evaluate()                ;break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON* /);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+			             default                                 :                                                                                                              break;}} */
+        //  case   "creditrepairnation"                          : // acquire inventory
+		//			if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+        //                  case   "home"                        : return HtmlService.createHtmlOutputFromFile("collect.html"  ).setSandboxMode(HtmlService.SandboxMode.NATIVE);break;
+		//  			 default                                 :                                                                                                             ;break;}}
+         default                                                 :                                                                                                              break;}}}
+function movieReportServeData(zip){return getFandango(zip)}
+function movieReportServeData2html(z,type){//@return{object} //@param{string} z zip code //@param{string} type Use "HTML" to return HtmlOutput; test type!="HTML" if called by GAS .html file because HtmlOutput is not a legal return type to client-side function
+    var FIND,REPL,hout,str,out={}
+	  ,                   t             =      HtmlService.createTemplateFromFile("result.html")
+      ;                   t.r           =      LibraryjsUtil.null2str(movieReportServeData(      z ))  // Fails return to server if any value is null // So we apply null2str() method
+  //  ;                   t.r           =                             movieReportServeData({item:z})   // Converted argument from address string to object contaning item string (objectId)
+	  ;                   out.data      =      t.r                                                     // Fails if any value is null // Undefined is okay // So we apply null2str() method 
+      ;/*if(type=="HTML"){ 
+						; FIND          =     "google.setOnLoadCallback(drawChart_load);"
+						; REPL          =      FIND
+						; REPL         +=     '\n function drawChart_load(){'
+                        ; REPL         +=     '\n new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable('+ JSON.stringify(t.r.dataValue) +'),'+JSON.stringify(t.r.options) +')'
+                        ; REPL         +=     '\n;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable('+ JSON.stringify(t.r.dataAttr ) +'),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}})'
+						; REPL         +=     '\n}'
+	                    ; str           =      HtmlService.createHtmlOutputFromFile(/*"sandbox.html"* /"home.html").getContent().replace(FIND,REPL);
+						; hout          =      HtmlService.createHtmlOutput()
+						; hout                .append(str.match(/^((\s|\S)+<div class="container container-fluid">)/m)[0])
+						; hout                .append('<br><br><br><div class="col-xs-12 col-xs-offset-0" id="result">')
+						; hout                .append(t.evaluate().getContent()) //.setSandboxMode(HtmlService.SandboxMode.IFRAME) (added at call)
+						; hout                .append('</div>')
+	                    ; hout                .append(str.match(/(<\/div>\n<script (\s|\S)+)$/m)[0])
+	                    ;  out.htm      =      hout                    // Return type is HtmlOutput // Logger.log/print2doc("line 206 hout: " + hout.getContent());
+	   }else            {*/out.result   =    t.evaluate().getContent() // .getContent() to return string because HtmlOutput is not a legal return type to client side .html file in GAS
+                                           // Wrong file // .replace(/(google.setOnLoadCallback\(drawChart_load(\s|\S)+function drawChart\()/m,"function drawChart(") // Deletes the drawChart_load() function because the following strings throw errors: 1. "<?=r.dataValue?>" and 2. "new google.visualization.BarChart..."
+	 /*}*/;return          out
+	//  movieReportServeData(a).dataBar//*NO.fact//*GO.link//GO.dataGauge//GO.dataTable//*NO.dataBar//GO.options
+	 /* { array   : 
+					  [ [ 'Year' , 'Sales' , 'Expenses' ]
+					  , [ '2004' ,   1000  ,       400  ]
+					  , [ '2005' ,   1170  ,       460  ]
+					  , [ '2006' ,    660  ,      1120  ]
+					  , [ '2007' ,   1030  ,       540  ] ]
+		  , options : {title:"Sales",vAxis:{title:"Year",titleTextStyle:{color:"blue"}}}}* /}*/}//HtmlService.createTemplateFromFile("result.html").evaluate().getContent()}//HtmlService.createHtmlOutputFromFile("result.html").setSandboxMode(HtmlService.SandboxMode.NATIVE).toString()}//out}
+-------------------------------------- form.html (a template kit for implementing forms; must be unpacked) --------------------------------------
+function processForm(formObject){var formBlob=formObject.myFile,driveFile=DriveApp.createFile(formBlob);return driveFile.getUrl()} // Goes in Code.gs // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+<form id="myForm"><input name="myFile" type="file"><input type="button" value="Submit" onclick="google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()"></form><div id="output"></div><script>function updateUrl(url){document.getElementById("output").innerHTML='<a href="'+url+'">Got it!</a>'}</script><!--Goes in index.html; Reference: https://developers.google.com/apps-script/guides/html/communication#forms-->
+-------------------------------------- signup.html -------------------------------------- 8/24/2014, 8/26/2014 To add features, see file: Bootstrap_Argenta_Signup (Undeprecated) Features: info and question glyphs, formatted tooltips and popovers, iframe for multiple pages on single Google Sites page
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+	    html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    */  input    {padding:7px 10px;border-radius:5px;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+    </style>
+</head>
+<body><h1>Agents signup here</h1>
+    <form id="myForm" class="form-inline" xclass="form-horizontal"> <!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+        <!--<fieldset><legend>Company information</legend>-->
+		<div class="well"><h2 class="text-left">Registration Form <small>for agents to provide BPO services</small></h2>
+		<div class="well"><h4 class="text-left">Your Contact Details</h4>
+		    &nbsp;&nbsp;&nbsp;<input type="text" id="email" name="email" placeholder="Email" style="width:200px" title="Example: janedoe@example.com">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="name"  name="name"  placeholder="Name"  style="width:200px" title="Example: Jane Doe">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="phone" name="phone" placeholder="Phone" style="width:100px" title="Example: 2125551212">
+            &nbsp;&nbsp;&nbsp;<input type="text" id="zip"   name="zip"   placeholder="Zip"   style="width: 70px" title="Example: 02139">
+		</div>
+		<!--</fieldset><fieldset><legend>Pricing</legend>-->
+		<div class="well"><h4 class="text-left">BPO Pricing</h4>
+		      &nbsp;&nbsp;&nbsp; Zone 1
+		          <label class="sr-only" for="radius1">Radius</label><input type="text" size="1" id="radius1" name="radius1" placeholder="Miles" title="Radius in miles for zone 1. Example: 5">
+                  <label class="sr-only" for="price1" >Price </label><input type="text" size="1" id="price1"  name="price1"  placeholder="Price" title="Price in dollars for zone 1. Example: 20">
+		      &nbsp;&nbsp;&nbsp; Zone 2
+		          <label class="sr-only" for="radius2">Radius</label><input type="text" size="1" id="radius2" name="radius2" placeholder="Miles" title="Radius in miles for zone 2. Example: 5">
+                  <label class="sr-only" for="price2" >Price </label><input type="text" size="1" id="price2"  name="price2"  placeholder="Price" title="Price in dollars for zone 2. Example: 20">
+		      &nbsp;&nbsp;&nbsp; Zone 3
+		          <label class="sr-only" for="radius3">Radius</label><input type="text" size="1" id="radius3" name="radius3" placeholder="Miles" title="Radius in miles for zone 3. Example: 5">
+                  <label class="sr-only" for="price3" >Price </label><input type="text" size="1" id="price3"  name="price3"  placeholder="Price" title="Price in dollars for zone 3. Example: 20">
+		<!--</fieldset>-->
+		</div></div>
+    <input  type="button" class="btn btn-lg btn-block btn-primary" xclass="blue" onclick=           "myFunction()" value="Submit" xstyle="xtext-align:center;xbackground:#3e0901;xfont-size:100%;xcolor:white;xfont-weight:bold;xpadding:10px 20px;xborder-radius:999px;xdisplay:inline-block;xwidth:770px;" > <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -->
+    <input  type="button" class="btn btn-lg btn-block btn-default" xclass="grey" onclick="this.parentNode.reset()" value="Reset"  xstyle="xtext-align:center;xbackground:#3e0901;xfont-size:100%;xcolor:white;xfont-weight:bold;xpadding:10px 20px;xborder-radius:999px;xdisplay:inline-block;xwidth:770px;" >
+	</form><br><br><br>
+						<table class="table table-striped table-hover" xclass="CSSTableGenerator-gray">
+                        <thead><th>Field A</th><th>Field B</th><th>Field C</th></thead>
+						<tbody>
+						<tr>
+						  <td>100</td>
+						  <td>200</td>
+						  <td>300</td>
+						</tr>
+						<tr>
+						  <td>400</td>
+						  <td>500</td>
+						  <td>600</td>
+						</tr>
+						<tr>
+						  <td>700</td>
+						  <td>800</td>
+						  <td>900</td>
+						</tr>
+						</tbody>
+						</table>
+<div id="result"></div>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- Latest compiled and minified JavaScript --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js -->
+    <script type="text/javascript">
+//$(function(){$("[rel='tooltip']").tooltip();});
+//$(document).ready(function(){$("body").tooltip({selector:'[data-toggle=tooltip]'});});
+//$('[data-toggle="tooltip"]').tooltip({"placement":"top","html":false,"animation":"true","delay":{"show":0,"hide":0}}); // References: http://jsfiddle.net/LhZpX/ http://stackoverflow.com/questions/18410922/bootstrap-3-0-popovers-and-tooltips
+//$('#mark-info'    ).tooltip({"show":true,"placement":"left","title":"We let you specify three pricing zones around your center zip code. This optimizes your pricing flexibility to be more competitive for closer locations and recoup costs if you have to travel farther."});
+//$('#mark-question').tooltip({"show":true,"placement":"left","title":"Pricing zones are defined by their distance around your home zone specified in the section labelled Contact Details"});
+function onFailure(e){alert(e.message)}function onSuccess(str){document.getElementById("result").innerHTML=str}//iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){//document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).receiveSignup(this.parentNode);this.parentNode.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parentNode” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" // Note: Use this.parentNode to retrieve all the fields in a form; to get only a single field, use something like: document.getElementById("address").value //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+</script></body></html>
+------------------------------------- sandbox.html -------------------------------------
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+        html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    * / input    {padding:7px 10px;border-radius:5px;margin-bottom:3px;xcolor-blue-button-primary:#428bca;xcolor-blue-button-hover:#3071a9;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+       <div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" style="border-left-style:solid;border-left-width:5px;border-left-color:#f0ad4e" role="alert"></div>
+    */ .alert        {border-left-width:5px ; border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+       .alert-default{border-left-color:#777   } /* User-created */
+       .alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+       .alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+       .alert-info   {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+       .alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+       .alert-danger {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */
+	</style>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','gauge']}]}"></script>
+	<script>
+	//	$(function(){$("#tabs").tabs()}); // jQueryUi // http://jqueryui.com/tabs/ // This function is called by onSuccess() handler using callback as argument
+		google.setOnLoadCallback(drawChart_load);
+     /* function drawChart_load(/*ob* /){
+		    var data = google.visualization.arrayToDataTable(/*JSON.stringify(* /JSON.parse(< ?=r.dataValue?>)/*)/*ob.dataBar/*array/ * /[
+			             [ 'Year' , 'Sales' , 'Expenses' ]
+			           , [ '2004' ,   1000  ,       400  ]
+			           , [ '2005' ,   1170  ,       460  ]
+			           , [ '2006' ,    660  ,      1120  ]
+			           , [ '2007' ,   1030  ,       540  ]
+			           ]/* * /);
+			var options = JSON.parse(< ?=r.options?>) /*ob.options/ * /{
+			                  title: 'Company Performance',
+			                  vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
+			                  }/* * /;
+			var chart = new google.visualization.BarChart(document.getElementById('chartBar_value'));
+			chart.draw(data, options);* /
+                               new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataValue?>)),JSON.parse(<?=r.options?>)) //intervals:{lineWidth:0,barWidth:0.8}
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataAttr ?>)),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+        }*/
+   	function drawChart(ob){ob.options.animation={startup:true,duration:500}
+		                      ;new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(ob.dataValue),ob.options)
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+ // Screen freezes at load // ;new google.visualization.Gauge   (document.getElementById("chartBar_attrDials" )).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{/*width:500,height:120,min:0,max:100,*/majorTicks:["0","10","20","30","40","50","60","70","80","90","100"],redFrom:0,redTo:30,yellowFrom:30,yellowTo:70,greenFrom:70,greenTo:100,minorTicks:2}) // Reference: https://developers.google.com/chart/interactive/docs/gallery/gauge
+							  ;}
+	</script>
+</head>
+<body>
+<div class="container container-fluid">
+<!--<div class="row">
+		<div style="width:65%;margin:auto;text-align:center">
+			<form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-- >
+				<input type="text" style="width:100%" id="address" name="address" placeholder="Enter address" title="e.g., 123 Main St, Los Angeles, CA 90210" onkeyup="updateLink()"> 
+			<br><a id="reportLink"><input type="button" class="btn btn-block btn-primary" xclass="blue|#428bca" value="Get free report" xonclick="myFunction()"></a> <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -- >
+			</form><!--<br><div id="result"></div>-- >
+		</div>
+	</div>-->
+	<div class="row">
+		<div class="col-xs-6 col-xs-offset-3">
+            <p style="text-align:center"><a href="https://docs.google.com/document/d/1PUoAaEo8tajVjiz4syxdimYLCapwEBXaA99MdIhnAyw/preview" target="_blank">
+                <abbr title="Instant due diligence on any U.S. property. We only support Chrome. Click here to learn more."><img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'></a></abbr>
+            </p>
+            <form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+				<div class="input-group">
+				<!--<input type="button" class="btn xbtn-block xbtn-default btn-primary" xclass="blue|#428bca" value="Get free report!" xonclick="myFunction()">-->
+				<!--<span class="input-group-addon" id="search-addon1">
+						<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="20" xstyle="max-width:100%;max-height:100%">
+					</span>-->
+					<input type="text" class="form-control" id="address" name="address" placeholder="Enter address..." title="e.g., 123 Main St, Los Angeles, CA 90210" aria-describedby="search-addon1" xonkeyup="updateLink()"> <!-- Note: Must use "onkeyup," otherwise "onkeypress" or "onkeydown" captures input before character is registered; so last character is omitted; usually the last digit of the zip code. -->
+					<span class="input-group-btn">
+						<button class="btn xbtn-link btn-default xbtn-primary xbtn-block" xstyle="blue|#428bca" value="Get free report" onclick="myFunction()" type="button">
+							<!--Get free report-->
+							<!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+							<!--<img src="https://lh4.googleusercontent.com/-RKG7E06LFOA/VMSOGhj5lmI/AAAAAAAANc0/ft1gvN0pZmA/s800/search_white.png" style="margin:0px 18px">-->
+							<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="18" style="margin:0px 15px;xmax-width:100%;xmax-height:100%">
+						</button>
+					</span>
+				</div>
+			</form><!--<br><div id="result"></div>-->
+		</div>
+	</div>
+	<br>
+	<div class="row">
+        <div class="col-xs-12 col-xs-offset-0" id="result"></div>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script><!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script>$(function(){$("#tabs").tabs()})</script>
+<script>
+//function updateLink(){document.getElementById("reportLink").href="https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00?a="+encodeURIComponent(document.getElementById("address").value)}
+function onFailure(e){alert(e.message)}
+function onSuccess(callback){document.getElementById("result").innerHTML=callback.result;$("#tabs").tabs();drawChart(callback.data)} // jQueryUi // http://jqueryui.com/tabs/ //DISREGARD THIS COMMENT... iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){document.getElementById("result").innerHTML="<div class='row' style='text-align:center'><img src='https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif' xsrc='https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif'><br><abbr title='If this takes longer than one minute to load, it might be a bug. Please email us a note at atlas.argenta@gmail.com to let us know. Please include the property address.'><img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'></abbr></div>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).movieReportServeData2html(document.getElementById("address").value)}
+</script></body></html>
+------------------------------------- result.html -------------------------------------
+<div>
+	<?var i,j,len,keys,lab,INFO="<img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'>" // Use <?!=INFO? >
+	?>
+<!--<div class="well xwell-sm xwell-lg alert alert-default xalert-success xalert-info xalert-warning xalert-danger" xrole="alert">
+		<strong>< ?=r.fact.sa/*123 Main Street*/?></strong>, < ?=r.fact.city/*Chicago*/?>, < ?=r.fact.state/*Il*/?> < ?=r.fact.zip/*60619*/?>
+		<big><span class="label label-default xlabel-primary xlabel-success xlabel-info xlabel-warning xlabel-danger">
+			< ?=LibraryjsUtil.num2cur(r.fact.autoEst,0,"$","")/*$125,000*/?></span></big> <abbr title='< ?=VAL_EXP?>'>< ?!=INFO?></abbr>
+	</div>-->
+	<div id="tabs" role="tabpanel"> <!-- References: http://getbootstrap.com/javascript/#tabs <style> | http://jqueryui.com/tabs/ <script> -->
+		<!-- Nav tabs -->
+		<ul class="nav xnav-tabs nav-pills" role="tablist">
+			<li role="presentation" class="xfade xin xout  active"><a role="tab" data-toggle="tab" aria-controls="tabs-1"  href="#tabs-1">
+				<!--<span class="glyphicon  glyphicon-sort-by-order-alt xglyphicon-sort-by-alphabet xglyphicon-sort-by-attributes"></span>-->
+				By Score</a></li>
+			<li role="presentation" class="xfade xin xout xactive"><a role="tab" data-toggle="tab" aria-controls="tabs-2"  href="#tabs-2">
+				<!--<span class="glyphicon xglyphicon-sort-by-order-alt  glyphicon-sort-by-alphabet xglyphicon-sort-by-attributes"></span>-->
+				By Title</a></li>
+			<li role="presentation" class="xfade xin xout xactive"><a role="tab" data-toggle="tab" aria-controls="tabs-3"  href="#tabs-3">
+				<!--<span class="glyphicon xglyphicon-sort-by-order-alt xglyphicon-sort-by-alphabet  glyphicon-sort-by-attributes"></span>-->
+				By Release</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane  active fade in out" id="tabs-1">
+				<div class="page-header">
+					<h3>
+						<!--<span class="glyphicon  glyphicon-sort-by-order-alt xglyphicon-sort-by-alphabet xglyphicon-sort-by-attributes"></span>-->
+						Movies Sorted by Score <small></small></h3>
+				</div>
+				<div class="col-xs-12 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading">showing today within driving distance<!--<abbr xclass="initialism" xtitle="Automated Valuation Models">Data</abbr>
+							<!--<span class="glyphicon glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover" style="table-layout:fixed;width:100%;xmargin:0" >
+								<thead>
+									<th class="col-xs-3 col-xs-offset-0" style="text-align:center">Movie</th>
+									<th class="col-xs-9 col-xs-offset-0" style="text-align:left"  >Details</th>
+								</thead>
+								<tfoot>
+									<tr>
+										<td colspan="6">
+											<div id="no-paging" xid="paging">&nbsp;
+												<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+								<tbody>
+								<?  i=r.movies.reverse().length;while(i--){
+								    try{r.movies[i].title    =r.movies[i].movieTitle                ||""}catch(e){r.movies[i].title    =""}
+								    try{r.movies[i].poster   =r.movies[i].moviePoster               ||""}catch(e){r.movies[i].poster   =""}
+								    try{r.movies[i].score    =r.movies[i].score                     ||""}catch(e){r.movies[i].score    =""}
+								    try{r.movies[i].rating   =r.movies[i].movieRating               ||""}catch(e){r.movies[i].rating   =""}
+								    try{r.movies[i].genre    =r.movies[i].movieGenre                ||""}catch(e){r.movies[i].genre    =""}
+								    try{r.movies[i].runtime  =r.movies[i].movieRuntime              ||""}catch(e){r.movies[i].runtime  =""}
+								    try{r.movies[i].synopsis =r.movies[i].rt.synopsis               ||""}catch(e){r.movies[i].synopsis =""}
+								    try{r.movies[i].released =r.movies[i].rt.release_dates.theater  ||""}catch(e){r.movies[i].released =""}
+								    try{r.movies[i].rdCode   =r.movies[i].released.replace(/-/gi,"")||""}catch(e){r.movies[i].rdCode   =""}
+								    try{r.movies[i].critics  =r.movies[i].rt.ratings.critics_score==-1 ? "--" :
+									                          r.movies[i].rt.ratings.critics_score  ||""}catch(e){r.movies[i].critics  =""}
+								    try{r.movies[i].audience =r.movies[i].rt.ratings.audience_score ||""}catch(e){r.movies[i].audience =""}
+                                         if(                         r.movies[i].score>=70){r.movies[i].lab="label-success"}
+									else if(r.movies[i].score>=50 && r.movies[i].score< 70){r.movies[i].lab="label-warning"}
+									else if(r.movies[i].score< 50                         ){r.movies[i].lab="label-danger" }
+								?>  <tr>
+										<td style="text-align:center;word-wrap:break-all">
+										    <h4><?=r.movies[i].title?></h4>
+											<p>
+												<small><abbr title="Critics" ><?=r.movies[i].critics?></abbr></small>
+												<span class="label <?=r.movies[i].lab?> xlabel-default xlabel-primary xlabel-info xlabel-success xlabel-warning xlabel-danger"><big><?=r.movies[i].score?></big></span>
+												<small><abbr title="Audience"><?=r.movies[i].audience?></abbr></small>
+											</p>
+											<p><img src="<?=r.movies[i].poster?>"></p>
+										</td>
+										<td style="text-align:left  ;word-wrap:break-all">
+										    <small>
+											    <p>
+										            <!--<h4>Synopsis     </h4>--><?=r.movies[i].rating?> | <?=r.movies[i].genre?> | <?=r.movies[i].synopsis?> | <?=r.movies[i].runtime?> | Released: <?=r.movies[i].released?>
+												</p>
+												<p>
+										            <!--<h4>Abridged Cast</h4>--><?try{j=r.movies[i].rt.abridged_cast.reverse().length;while(j--){?>
+										                                              <?=r.movies[i].rt.abridged_cast[j].name?><?if(j){?>, <?}?><?}}catch(e){}?>
+												</p>
+												<p>
+										            <!--<h4>Showtimes    </h4>--><?try{j=r.movies[i].movieTimes.reverse().length;while(j--){?>
+										                                              <button type="button" class="btn xbtn-default btn-primary xbtn-success xbtn-info xbtn-warning xbtn-danger xbtn-link xbtn-lg xbtn-sm btn-xs">
+																					  <?=r.movies[i].movieTimes[j].displayTime?></button>
+																					  <?=r.movies[i].movieTimes[j].theaterName?>, <?=r.movies[i].movieTimes[j].theaterAddyString?><br>
+																		              <?}}catch(e){}?>
+												</p>
+									        </small>
+										</td>
+									</tr>
+								<?}?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane xactive fade in out" id="tabs-2">
+				<div class="page-header">
+					<h3>
+						<!--<span class="glyphicon xglyphicon-sort-by-order-alt  glyphicon-sort-by-alphabet xglyphicon-sort-by-attributes"></span>-->
+						Movies Sorted Alphabetically by Title <small></small>
+					</h3>
+				</div>
+				<div class="col-xs-12 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading">showing today within driving distance<!--<abbr xclass="initialism" xtitle="Automated Valuation Models">Data</abbr>
+							<!--<span class="glyphicon glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover" style="table-layout:fixed;width:100%;xmargin:0" >
+								<thead>
+									<th class="col-xs-3 col-xs-offset-0" style="text-align:center">Movie</th>
+									<th class="col-xs-9 col-xs-offset-0" style="text-align:left"  >Details</th>
+								</thead>
+								<tfoot>
+									<tr>
+										<td colspan="6">
+											<div id="no-paging" xid="paging">&nbsp;
+												<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+								<tbody>
+							<!--< ? r.movies.sort(function(a){var x="title" ;return(a[x])})-->
+								<?  r.movies.sort(LibraryjsUtil.ao_sortBy(/*"title"*/"movieTitleCodename",true,function(a){return a.toUpperCase()}));i=r.movies.length;while(i--){?>
+							        <tr>
+										<td style="text-align:center;word-wrap:break-all">
+										    <h4><?=r.movies[i].title?></h4>
+											<p>
+												<small><abbr title="Critics" ><?=r.movies[i].critics?></abbr></small>
+												<span class="label <?=r.movies[i].lab?> xlabel-default xlabel-primary xlabel-info xlabel-success xlabel-warning xlabel-danger"><big><?=r.movies[i].score?></big></span>
+												<small><abbr title="Audience"><?=r.movies[i].audience?></abbr></small>
+											</p>
+											<p><img src="<?=r.movies[i].poster?>"></p>
+										</td>
+										<td style="text-align:left  ;word-wrap:break-all">
+										    <small>
+											    <p>
+										            <!--<h4>Synopsis     </h4>--><?=r.movies[i].rating?> | <?=r.movies[i].genre?> | <?=r.movies[i].synopsis?> | <?=r.movies[i].runtime?> | Released: <?=r.movies[i].released?>
+												</p>
+												<p>
+										            <!--<h4>Abridged Cast</h4>--><?try{j=r.movies[i].rt.abridged_cast.length;while(j--){?>
+										                                              <?=r.movies[i].rt.abridged_cast[j].name?><?if(j){?>, <?}?><?}}catch(e){}?>
+												</p>
+												<p>
+										            <!--<h4>Showtimes    </h4>--><?try{j=r.movies[i].movieTimes.length;while(j--){?>
+										                                              <button type="button" class="btn xbtn-default btn-primary xbtn-success xbtn-info xbtn-warning xbtn-danger xbtn-link xbtn-lg xbtn-sm btn-xs">
+																					  <?=r.movies[i].movieTimes[j].displayTime?></button>
+																					  <?=r.movies[i].movieTimes[j].theaterName?>, <?=r.movies[i].movieTimes[j].theaterAddyString?><br>
+																		              <?}}catch(e){}?>
+												</p>
+									        </small>
+										</td>
+									</tr>
+								<?}?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane xactive fade in out" id="tabs-3">
+				<div class="page-header">
+					<h3>
+						<!--<span class="glyphicon xglyphicon-sort-by-order-alt xglyphicon-sort-by-alphabet  glyphicon-sort-by-attributes"></span>-->
+						Movies Sorted By Release Date <small>(newest first)</small>
+					</h3>
+				</div>
+				<div class="col-xs-12 col-xs-offset-0">
+					<div class="panel panel-default xpanel-primary xpanel-success">
+						<div class="panel-heading">showing today within driving distance<!--<abbr xclass="initialism" xtitle="Automated Valuation Models">Data</abbr>
+							<!--<span class="glyphicon glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+							<!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover" style="table-layout:fixed;width:100%;xmargin:0" >
+								<thead>
+									<th class="col-xs-3 col-xs-offset-0" style="text-align:center">Movie</th>
+									<th class="col-xs-9 col-xs-offset-0" style="text-align:left"  >Details</th>
+								</thead>
+								<tfoot>
+									<tr>
+										<td colspan="6">
+											<div id="no-paging" xid="paging">&nbsp;
+												<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+								<tbody>
+								<?  r.movies.sort(function(a,b){var x="rdCode";return(a[x]-b[x])});i=r.movies.length;while(i--){?>
+								    <tr>
+										<td style="text-align:center;word-wrap:break-all">
+										    <h4><?=r.movies[i].title?></h4>
+											<p>
+												<small><abbr title="Critics" ><?=r.movies[i].critics?></abbr></small>
+												<span class="label <?=r.movies[i].lab?> xlabel-default xlabel-primary xlabel-info xlabel-success xlabel-warning xlabel-danger"><big><?=r.movies[i].score?></big></span>
+												<small><abbr title="Audience"><?=r.movies[i].audience?></abbr></small>
+											</p>
+											<p><img src="<?=r.movies[i].poster?>"></p>
+										</td>
+										<td style="text-align:left  ;word-wrap:break-all">
+										    <small>
+											    <p>
+										            <!--<h4>Synopsis     </h4>--><?=r.movies[i].rating?> | <?=r.movies[i].genre?> | <?=r.movies[i].synopsis?> | <?=r.movies[i].runtime?> | Released: <?=r.movies[i].released?>
+												</p>
+												<p>
+										            <!--<h4>Abridged Cast</h4>--><?try{j=r.movies[i].rt.abridged_cast.length;while(j--){?>
+										                                              <?=r.movies[i].rt.abridged_cast[j].name?><?if(j){?>, <?}?><?}}catch(e){}?>
+												</p>
+												<p>
+										            <!--<h4>Showtimes    </h4>--><?try{j=r.movies[i].movieTimes.length;while(j--){?>
+										                                              <button type="button" class="btn xbtn-default btn-primary xbtn-success xbtn-info xbtn-warning xbtn-danger xbtn-link xbtn-lg xbtn-sm btn-xs">
+																					  <?=r.movies[i].movieTimes[j].displayTime?></button>
+																					  <?=r.movies[i].movieTimes[j].theaterName?>, <?=r.movies[i].movieTimes[j].theaterAddyString?><br>
+																		              <?}}catch(e){}?>
+												</p>
+									        </small>
+										</td>
+									</tr>
+								<?}?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+-------------------------------------- home.html --------------------------------------
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style>
+    /*  form     {xbackground:grey;padding:6px;xborder:2px solid #DDDDDD;border-radius:8px;}
+        html     {text-align:center;font-family:arial;font-size:100%;color:#888888;}
+        legend   {color:#888888;xtext-align:left}
+	    table    {border-collapse:separate;border-spacing:15px;}
+	    td       {color:#888888;vertical-align:top;text-align:center;padding:20px;border-radius:30px;border:8px solid #000000}
+	    col-sm-1 {padding:10px}
+	    sup      {font-style:italic;text-decoration:underline}
+    * / input    {padding:7px 10px;border-radius:5px;margin-bottom:3px;xcolor-blue-button-primary:#428bca;xcolor-blue-button-hover:#3071a9;xcolor:#006dcc;xcolor:#0044cc;xcolor:#3e0901;xheight:100px;xfont-size:150%;xborder:5px solid #3e0901;}
+       <div class="xwell xwell-sm xwell-lg alert xalert-success xalert-info alert-warning xalert-danger" style="border-left-style:solid;border-left-width:5px;border-left-color:#f0ad4e" role="alert"></div>
+    */ .alert        {border-left-width:5px ; border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+       .alert-default{border-left-color:#777   } /* User-created */
+       .alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+       .alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+       .alert-info   {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+       .alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+       .alert-danger {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */
+	</style>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','gauge']}]}"></script>
+	<script>
+	//	$(function(){$("#tabs").tabs()}); // jQueryUi // http://jqueryui.com/tabs/ // This function is called by onSuccess() handler using callback as argument
+	/*	google.setOnLoadCallback(drawChart_load);
+     /* function drawChart_load(/*ob* /){
+		    var data = google.visualization.arrayToDataTable(/*JSON.stringify(* /JSON.parse(< ?=r.dataValue?>)/*)/*ob.dataBar/*array/ * /[
+			             [ 'Year' , 'Sales' , 'Expenses' ]
+			           , [ '2004' ,   1000  ,       400  ]
+			           , [ '2005' ,   1170  ,       460  ]
+			           , [ '2006' ,    660  ,      1120  ]
+			           , [ '2007' ,   1030  ,       540  ]
+			           ]/* * /);
+			var options = JSON.parse(< ?=r.options?>) /*ob.options/ * /{
+			                  title: 'Company Performance',
+			                  vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
+			                  }/* * /;
+			var chart = new google.visualization.BarChart(document.getElementById('chartBar_value'));
+			chart.draw(data, options);* /
+                               new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataValue?>)),JSON.parse(<?=r.options?>)) //intervals:{lineWidth:0,barWidth:0.8}
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(JSON.parse(<?=r.dataAttr ?>)),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+        }* /
+   	function drawChart(ob){ob.options.animation={startup:true,duration:500}
+		                      ;new google.visualization.BarChart(document.getElementById("chartBar_value"     )).draw(google.visualization.arrayToDataTable(ob.dataValue),ob.options)
+                              ;new google.visualization.BarChart(document.getElementById("chartBar_attributes")).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{width:900,height:400,legend:{position:"none"},hAxis:{minValue:0,maxValue:100,ticks:[0,10,20,30,40,50,60,70,80,90,100]}}) //intervals:{lineWidth:0,barWidth:0.8}
+ // Screen freezes at load // ;new google.visualization.Gauge   (document.getElementById("chartBar_attrDials" )).draw(google.visualization.arrayToDataTable(ob.dataAttr ),{/*width:500,height:120,min:0,max:100,* /majorTicks:["0","10","20","30","40","50","60","70","80","90","100"],redFrom:0,redTo:30,yellowFrom:30,yellowTo:70,greenFrom:70,greenTo:100,minorTicks:2}) // Reference: https://developers.google.com/chart/interactive/docs/gallery/gauge
+							  ;}*/
+	</script>
+</head>
+<body>
+<div class="container container-fluid">
+<!--<div class="row">
+		<div style="width:65%;margin:auto;text-align:center">
+			<form id="research"><!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-- >
+				<input type="text" style="width:100%" id="address" name="address" placeholder="Enter address" title="e.g., 123 Main St, Los Angeles, CA 90210" onkeyup="updateLink()"> 
+			<br><a id="reportLink"><input type="button" class="btn btn-block btn-primary" xclass="blue|#428bca" value="Get free report" xonclick="myFunction()"></a> <!-- Reference: http://stackoverflow.com/questions/5462251/button-width-in-css3 -- >
+			</form><!--<br><div id="result"></div>-- >
+		</div>
+	</div>-->
+	<div class="page-header" class="row" style="text-align:center">
+	    <!--<img src="https://lh4.googleusercontent.com/-ZoUfaMLDbkE/VPqMg16iXUI/AAAAAAAANjY/JBD7r3T43Vk/s144/dnmf.png">--> <!--Latest--> 
+	    <!--<img src="https://lh6.googleusercontent.com/-fDs9otJuEtQ/VPl374wZmGI/AAAAAAAANiM/ZYUPbsxcInw/s288/dnmf.png">-->
+		<h3>DateNight&trade; MovieFinder&trade;<br><small>Find movies. Simply.</small></h3>
+	</div>
+	<div class="row">
+		<div class="col-xs-4 col-xs-offset-4">
+			<div class="col-xs-8 col-xs-offset-2">
+			<!--<p style="text-align:center"><a href="https://docs.google.com/document/d/1PUoAaEo8tajVjiz4syxdimYLCapwEBXaA99MdIhnAyw/preview" target="_blank">
+					<abbr title="Instant due diligence on any U.S. property. We only support Chrome. Click here to learn more."><img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'></a></abbr>
+				</p>-->
+				<form id="research" name="research" xonsubmit="myFunction()"><!--References: http://stackoverflow.com/questions/7996572/making-a-submit-button-respond-to-hitting-enter-and-click https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+					<div class="input-group">
+					<!--<input type="button" class="btn xbtn-block xbtn-default btn-primary" xclass="blue|#428bca" value="Get free report!" xonclick="myFunction()">-->
+					<!--<span class="input-group-addon" id="search-addon1">
+							<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="20" xstyle="max-width:100%;max-height:100%">
+						</span>-->
+						<input type="text" class="form-control" id="address" name="address" placeholder="Enter zip..." title="e.g., 90210" style="text-align:center" aria-describedby="search-addon1" xonkeyup="updateLink()"> <!-- Note: Must use "onkeyup," otherwise "onkeypress" or "onkeydown" captures input before character is registered; so last character is omitted; usually the last digit of the zip code. -->
+						<span class="input-group-btn">
+							<button class="btn xbtn-link btn-default xbtn-primary xbtn-block" xstyle="blue|#428bca" value="Get free report" onclick="myFunction()" type="button">
+								<!--Get free report-->
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<!--<img src="https://lh4.googleusercontent.com/-RKG7E06LFOA/VMSOGhj5lmI/AAAAAAAANc0/ft1gvN0pZmA/s800/search_white.png" style="margin:0px 18px">-->
+								<!--<img src="https://lh5.googleusercontent.com/-7MeZw7t6TK4/VMMadaXoTvI/AAAAAAAANcQ/0HQeb7AoqYM/s800/searchRLsm.png" height="18" style="margin:0px 15px;xmax-width:100%;xmax-height:100%">-->
+							</button>
+						</span>
+					</div>
+				</form><!--<br><div id="result"></div>-->
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+        <div class="col-xs-12 col-xs-offset-0" id="result"></div>
+    </div>
+</div>
+<!--<script src="//getbootstrap.com/dist/js/bootstrap.min.js"></script><!--<script src="https://googledrive.com/host/0B1LVOoV_2dFtRE9QbU5iem9JM0U"></script>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script><!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<!--<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script>$(function(){$("#tabs").tabs()})</script>
+<script>
+//function updateLink(){document.getElementById("reportLink").href="https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00?a="+encodeURIComponent(document.getElementById("address").value)}
+function onFailure(e){alert(e.message)}
+function onSuccess(callback){document.getElementById("result").innerHTML=callback.result;$("#tabs").tabs();drawChart(callback.data)} // jQueryUi // http://jqueryui.com/tabs/ //DISREGARD THIS COMMENT... iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction(){document.getElementById("result").innerHTML="<div class='row' style='text-align:center'><img src='https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif' xsrc='https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif'><!--<br><abbr title='If this takes longer than one minute to load, it might be a bug. Please email us a note at atlas.argenta@gmail.com to let us know. Please include the property address.'><img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'></abbr>--></div>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).movieReportServeData2html(document.getElementById("address").value/*this.parentNode.address*/)} // References: https://developers.google.com/apps-script/guides/html/communication#forms  http://stackoverflow.com/questions/7996572/making-a-submit-button-respond-to-hitting-enter-and-click Google search (and page search): this.parentNode // Use for form "onsubmit" event (with button.type="submit") vs button "onclick" event
+</script></body></html>

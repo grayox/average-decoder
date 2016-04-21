@@ -1,0 +1,45 @@
+<!DOCTYPE html> <!-- -------------------------------------- AvmReport.html (incorporated into application as <iframe> ) -------------------------------------- -->
+<html>
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','table']}]}"></script>
+<script>
+(function(){ // References: http://api.jquery.com/append/ | http://api.jquery.com/jQuery.getJSON/ See example: "Loads the four most recent pictures of Mount Rainier from the Flickr JSONP API."
+             // var act = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?"                                           , ob = {tags:"mount rainier",tagmode:"any",format:"json"}
+                var act = "https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?jsoncallback=?" , ob = {k:"3bc9cpv6wb54gyqv6kl3"}
+                $.getJSON(act,ob).done(function(data){$("#chart").append(drawChart)})})() //.append("test")})})()
+function drawChart(){
+	var dataBar = google.visualization.arrayToDataTable([
+	              [ "Source"     , "Estimate"    , "Low range"   , "High range"  ] //, { role  : "style" } ]
+                , [ "Median"     , 433844-110491 , 110491        , 110491        ] //,  "color : #006cff"  ]
+                , [ "Zillow"     , 597220        , 628653-597220 , 660086-628653 ] //,  "color : #0044ff"  ]
+                , [ "Trulia"     , 509000-110491 , 110491        , 110491        ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+                , [ "DataQuick"  , 396149        , 511356-396149 , 626562-511356 ] //,  "color : #0044ff"  ]
+                , [ "SmartZip"   , 300104        , 326200-300104 , 352296-326200 ] //,  "color : #006cff"  ]
+                , [ "Eppraisal"  , 304884        , 358687-304884 , 412490-358687 ] //,  "color : #0044ff"  ]
+                , [ "RealEstate" , 347631-110491 , 110491        , 110491        ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+        ])
+	  , dataTable = google.visualization.arrayToDataTable([
+	              [ "Source"     , "Estimate"    , "Low range"   , "High range"  ]
+                , [ "Median"     , 433844        , 433844-110491 , 433844+110491 ]
+                , [ "Zillow"     , 628653        , 597220        , 660086        ]
+                , [ "Trulia"     , 509000        , 509000-110491 , 509000+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+                , [ "DataQuick"  , 511356        , 396149        , 626562        ] //,  "color : #0044ff"  ]
+                , [ "SmartZip"   , 326200        , 300104        , 352296        ] //,  "color : #006cff"  ]
+                , [ "Eppraisal"  , 358687        , 304884        , 412490        ] //,  "color : #0044ff"  ]
+                , [ "RealEstate" , 347631        , 347631-110491 , 347631+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+        ])
+	  , options = {
+        title     : "Value estimates for 5115 Longfellow St, Los Angeles, CA 90042"
+	  , isStacked : true
+      , series    : {0:{"color":"transparent"},1:{"color":"#CCCCCC"},2:{"color":"#CCCCCC"}} //, intervals : { "lineWidth" : 2 , "barWidth" : 0.618 } // 0.618 = "Golden Ratio"
+    };
+    new google.visualization.BarChart(document.getElementById("chartBar"  )).draw(dataBar  ,options);
+    new google.visualization.Table   (document.getElementById("chartTable")).draw(dataTable,{showRowNumber:true});
+}
+</script>
+<div id="chart"></div>
+<div id="chartBar"   style="width:900px;height:500px;"></div>
+<div id="chartTable" style="width:600px;height:500px;"></div>
+</body>
+</html>

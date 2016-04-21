@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>
+      Data Charts
+    </title>
+    <script type="text/javascript" src="//www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart","table"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart(){
+        var data_histogram_overlay = google.visualization.arrayToDataTable([
+		        ["Month","Return"]
+               ,['2/2007',3.04]
+               ,['3/2007',0.84]
+               ,['4/2007',-0.76]
+               ,['5/2007',1.94]
+               ,['6/2007',0.54]
+               ,['7/2007',-2.23]
+               ,['8/2007',3.36]
+               ,['9/2007',2.09]
+               ,['10/2007',3.29]
+               ,['11/2007',-3.94]
+               ,['12/2007',1.4]
+               ,['1/2008',1.29]
+               ,['2/2008',0.36]
+               ,['3/2008',2.02]
+               ,['4/2008',-1.93]
+               ,['5/2008',-2.95]
+               ,['6/2008',-5.88]
+               ,['7/2008',0.16]
+               ,['8/2008',1.59]
+               ,['9/2008',6.87]
+               ,['10/2008',5.96]
+               ,['11/2008',6.75]
+               ,['12/2008',4.51]
+               ,['1/2009',-4.97]
+               ,['2/2009',-1.16]
+               ,['3/2009',2.36]
+               ,['4/2009',-4.05]
+               ,['5/2009',3.75]
+               ,['6/2009',-0.86]
+               ,['7/2009',2.89]
+               ,['8/2009',3.13]
+               ,['9/2009',5.84]
+               ,['10/2009',-3.24]
+               ,['11/2009',3.63]
+               ,['12/2009',5.08]
+               ,['1/2010',-2.4]
+               ,['2/2010',0.97]
+               ,['3/2010',9.3]
+               ,['4/2010',6.07]
+               ,['5/2010',-3.59]
+               ,['6/2010',-4.94]
+               ,['7/2010',-0.62]
+               ,['8/2010',-1.38]
+               ,['9/2010',4.19]
+               ,['10/2010',6.69]
+               ,['11/2010',0.18]
+               ,['12/2010',7.21]
+               ,['1/2011',4.42]
+               ,['2/2011',5.75]
+               ,['3/2011',0.23]
+               ,['4/2011',3.44]
+               ,['5/2011',-0.2]
+               ,['6/2011',-3.23]
+               ,['7/2011',1.96]
+               ,['8/2011',12.07]
+               ,['9/2011',7.79]
+               ,['10/2011',-4.07]
+               ,['11/2011',0.61]
+               ,['12/2011',1.58]
+               ,['1/2012',-0.66]
+               ,['2/2012',-0.34]
+		]);
+        var options_histogram_overlay = {
+          title    : 'Histogram of returns, strategy'
+		, colors   : [ "skyblue"]
+		, hAxis    : { title : "Precent (%) return" , showTextEvery : 2 , minValue : -20 , maxValue : 20 }
+		, histogram: { bucketSize: 2 }
+        , legend   : { position: 'none' }
+		};
+        var data_histogram_index      = google.visualization.arrayToDataTable([
+		        ["Month","Return"]
+               ,['2/2007',-1.96]
+               ,['3/2007',1.12]
+               ,['4/2007',4.43]
+               ,['5/2007',3.49]
+               ,['6/2007',-1.66]
+               ,['7/2007',-3.1]
+               ,['8/2007',1.5]
+               ,['9/2007',3.74]
+               ,['10/2007',1.59]
+               ,['11/2007',-4.18]
+               ,['12/2007',-0.69]
+               ,['1/2008',-6]
+               ,['2/2008',-3.25]
+               ,['3/2008',-0.43]
+               ,['4/2008',4.87]
+               ,['5/2008',1.3]
+               ,['6/2008',-8.43]
+               ,['7/2008',-0.84]
+               ,['8/2008',1.45]
+               ,['9/2008',-8.91]
+               ,['10/2008',-16.8]
+               ,['11/2008',-7.18]
+               ,['12/2008',1.06]
+               ,['1/2009',-8.43]
+               ,['2/2009',-10.65]
+               ,['3/2009',8.76]
+               ,['4/2009',9.57]
+               ,['5/2009',5.59]
+               ,['6/2009',0.2]
+               ,['7/2009',7.56]
+               ,['8/2009',3.61]
+               ,['9/2009',3.73]
+               ,['10/2009',-1.86]
+               ,['11/2009',6]
+               ,['12/2009',1.93]
+               ,['1/2010',-3.6]
+               ,['2/2010',3.1]
+               ,['3/2010',6.03]
+               ,['4/2010',1.58]
+               ,['5/2010',-7.99]
+               ,['6/2010',-5.23]
+               ,['7/2010',7.01]
+               ,['8/2010',-4.51]
+               ,['9/2010',8.92]
+               ,['10/2010',3.81]
+               ,['11/2010',0.01]
+               ,['12/2010',6.68]
+               ,['1/2011',2.37]
+               ,['2/2011',3.43]
+               ,['3/2011',0.04]
+               ,['4/2011',2.96]
+               ,['5/2011',-1.13]
+               ,['6/2011',-1.67]
+               ,['7/2011',-2.03]
+               ,['8/2011',-5.43]
+               ,['9/2011',-7.03]
+               ,['10/2011',10.93]
+               ,['11/2011',-0.22]
+               ,['12/2011',1.02]
+               ,['1/2012',4.48]
+               ,['2/2012',4.32]
+		]);
+        var options_histogram_index = {
+          title    :   'Histogram of returns, benchmark: S&P500TR'
+		, colors   : [ "orange"]
+		, hAxis    : { title : "Precent (%) return" , showTextEvery : 2 , minValue : -20 , maxValue : 20  }
+		, histogram: { bucketSize: 2 }
+        , legend   : { position: 'none' }
+        };
+		
+		var data_lineChart1 = google.visualization.arrayToDataTable([
+                ['Year', 'Overlay', 'S&P500TR']
+               ,['2/2007',103044,98040]
+               ,['3/2007',103908,99138]
+               ,['4/2007',103118,103530]
+               ,['5/2007',105119,107143]
+               ,['6/2007',105686,105364]
+               ,['7/2007',103325,102098]
+               ,['8/2007',106795,103630]
+               ,['9/2007',109027,107505]
+               ,['10/2007',112612,109215]
+               ,['11/2007',108171,104650]
+               ,['12/2007',109682,103927]
+               ,['1/2008',111092,97692]
+               ,['2/2008',111492,94517]
+               ,['3/2008',113744,94110]
+               ,['4/2008',111544,98694]
+               ,['5/2008',108258,99977]
+               ,['6/2008',101888,91549]
+               ,['7/2008',102055,90780]
+               ,['8/2008',103679,92096]
+               ,['9/2008',110804,83890]
+               ,['10/2008',117403,69797]
+               ,['11/2008',125326,64785]
+               ,['12/2008',130979,65472]
+               ,['1/2009',124472,59953]
+               ,['2/2009',123034,53568]
+               ,['3/2009',125942,58260]
+               ,['4/2009',120839,63836]
+               ,['5/2009',125365,67404]
+               ,['6/2009',124281,67539]
+               ,['7/2009',127869,72645]
+               ,['8/2009',131868,75267]
+               ,['9/2009',139570,78075]
+               ,['10/2009',135049,76623]
+               ,['11/2009',139946,81220]
+               ,['12/2009',147059,82788]
+               ,['1/2010',143526,79807]
+               ,['2/2010',144913,82281]
+               ,['3/2010',158388,87243]
+               ,['4/2010',167997,88621]
+               ,['5/2010',161971,81540]
+               ,['6/2010',153968,77276]
+               ,['7/2010',153018,82693]
+               ,['8/2010',150904,78963]
+               ,['9/2010',157221,86007]
+               ,['10/2010',167742,89284]
+               ,['11/2010',168046,89293]
+               ,['12/2010',180163,95257]
+               ,['1/2011',188122,97515]
+               ,['2/2011',198943,100860]
+               ,['3/2011',199399,100900]
+               ,['4/2011',206262,103887]
+               ,['5/2011',205858,102713]
+               ,['6/2011',199200,100998]
+               ,['7/2011',203100,98947]
+               ,['8/2011',227605,93575]
+               ,['9/2011',245344,86996]
+               ,['10/2011',235353,96505]
+               ,['11/2011',236790,96293]
+               ,['12/2011',240520,97275]
+               ,['1/2012',238926,101633]
+               ,['2/2012',238124,106023]
+        ]);
+        var options_lineChart1 = {
+            title     : 'Growth of $100,000 investment'
+		  , colors    : ["skyblue","orange"] 
+		  , lineWidth : 4
+        };
+
+		var data_lineChart2 = google.visualization.arrayToDataTable([
+                [ "Range"          , 'Frequency' ]
+               ,[       "r<=-7.5%" ,          0  ]
+               ,[ "-7.5%<r<=-5.0%" ,          1  ]
+               ,[ "-5.0%<r<=-2.5%" ,         11  ]
+               ,[ "-2.5%<r<=0%"    ,         16  ]
+               ,[    "0%<r<=2.5%"  ,         27  ]
+               ,[  "2.5%<r<=5.0%"  ,         17  ]
+               ,[  "5.0%<r<=7.5%"  ,         14  ]
+               ,[  "7.5%<r"        ,          0  ]
+        ]);
+        var options_lineChart2 = {
+            title     : 'Distribution of returns'
+		  , colors    : ["skyblue"]//,"orange"] 
+		  , curveType : "function"
+		  , lineWidth : 4
+        };
+				
+		var data_columnChart1= google.visualization.arrayToDataTable([
+            ['Year', 'Overlay', 'S&P500TR']
+               ,['2007',9.68,3.93]
+               ,['2008',19.42,-37]
+               ,['2009',12.28,26.45]
+               ,['2010',22.51,15.06]
+               ,['2011',33.5,2.12]
+               ,['2012',25.4,15.98]
+               ,['2013',36.18,32.41]
+               ,['2014',6.88,5.66]
+        ]);
+        var options_columnChart1= {
+            title  : 'Annual returns'
+      //  , hAxis  : {title: 'Year', titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange"]
+        };
+		
+		var data_columnChart2= google.visualization.arrayToDataTable([
+            ['Year', 'Equities', 'Volatility', 'Treasuries']
+               ,['June'  ,.65,.35,0]
+               ,['July'  ,.65,.35,0]
+               ,['August',.65,.35,0]
+        ]);
+        var options_columnChart2= {
+            title  : 'Current strategy allocation'
+          , hAxis  : {title: 'Month' } //, titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange","lightgrey"]
+		  , vAxis  : {title:"Allocation (%)",format:"#%"} 
+        };
+		
+		var data_tableChart1 = google.visualization.arrayToDataTable([
+            [ 'Performance'     , 'Overlay'  , 'S&P500TR' ]
+          , [ 'CAGR'            ,  "21.80%"  ,   "6.27%"  ]
+          , [ '1-Yr Annualized' ,  "26.93%"  ,  "16.94%"  ]
+          , [ '3-Yr Annualized' ,  "35.77%"  ,  "18.27%"  ]
+          , [ 'Cumulative'      , "339.00%"  ,  "57.83%"  ]
+        ]);
+        var options_tableChart1 = {
+    /*      title  : 'Current strategy allocation'
+          , hAxis  : {title: 'Month' } //, titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange","lightgrey"]
+		  , vAxis  : {title:"Allocation (%)",format:"#%"} 
+    */  };
+		
+		var data_tableChart2 = google.visualization.arrayToDataTable([
+            [ 'Risk Measures'           , 'Overlay'  , 'S&P500TR' ]
+          , [ 'Standard Dev (All Yrs)'  , "12.68%"   , "16.50%"   ]
+          , [ 'Alpha'                   , "15.53%"   , "N/A"      ]
+          , [ 'Beta (5 Yrs)'            , "#NAME?"   , "1.00"     ]
+          , [ 'R-squared (All Yrs)'     , "1.13%"    , "100"      ]
+          , [ 'Sharpe Ratio (All Yrs)'  , "1.42"     , "0.15"     ]
+        ]);
+        var options_tableChart2 = {
+    /*      title  : 'Current strategy allocation'
+          , hAxis  : {title: 'Month' } //, titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange","lightgrey"]
+		  , vAxis  : {title:"Allocation (%)",format:"#%"} 
+    */  };
+		
+		var data_tableChart3 = google.visualization.arrayToDataTable([
+            [ 'Drawdown'             , 'Overlay'  , 'S&P500TR' ]
+          , [ 'Maximum Drawdown (%)' , "-10.42%"  , "-50.95%"  ]
+        ]);
+        var options_tableChart3 = {
+    /*      title  : 'Current strategy allocation'
+          , hAxis  : {title: 'Month' } //, titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange","lightgrey"]
+		  , vAxis  : {title:"Allocation (%)",format:"#%"} 
+    */  };
+		
+		var data_tableChart4 = google.visualization.arrayToDataTable([
+            [ 'Capture Ratios'  , 'Up Capture'  , 'Down Capture' ]
+          , [ '10 Years'        , "N/A"         , "N/A"          ]
+          , [ '5 Years'         , "71.63"       , "-23.00"       ]
+          , [ '3 Years'         , "55.03"       , "-117.40"      ]
+          , [ '1 Year'          , "102.80%"     , "3.20"         ]
+        ]);
+        var options_tableChart4 = {
+    /*      title  : 'Current strategy allocation'
+          , hAxis  : {title: 'Month' } //, titleTextStyle: {color: 'red'}}
+	      , colors : ["skyblue","orange","lightgrey"]
+		  , vAxis  : {title:"Allocation (%)",format:"#%"} 
+    */  };
+	
+        var chart_tableChart4       = new google.visualization.Table      (document.getElementById('chart_div_tableChart4'      ));
+        var chart_tableChart3       = new google.visualization.Table      (document.getElementById('chart_div_tableChart3'      ));
+        var chart_tableChart2       = new google.visualization.Table      (document.getElementById('chart_div_tableChart2'      ));
+        var chart_tableChart1       = new google.visualization.Table      (document.getElementById('chart_div_tableChart1'      ));
+        var chart_columnChart2      = new google.visualization.ColumnChart(document.getElementById('chart_div_columnChart2'     ));
+        var chart_columnChart1      = new google.visualization.ColumnChart(document.getElementById('chart_div_columnChart1'     ));
+        var chart_lineChart2        = new google.visualization.LineChart  (document.getElementById('chart_div_lineChart2'       ));
+        var chart_lineChart1        = new google.visualization.LineChart  (document.getElementById('chart_div_lineChart1'       ));
+        var chart_histogram_overlay = new google.visualization.Histogram  (document.getElementById('chart_div_histogram_overlay'));
+        var chart_histogram_index   = new google.visualization.Histogram  (document.getElementById('chart_div_histogram_index'  ));
+        chart_tableChart4      .draw(data_tableChart4       , options_tableChart4       );
+        chart_tableChart3      .draw(data_tableChart3       , options_tableChart3       );
+        chart_tableChart2      .draw(data_tableChart2       , options_tableChart2       );
+        chart_tableChart1      .draw(data_tableChart1       , options_tableChart1       );
+        chart_columnChart2     .draw(data_columnChart2      , options_columnChart2      );
+        chart_columnChart1     .draw(data_columnChart1      , options_columnChart1      );
+        chart_lineChart2       .draw(data_lineChart2        , options_lineChart2        );
+        chart_lineChart1       .draw(data_lineChart1        , options_lineChart1        );
+        chart_histogram_overlay.draw(data_histogram_overlay , options_histogram_overlay );
+        chart_histogram_index  .draw(data_histogram_index   , options_histogram_index   );
+      }
+    </script>
+  </head>
+  <body>
+	<div id="chart_div_lineChart2"        style="width: 900px; height: 500px;"></div>
+	<div id="chart_div_tableChart4"       style="width: 300px; height: 200px;"></div>
+	<div id="chart_div_tableChart3"       style="width: 300px; height: 200px;"></div>
+	<div id="chart_div_tableChart2"       style="width: 300px; height: 200px;"></div>
+	<div id="chart_div_tableChart1"       style="width: 300px; height: 200px;"></div>
+	<div id="chart_div_columnChart2"      style="width: 900px; height: 500px;"></div>
+	<div id="chart_div_columnChart1"      style="width: 900px; height: 500px;"></div>
+	<div id="chart_div_lineChart1"        style="width: 900px; height: 500px;"></div>
+    <div id="chart_div_histogram_overlay" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div_histogram_index"   style="width: 900px; height: 500px;"></div>
+  </body>
+</html>

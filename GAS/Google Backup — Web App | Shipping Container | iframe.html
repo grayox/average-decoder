@@ -1,0 +1,26 @@
+----------------------------------- Code.gs -----------------------------------
+<script>
+// Allows conventional web app to be distributed on Google Chrome Store or Google Play Store by wraping it in a Google Apps Script deployed web app.
+function doGet(e) {
+  var template = HtmlService.createTemplateFromFile('Index');
+  return template.evaluate()
+      .setTitle('Web App Shipping Container')
+      .setSandboxMode(HtmlService.SandboxMode.IFRAME);
+}
+</script>
+----------------------------------- Index.html -----------------------------------
+<html>
+  <body style="margin:0;text-align:center;">
+    <iframe src="https://shining-heat-3010.firebaseapp.com/#/" width="100%" height="10000px" xonload="iframeLoaded()" />
+    <!--<script type="text/javascript">
+      function iframeLoaded() { // Resises iframe height to match content // Reference: http://stackoverflow.com/questions/9162933/make-iframe-height-dynamic-based-on-content-inside-jquery-javascript
+          var iFrameID = document.getElementById('idIframe');
+          if(iFrameID) {
+                // here you can make the height, I delete it first, then I make it again
+                iFrameID.height = "";
+                iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+          }   
+      }
+    </script>-->
+  </body>
+</html>

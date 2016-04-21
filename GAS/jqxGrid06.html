@@ -1,0 +1,131 @@
+<!DOCTYPE html> <!-- Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm?(bootstrap)#demos/jqxgrid/bindingtojsonp.htm // Our file: jqxGrid2 | http://jsfiddle.net/Ynp5Z/14/ -->
+<html lang="en">
+<head>
+    <title id='Description'>In this example the Grid is bound to a Remote Data.</title>
+	<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css" type="text/css" />
+	<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/json2.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/knockout-2.2.1.js"></script>
+ --><script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script>
+<!--<link rel="stylesheet" href="../../jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="../../scripts/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="../../jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.selection.js"></script> 
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.columnsresize.js"></script> 
+    <script type="text/javascript" src="../../scripts/gettheme.js"></script>
+ --><style type="text/css">.editedRow{color:#b90f0f;font-style:italic;}</style>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            var theme = "bootstrap"/*getDemoTheme()*/;
+            // prepare the data
+			var source = {
+					url		   : "https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=9l4y95xhwwi8q2hbkslp"
+				,	datatype   : "jsonp"
+				,   datafields : [
+						{ name : "City"    , type : "string"  }
+					,   { name : "Address" , type : "string"  }
+					,   { name : "OpenBid" , type : "integer" } // replaced: "float"
+					,   { name : "TS_No"   , type : "string"  }
+					]
+				,	data	   : {
+						featureClass : "P"
+					,	style        : "full"
+					,	maxRows      : 50
+					}
+	/**/		,	updaterow  : function(rowid,rowdata,commit){var rowindex=$("#jqxgrid").jqxGrid("getrowboundindexbyid",rowid);editedRows.push({index:rowindex,data:rowdata});commit(true);} // called after each edit. // synchronize with the server - send update command call commit with parameter true if the synchronization with the server is successful and with parameter false if the synchronization failder.
+				};
+    /**/    var editedRows = []; // array which keeps the indexes of the edited rows.
+            var dataAdapter = new $.jqx.dataAdapter(source,{ // Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxchart/index.htm#demos/jqxchart/javascript_chart_column_series.htm // Reference: http://www.jqwidgets.com/community/topic/bind-chart-with-json-fromajex-request/#post-22612
+					async			: true  // default=true
+				,	autoBind		: false // default=false
+				,	loadError		: function(xhr,status,error){alert('Error loading "' + source.url + '" : ' + error);}
+				});
+	/**/	var cellclass = function(row,datafield,value,rowdata){for(var i=0;i<editedRows.length;i++){if(editedRows[i].index==row){return 'editedRow';}}}
+            $("#jqxgrid").jqxGrid({
+					source			:	dataAdapter
+				,   theme			:	theme
+				,	width			:	670
+				, 	pagesize		:	20
+				,   selectionmode	:	"singlerow"
+				,   columnsresize	:	true			
+                ,	showfilterrow	:	true
+                ,	filterable		:	true
+				,   pageable 		:	true
+				,   autoheight		:	true
+				,   sortable		:	true
+				,   altrows			:	true
+				,   enabletooltips	:	true
+				,   editable		:	true
+				,	groupable		:	true
+				,	groups			: 	["City"]				
+				,   columns			:	[
+						{ datafield : 	"City"	  , text : "City"	  , filtertype : "checkedlist" , width    : 200 				                          }
+					,	{ datafield : 	"Address" , text : "Address"  , filtertype : "textbox"     , width    : 170                                           }
+					,	{ datafield : 	"OpenBid" , text : "Open Bid" , filtertype : "textbox"     , width    : 170 , cellsformat : "f" , cellsalign: "right" }
+					,	{ datafield : 	"TS_No"	  , text : "TS No"    , filtertype : "textbox"     , minwidth : 110 				                          }
+					]
+            });
+			$("#button"     ).jqxButton({theme:theme});$("#button"     ).    click          ( function(){$("#jqxgrid").jqxGrid("autoresizecolumns"                                                                 );});
+            $("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxGrid").jqxGrid("exportdata","json","jqxGrid",true,null,true,"http://www.myserver.com/save-file.php");});
+            $("#expand"     ).jqxButton({theme:theme});$("#expand"     ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("expandgroup"  , groupnum);}});
+            $("#collapse"   ).jqxButton({theme:theme});$("#collapse"   ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("collapsegroup", groupnum);}});
+            $("#expandall"  ).jqxButton({theme:theme});$("#expandall"  ).on("click"         , function(){$("#jqxgrid").jqxGrid("expandallgroups"  );});
+            $("#collapseall").jqxButton({theme:theme});$("#collapseall").on("click"         , function(){$("#jqxgrid").jqxGrid("collapseallgroups");});
+													   $("#jqxgrid"    ).on("groupexpand"   , function(event){var args=event.args;$("#expandedgroup" ).text("Group: " + args.group + ", Level: " + args.level);});
+													   $("#jqxgrid"    ).on('groupcollapse' , function(event){var args=event.args;$("#collapsedgroup").text("Group: " + args.group + ", Level: " + args.level);});
+		});
+    </script>
+</head>
+<body class="default">
+    <div id="jqxWidget" style="font-size: 13px; font-family: Verdana; float: left;">
+        <div style='margin-top:20px;'>
+            <div style="margin:10px;text-align:center;">
+                <input id="jsonExport" type="button" value="Submit"      />
+				<input id="button"     type="button" value="Fit Columns" />
+            </div>
+        </div>
+		
+		<div style="margin-top: 30px;">
+            <div style="float: left; margin-left: 20px;">
+                <input value="Expand Group" type="button" id='expand' />
+                <br />
+                <input style="margin-top: 10px;" value="Collapse Group" type="button" id='collapse' />
+                <br />
+                <span style="margin-top: 10px;">Group:</span>
+                <input value="1" id="groupnum" style="margin-top: 10px; width: 20px;" type="text" />
+            </div>
+            <div style="float: left; margin-left: 20px;">
+                <input value="Expand All Groups" type="button" id='expandall' />
+                <br />
+                <input style="margin-top: 10px; margin-bottom: 10px;" value="Collapse All Groups"
+                    type="button" id='collapseall' />
+                <br />
+            </div>
+            <div style="float: left; margin-left: 20px;">
+                <div style="font-weight: bold;">
+                    <span>Event Log:</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span>Expanded Group:</span> <span id="expandedgroup"></span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span>Collapsed Group:</span> <span id="collapsedgroup"></span>
+                </div>
+            </div>
+        </div>		
+		
+		<div id="jqxgrid"></div>
+		<div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+            <div id="cellbegineditevent"></div>
+            <div style="margin-top: 10px;" id="cellendeditevent"></div>
+       </div>
+    </div>
+</body>
+</html>

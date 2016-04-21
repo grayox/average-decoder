@@ -1,0 +1,166 @@
+<!DOCTYPE html> <!-- Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm?(bootstrap)#demos/jqxgrid/bindingtojsonp.htm // Our file: jqxGrid2 | http://jsfiddle.net/Ynp5Z/14/ -->
+<html lang="en">
+<head>
+    <title id='Description'>In this example the Grid is bound to a Remote Data.</title>
+	<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css" type="text/css" />
+	<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/json2.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/knockout-2.2.1.js"></script>
+ --><script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script>
+<!--<link rel="stylesheet" href="../../jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="../../scripts/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="../../jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.selection.js"></script> 
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.columnsresize.js"></script> 
+    <script type="text/javascript" src="../../scripts/gettheme.js"></script>
+ --><style type="text/css">.editedRow{color:#b90f0f;font-style:italic;}</style>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            var theme = "bootstrap"; // getDemoTheme();
+			var source = {           // Prepare data
+					url		   : "https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=9l4y95xhwwi8q2hbkslp"
+	/**/		,	updaterow  : function(rowid,rowdata,commit){var rowindex=$("#jqxgrid").jqxGrid("getrowboundindexbyid",rowid);editedRows.push({index:rowindex,data:rowdata});commit(true);} // called after each edit. // synchronize with the server - send update command call commit with parameter true if the synchronization with the server is successful and with parameter false if the synchronization failder.
+				,	datatype   : "jsonp"
+				,   datafields : [
+						{ name : "City"    , type : "string"  }
+					,   { name : "Address" , type : "string"  }
+					,   { name : "OpenBid" , type : "integer" } // replaced: "float"
+					,   { name : "TS_No"   , type : "string"  }
+					]
+				,	data	   : {
+						featureClass : "P"
+					,	style        : "full"
+					,	maxRows      : 50
+					}
+				};
+    /**/    var editedRows = []; // array which keeps the indexes of the edited rows.
+            var dataAdapter = new $.jqx.dataAdapter(source,{ // Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxchart/index.htm#demos/jqxchart/javascript_chart_column_series.htm // Reference: http://www.jqwidgets.com/community/topic/bind-chart-with-json-fromajex-request/#post-22612
+					async			: true  // default=true
+				,	autoBind		: false // default=false
+				,	loadError		: function(xhr,status,error){alert('Error loading "' + source.url + '" : ' + error);}
+				});
+	/**/	var cellclass      = function ( row   , datafield     , value       , rowdata    ) {for(var i=0;i<editedRows.length;i++){if(editedRows[i].index==row){return 'editedRow';}}}
+			var initrowdetails = function ( index , parentElement , gridElement , datarecord ) {
+                var tabsdiv    = null , information = null , notes = null , note1 = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+					tabsdiv    = $($(parentElement).children()[0]);
+                if (tabsdiv   != null) {
+                    information        = tabsdiv.find(".information");
+                    notes              = tabsdiv.find(".notes"      );
+                    var title          = tabsdiv.find(".title"      );title.text("Specs"/*datarecord.firstname*/);
+                    var container      = $('<div style="margin: 5px;"></div>'            );container.appendTo($(information));
+                    var photocolumn    = $('<div style="float: left; width: 15%;"></div>');container.append  (  photocolumn );
+                    var leftcolumn     = $('<div style="float: left; width: 45%;"></div>');container.append  (  leftcolumn  );
+                    var rightcolumn    = $('<div style="float: left; width: 40%;"></div>');container.append  (  rightcolumn );
+                    var photo          = $("<div class='jqx-rc-all' style='margin: 10px;'><b>Photo:</b></div>");photocolumn.append(photo);
+                    var imgurl         = /* 'https://lh3.googleusercontent.com/-23AleDJ0osk/UauT1e16NkI/AAAAAAAAGtY/yjl2luc_ZWo/s144/5.jpg'; */ 'https://lh5.googleusercontent.com/-Lcx6hdPa-3A/UgM3WA9BKdI/AAAAAAAAIFs/8z8-QpFvd_Q/s144/0405a8d.jpg'; // + datarecord.firstname.toLowerCase() + '.png';
+                    var img            = $('<img height="60" src="' + imgurl + '"/>');
+					var image          = $("<div style='margin-top: 10px;'></div>");image.append(img);image.appendTo(photo);
+                    var firstname      =   "<div style='margin: 10px;'><b>First Name:</b> "                  + "Lorem" /*datarecord.firstname */ + "</div>"        ;$(leftcolumn ).append(firstname     );
+                    var lastname       =   "<div style='margin: 10px;'><b>Last Name:</b> "                   + "Ipsum" /*datarecord.lastname  */ + "</div>"        ;$(leftcolumn ).append(lastname      );
+                    var title          =   "<div style='margin: 10px;'><b>Title:</b> "                       + "Dolor" /*datarecord.title     */ + "</div>"        ;$(leftcolumn ).append(title         );
+                    var address        =   "<div style='margin: 10px;'><b>Address:</b> "                     + "Sit"   /*datarecord.address   */ + "</div>"        ;$(leftcolumn ).append(address       );
+					var postalcode     =   "<div style='margin: 10px;'><b>Postal Code:</b> "                 + "Amet"  /*datarecord.postalcode*/ + "</div>"        ;$(rightcolumn).append(postalcode    );
+                    var city           =   "<div style='margin: 10px;'><b>City:</b> "                        + "Consec"/*datarecord.city      */ + "</div>"        ;$(rightcolumn).append(city          );
+                    var phone          =   "<div style='margin: 10px;'><b>Phone:</b> "                       + "Tetur" /*datarecord.homephone */ + "</div>"        ;$(rightcolumn).append(phone         );
+                    var hiredate       =   "<div style='margin: 10px;'><b>Hire Date:</b> "                   + "Elit"  /*datarecord.hiredate  */ + "</div>"        ;$(rightcolumn).append(hiredate      );
+                    var notescontainer = $('<div style="white-space:normal;margin:5px;color:#555555"><span>' + note1   /*datarecord.notes     */ + '</span></div>');$(notes      ).append(notescontainer);
+                    $(tabsdiv).jqxTabs({width:600,height:170,theme:theme});
+                }
+            }
+            $("#jqxgrid").jqxGrid({
+					source				:	dataAdapter
+				,   theme				:	theme
+				,	width				:	700
+				, 	pagesize			:	20
+				,	statusbarheight		:	50
+				,   selectionmode		:	"multiplecellsextended" // "singlerow"
+                ,	rowdetailstemplate	:	{ rowdetailsheight : 200 , rowdetails : "<div style='margin: 10px;'><ul style='margin-left: 30px;'><li class='title'></li><li>Notes</li></ul><div class='information'></div><div class='notes'></div></div>" }
+				,	initrowdetails		:	initrowdetails
+				,	rowdetails			:	true
+				,   columnsresize		:	true			
+                ,	showfilterrow		:	true
+                ,	filterable			:	true
+				,   pageable 			:	true
+				,   autoheight			:	true
+				,   sortable			:	true
+				,   altrows				:	true
+				,   enabletooltips		:	true
+				,   editable			:	true
+				,	showaggregates		:	true
+				,	showstatusbar		:	true
+				,	groupable			:	true
+				,	groups				: 	["City"]				
+				,   columns				:	[
+							{ datafield : 	"City"	  , text : "City"	  , filtertype : "checkedlist" , width    : 200 }
+						,	{ datafield : 	"Address" , text : "Address"  , filtertype : "textbox"     , width    : 170 }
+						,	{ datafield : 	"OpenBid" , text : "Open Bid" , filtertype : "textbox"     , width    : 170 , aggregates : ["sum","avg"] , cellsformat : "c0" , cellsalign: "right" }
+						,	{ datafield : 	"TS_No"	  , text : "TS No"    , filtertype : "textbox"     , minwidth : 110 }
+						]
+            });
+			$("#button"     ).jqxButton({theme:theme});$("#button"     ).    click          ( function(){$("#jqxgrid").jqxGrid("autoresizecolumns"                                                                 );});
+        /*  $("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxGrid").jqxGrid('exportdata','json','jqxGrid');});
+            $("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxGrid").jqxGrid('exportdata','json','jqxGrid',true,null,true,'https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=2kpco3hg68eo6alklck6');});
+		*/	$("#expand"     ).jqxButton({theme:theme});$("#expand"     ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("expandgroup"  , groupnum);}});
+            $("#collapse"   ).jqxButton({theme:theme});$("#collapse"   ).on("click"         , function(){var groupnum=parseInt($("#groupnum").val());if(!isNaN(groupnum)){$("#jqxgrid").jqxGrid("collapsegroup", groupnum);}});
+            $("#expandall"  ).jqxButton({theme:theme});$("#expandall"  ).on("click"         , function(){$("#jqxgrid").jqxGrid("expandallgroups"  );});
+            $("#collapseall").jqxButton({theme:theme});$("#collapseall").on("click"         , function(){$("#jqxgrid").jqxGrid("collapseallgroups");});
+													   $("#jqxgrid"    ).on("groupexpand"   , function(event){var args=event.args;$("#expandedgroup" ).text("Group: " + args.group + ", Level: " + args.level);});
+													   $("#jqxgrid"    ).on("groupcollapse" , function(event){var args=event.args;$("#collapsedgroup").text("Group: " + args.group + ", Level: " + args.level);});
+		//	$("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxgrid").jqxGrid('exportdata','json','jqxGrid');}); // CRITICAL: 1. Use single quotes. 2. Position statement at the end of the code section.
+            $("#jsonExport" ).jqxButton({theme:theme});$("#jsonExport" ).    click          ( function(){$("#jqxGrid").jqxGrid('exportdata','json','jqxGrid',true,null,true/*,"https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=2kpco3hg68eo6alklck6"*/);});
+	
+		
+		});
+    </script>
+</head>
+<body class="default">
+    <div id="jqxWidget" style="font-size: 13px; font-family: Verdana; float: left;">
+        <div style='margin-top:20px;'>
+            <div style="margin:10px;text-align:center;">
+                <input id='jsonExport' type="button" value="Submit"      />
+				<input id="button"     type="button" value="Fit Columns" />
+            </div>
+        </div>
+		<div style="margin-top: 30px;">
+            <div style="float: left; margin-left: 20px;">
+                <input value="Expand Group" type="button" id='expand' />
+                <br />
+                <input style="margin-top: 10px;" value="Collapse Group" type="button" id='collapse' />
+                <br />
+                <span style="margin-top: 10px;">Group:</span>
+                <input value="1" id="groupnum" style="margin-top: 10px; width: 20px;" type="text" />
+            </div>
+            <div style="float: left; margin-left: 20px;">
+                <input value="Expand All Groups" type="button" id='expandall' />
+                <br />
+                <input style="margin-top: 10px; margin-bottom: 10px;" value="Collapse All Groups"
+                    type="button" id='collapseall' />
+                <br />
+            </div>
+            <div style="float: left; margin-left: 20px;">
+                <div style="font-weight: bold;">
+                    <span>Event Log:</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span>Expanded Group:</span> <span id="expandedgroup"></span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span>Collapsed Group:</span> <span id="collapsedgroup"></span>
+                </div>
+            </div>
+        </div>		
+		<div id="jqxgrid"></div>
+		<div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+            <div id="cellbegineditevent"></div>
+            <div style="margin-top: 10px;" id="cellendeditevent"></div>
+       </div>	   
+    </div>
+</body>
+</html>

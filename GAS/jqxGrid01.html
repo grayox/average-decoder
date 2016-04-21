@@ -1,0 +1,80 @@
+<!DOCTYPE html> <!-- Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxknockout/index.htm?(bootstrap)#demos/jqxknockout/gridwithpaging.htm // Our file: jqxGrid1 | http://jsfiddle.net/Ynp5Z/6/ -->
+<html lang="en" style="font-family:arial;font-size:75%;color:grey;">
+<head>
+    <title id='Description'>This example illustrates Knockout integration of pageable jqxGrid.</title>
+    <link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css" type="text/css" />
+	<link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.10.1.min.js"></script>-->
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/json2.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/knockout-2.2.1.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcore.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxdata.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxbuttons.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxmenu.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxlistbox.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxknockout.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/gettheme.js"></script>
+ --><script type="text/javascript">
+		var theme = "bootstrap"/*getDemoTheme()*/;
+        function Person(data) {
+            this.Title   = ko.observable(data.Title  );
+            this.Company = ko.observable(data.Company);
+            this.Name    = ko.observable(data.Name   );
+        };
+        var viewModel = {
+            items: ko.observableArray([
+                new Person({ Title: "Sales Representative" , Company: "Ana Trujillo Emparedados y helados" , Name: "Nancy Davolio"    })
+            ,   new Person({ Title: "Sales Manager"        , Company: "Antonio Moreno Taqueria"            , Name: "Andrew Fuller"    })
+            ,   new Person({ Title: "Sales Representative" , Company: "Around the Horn"                    , Name: "Margaret Peacock" })
+            ,   new Person({ Title: "Vice President"       , Company: "Berglunds snabbkop"                 , Name: "Robert King"      })
+            ])
+        };
+        $(document).ready(function(){ko.applyBindings(viewModel);});
+        function addRow(){var count=viewModel.items().length;viewModel.items.push(new Person({Title:"Title"+count,Company:"Company"+count,Name:"Name"+count}));};
+    </script>
+</head>
+<body>
+    <div>
+        <div id="jqxgrid" data-bind="jqxGrid:{
+				    source			:	items
+				,	theme			:	theme
+				, 	pagesize		:	10
+				,   selectionmode	:	'singlerow'
+				, 	autoheight		:	true
+                ,	showfilterrow	:	true
+                ,	filterable		:	true
+				,   pageable 		:	true
+				,   autoheight		:	true
+				,   sortable		:	true
+				,   altrows			:	true
+				,   enabletooltips	:	true
+				,   editable		:	true
+				, 	columns:[
+						{ text : 'Title'   , dataField : 'Title'   , width : 200 }
+					,	{ text : 'Company' , dataField : 'Company' , width : 200 }
+					,	{ text : 'Name'    , dataField : 'Name'    , width : 200 }
+					]
+				}
+		"></div>
+    <!--<table style="margin-top: 20px;">
+            <tbody      data-bind = "foreach : items   ">
+                <tr>
+                    <td data-bind = "text    : Title   "></td>
+                    <td data-bind = "text    : Company "></td>
+                    <td data-bind = "text    : Name    "></td>
+                </tr>
+            </tbody>
+        </table>-->
+        <div><input data-bind="jqxButton:{theme:theme}" type="button" id="addRowButton" onclick="addRow()" value="Add row" /></div>
+    </div>
+</body>
+</html>

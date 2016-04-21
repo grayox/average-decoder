@@ -1,0 +1,175 @@
+<!DOCTYPE html> <!-- -------------------------------------- AvmReport.html (incorporated into application as <iframe> ) -------------------------------------- -->
+<html>
+<body>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','table']}]}"></script>
+<script>
+google.setOnLoadCallback(drawChart);
+function drawChart(){
+	var dataBar = google.visualization.arrayToDataTable([
+	              [ "Source"     , "Estimate"    , "Low range"   , "High range"  ] //, { role  : "style" } ]
+                , [ "Median"     , 433844-110491 , 110491        , 110491        ] //,  "color : #006cff"  ]
+                , [ "Zillow"     , 597220        , 628653-597220 , 660086-628653 ] //,  "color : #0044ff"  ]
+                , [ "Trulia"     , 509000-110491 , 110491        , 110491        ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+                , [ "DataQuick"  , 396149        , 511356-396149 , 626562-511356 ] //,  "color : #0044ff"  ]
+                , [ "SmartZip"   , 300104        , 326200-300104 , 352296-326200 ] //,  "color : #006cff"  ]
+                , [ "Eppraisal"  , 304884        , 358687-304884 , 412490-358687 ] //,  "color : #0044ff"  ]
+                , [ "RealEstate" , 347631-110491 , 110491        , 110491        ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+        ])
+	  , dataTable = google.visualization.arrayToDataTable([
+	              [ "Source"     , "Estimate"    , "Low range"   , "High range"  ]
+                , [ "Median"     , 433844        , 433844-110491 , 433844+110491 ]
+                , [ "Zillow"     , 628653        , 597220        , 660086        ]
+                , [ "Trulia"     , 509000        , 509000-110491 , 509000+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+                , [ "DataQuick"  , 511356        , 396149        , 626562        ] //,  "color : #0044ff"  ]
+                , [ "SmartZip"   , 326200        , 300104        , 352296        ] //,  "color : #006cff"  ]
+                , [ "Eppraisal"  , 358687        , 304884        , 412490        ] //,  "color : #0044ff"  ]
+                , [ "RealEstate" , 347631        , 347631-110491 , 347631+110491 ] //,  "color : #006cff"  ] // If no range, use populastion stdDev
+        ])
+	  , options = {
+        title     : "Value estimates for 5115 Longfellow St, Los Angeles, CA 90042"
+	  , isStacked : true
+      , series    : {0:{"color":"transparent"},1:{"color":"#CCCCCC"},2:{"color":"#CCCCCC"}} //, intervals : { "lineWidth" : 2 , "barWidth" : 0.618 } // 0.618 = "Golden Ratio"
+    };
+    new google.visualization.BarChart(document.getElementById("chartBar"  )).draw(dataBar  ,options);
+    new google.visualization.Table   (document.getElementById("chartTable")).draw(dataTable,{showRowNumber:true});
+}
+</script>
+<div id="chartBar"   style="width:900px;height:500px;"></div>
+<div id="chartTable" style="width:600px;height:500px;"></div>
+</body>
+</html>
+<!--
+------------------------- v2 -------------------------
+function xdoGet(){
+	var dataTableChart=Charts.newDataTable()
+                             .addColumn(Charts.ColumnType.STRING ,  "Source"     )
+                             .addColumn(Charts.ColumnType.NUMBER ,  "Estimate"   )
+                             .addColumn(Charts.ColumnType.NUMBER ,  "Low range"  )
+                             .addColumn(Charts.ColumnType.NUMBER ,  "High range" )
+                             .addRow(["Median"     , 433844 , 433844-110491 , 433844+110491 ])
+                             .addRow(["Zillow"     , 628653 , 597220        , 660086        ])
+                             .addRow(["Trulia"     , 509000 , 509000        , 509000        ])
+                             .addRow(["DataQuick"  , 511356 , 396149        , 626562        ])
+                             .addRow(["SmartZip"   , 326200 , 300104        , 352296        ])
+                             .addRow(["Eppraisal"  , 358687 , 304884        , 412490        ])
+                             .addRow(["RealEstate" , 347631 , 347631        , 347631        ])
+                             .build();
+    var dataTableBar=//dataSourceUrl='https://docs.google.com/spreadsheet/tq?range=B1%3AC11'+'&key=0Aq4s9w_HxMs7dHpfX05JdmVSb1FpT21sbXd4NVE3UEE&gid=0&headers=-1';
+    /*{ cols:[
+               {id : 'source'                       , type : 'string'}
+             , {id : 'estimate'                     , type : 'number'}
+             , {id : 'i0'       , role : 'interval' , type : 'number'}
+             , {id : 'i1'       , role : 'interval' , type : 'number'}
+             ]
+      , rows:[
+               {c:[{v:'Median'    },{v:433844},{v:433844+110491},{v:433844-110491}]}
+             , {c:[{v:'Zillow'    },{v:628653},{v:660086       },{v:597220       }]}
+             , {c:[{v:'Trulia'    },{v:509000},{v:509000       },{v:509000       }]}
+             , {c:[{v:'DataQuick' },{v:511356},{v:626562       },{v:396149       }]}
+             , {c:[{v:'SmartZip'  },{v:326200},{v:352296       },{v:300104       }]}
+             , {c:[{v:'Eppraisal' },{v:358687},{v:412490       },{v:304884       }]}
+             , {c:[{v:'RealEstate'},{v:347631},{v:347631       },{v:347631       }]}
+             ]};*/
+			 Charts.newDataTable()
+                   .addColumn(Charts.ColumnType.STRING ,  "source"     )
+                   .addColumn(Charts.ColumnType.NUMBER ,  "Estimates"  )
+                   .addColumn(Charts.ColumnType.NUMBER ,  "low range"  )
+                   .addColumn(Charts.ColumnType.NUMBER ,  "high range" )
+                 //.addColumn({type : "number"         , role : "interval"})
+                 //.addColumn({type : "number"         , role : "interval"})
+                 /*.addRow(["Median"     , 433844 , 433844+110491 , 433844-110491 ])
+                   .addRow(["Zillow"     , 628653 , 660086        , 597220        ])
+                   .addRow(["Trulia"     , 509000 , 509000        , 509000        ])
+                   .addRow(["DataQuick"  , 511356 , 626562        , 396149        ])
+                   .addRow(["SmartZip"   , 326200 , 352296        , 300104        ])
+                   .addRow(["Eppraisal"  , 358687 , 412490        , 304884        ])
+                   .addRow(["RealEstate" , 347631 , 347631        , 347631        ])*/ // Use data for stacked chart
+                   .addRow(["Median"     , 433844-110491 , 110491        , 110491        ])
+                   .addRow(["Zillow"     , 597220        , 628653-597220 , 660086-628653 ])
+                   .addRow(["Trulia"     , 509000-110491 , 110491        , 110491        ]) // If no range, use populastion stdDev
+                   .addRow(["DataQuick"  , 396149        , 511356-396149 , 626562-511356 ])
+                   .addRow(["SmartZip"   , 300104        , 326200-300104 , 352296-326200 ])
+                   .addRow(["Eppraisal"  , 304884        , 358687-304884 , 412490-358687 ])
+                   .addRow(["RealEstate" , 347631-110491 , 110491        , 110491        ]) // If no range, use populastion stdDev
+				   .build();
+/*var options = {
+        title     : "Value estimates for 5115 Longfellow St, Los Angeles, CA 90042"
+      , series    : [{"color":"#FF9900"}]
+      , intervals : { "lineWidth" : 2 , "barWidth" : 0.618 } // 0.618 = "Golden Ratio"
+    };*/
+    var chartBuilderBar   = Charts.newBarChart()
+                                  .setTitle("Value estimates for 5115 Longfellow St, Los Angeles, CA 90042")
+                                  .setXAxisTitle("USD($)")
+                                  .setYAxisTitle("Source")
+                                  .setDimensions(900,500) // (width, height)
+	                              .setColors(["transparent","#3E0901","#3E0901"]) // #FF9900 is a strong yellow; however, we opted to match the theme with 3E0901
+                                //.setLegendPosition(Charts.Position.BOTTOM)
+                                  .setDataTable(dataTableBar)//.setDataSourceUrl(dataSourceUrl);
+	                            //.setOptions(options);
+	                              .setStacked();
+    var chartBuilderTable = Charts.newTableChart()
+                                  .setDimensions(600, 500)
+                                  .enablePaging(20)
+                                  .setDataTable(dataTableChart);  
+    var chartBar   = chartBuilderBar  .build();
+    var chartTable = chartBuilderTable.build();
+    return UiApp.createApplication().add(chartBar).add(chartTable);
+ }
+------------------------- v1 -------------------------
+function drawChart(){
+ /* var JSONObject = {
+        cols:[
+               {id : 'source'   , type : 'string'}
+             , {id : 'estimate' , type : 'number'}
+             , {id : 'i0'       , type : 'number'} //, role : 'interval'
+             , {id : 'i1'       , type : 'number'} //, role : 'interval'
+             ]
+      , rows:[
+               {c:[{v:'Median'    },{v:433844-110491},{v:110491       },{v:110491       }]}
+             , {c:[{v:'Zillow'    },{v:597220}       ,{v:628653-597220},{v:660086-628653}]}
+             , {c:[{v:'Trulia'    },{v:509000-110491},{v:110491       },{v:110491       }]}  // If no range, use populastion stdDev
+             , {c:[{v:'DataQuick' },{v:396149}       ,{v:511356-396149},{v:626562-511356}]}
+             , {c:[{v:'SmartZip'  },{v:300104}       ,{v:326200-300104},{v:352296-326200}]}
+             , {c:[{v:'Eppraisal' },{v:304884}       ,{v:358687-304884},{v:412490-358687}]}
+             , {c:[{v:'RealEstate'},{v:347631-110491},{v:110491       },{v:110491       }]}  // If no range, use populastion stdDev
+             ]}
+	  , data = new google.visualization.DataTable(JSONObject,0.5) */
+	var JSONObject = {
+        cols:[
+               {id : 'source'                       , type : 'string'}
+             , {id : 'estimate'                     , type : 'number'}
+             , {id : 'i0'       , role : 'interval' , type : 'number'}
+             , {id : 'i1'       , role : 'interval' , type : 'number'}
+             ]
+      , rows:[
+               {c:[{v:'Median'    },{v:433844},{v:433844+110491},{v:433844-110491}]}
+             , {c:[{v:'Zillow'    },{v:628653},{v:660086       },{v:597220       }]}
+             , {c:[{v:'Trulia'    },{v:509000},{v:509000       },{v:509000       }]}
+             , {c:[{v:'DataQuick' },{v:511356},{v:626562       },{v:396149       }]}
+             , {c:[{v:'SmartZip'  },{v:326200},{v:352296       },{v:300104       }]}
+             , {c:[{v:'Eppraisal' },{v:358687},{v:412490       },{v:304884       }]}
+             , {c:[{v:'RealEstate'},{v:347631},{v:347631       },{v:347631       }]}
+             ]};
+    var data = new google.visualization.DataTable( JSONObject , 0.5 );
+    /*  data.addColumn('string', 'x');
+    data.addColumn('number', 'values');
+    data.addColumn({id:'i0', type:'number', role:'interval'});
+    data.addColumn({id:'i1', type:'number', role:'interval'});
+    data.addRows([
+  [ 'Median'     , 433844 , 433844+110491 , 433844-110491]
+, [ 'Zillow'     , 628653 , 660086        , 597220       ]
+, [ 'Trulia'     , 509000 , 509000        , 509000       ]
+, [ 'DataQuick'  , 511356 , 626562        , 396149       ]
+, [ 'SmartZip'   , 326200 , 352296        , 300104       ]
+, [ 'Eppraisal'  , 358687 , 412490        , 304884       ]
+, [ 'RealEstate' , 347631 , 347631        , 347631       ]
+    ]);*/
+    var options = {
+        title     : "Value estimates for 5115 Longfellow St, Los Angeles, CA 90042"
+      , series    : [{"color":"#FF9900"}]
+      , intervals : { "lineWidth" : 2 , "barWidth" : 0.618 } // 0.618 = "Golden Ratio"
+    };
+    var chart = new google.visualization.BarChart(document.getElementById('chart'));
+    chart.draw(data, options);
+}
+-->

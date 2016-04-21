@@ -1,0 +1,55 @@
+<script>
+// File location: https://script.google.com/d/1b7sEqRmz8_AJELXMu4BvjBDd0PcYmpVCTZnlWI-qLFSYfD1W4WA0303-/edit?usp=drive_web
+// Demonstrates how to implement Bootstrap in GAS
+// Reference: Andrew Roberts http://www.andrewroberts.net/() posts:
+// Answer: http://stackoverflow.com/questions/27863416/can-bootstrap-js-be-used-in-gas-google-apps-script/28820528?iemail=1&noredirect=1#28820528
+// Script: https://script.google.com/d/1n8eHhuJdIl6NpdOi8dco0VtYujO53SnJKH3e7aVX3BV29WtPRS6i9MmE/edit?usp=sharing
+// App:    https://script.google.com/macros/s/AKfycbw35OdhtI7PcydvwXlkcAp6BcUyZQRBiDxPX7Oa_1D2a3oDlAPN/exec
+function doGet(e) {
+  return HtmlService
+    .createHtmlOutputFromFile('mainPage')
+    .setSandboxMode(HtmlService.SandboxMode.IFRAME);
+}
+</script>
+-------------------------------------- mainPage.html -------------------------------------- 8/24/2014, 8/26/2014 To add features, see file: Bootstrap_Argenta_Signup (Undeprecated) Features: info and question glyphs, formatted tooltips and popovers, iframe for multiple pages on single Google Sites page
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <!-- Reference: http://getbootstrap.com/javascript/#tabs -->
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a role="tab" data-toggle="tab" aria-controls="home" href="#home">Home</a>
+            </li>
+            <li role="presentation"><a role="tab" data-toggle="tab" aria-controls="profile" href="#profile">Profile</a>
+            </li>
+            <li role="presentation"><a role="tab" data-toggle="tab" aria-controls="messages" href="#messages">Messages</a>
+            </li>
+            <li role="presentation"><a role="tab" data-toggle="tab" aria-controls="settings" href="#settings">Settings</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">Lorem ipsum dolor sit amet</div>
+            <div role="tabpanel" class="tab-pane" id="profile">consectetur adipiscing elit,</div>
+            <div role="tabpanel" class="tab-pane" id="messages">sed do eiusmod tempor incididun</div>
+            <div role="tabpanel" class="tab-pane" id="settings">ut labore et dolore magna aliqua</div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+    
+    
+    
+    
+    
+    
+    

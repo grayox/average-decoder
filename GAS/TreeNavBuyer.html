@@ -1,0 +1,92 @@
+<html> <!-- Obfuscate: http://techyzilla.blogspot.com/2012/09/better-javascript-obfuscating-method-to-protect-your-code.html Reference: @http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxtree/index.htm?(web)#demos/jqxtree/navigation.htm @http://jsfiddle.net/nkNT5/4 --> <!-- Note: Clear internet browsing history if scripts/splitter windows/tree animations stop functioning -->
+<head>
+    <title id='Description'>Navigation with jqxTree</title>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.8.3.min.js?attredirects=0&d=1"></script>-->
+    <link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtVlJqWDhxUk9hcG8" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1" type="text/css" />
+	<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtNm0yVXh0Z1JQWkU" xhref="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://googledrive.com/host/0B1LVOoV_2dFtdGF1Q25haHVEMnM" 2xsrcx="https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?k=k7fvbixefxcc1fy4eqr5" 1xsrcx="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script> <!-- src replaced 2xsrc per "using Google Drive to host .css and .js" Reference: http://www.mybloggerlab.com/2013/04/how-to-host-css-or-javascript-files-in-blogger-using-google-drive.html --><!-- 1xsrc replaced 1xsrc because Chrome has enabled strict MIME type checking and xsrc serves MIME=text/plain. Reference: https://code.google.com/p/chromium/issues/detail?id=180007 -->
+<!--<script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/gettheme.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcore.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxbuttons.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxscrollbar.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxpanel.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxtree.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxexpander.js?attredirects=0&d=1"></script>
+    <script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxsplitter.js?attredirects=0&d=1"></script>-->
+	<script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            var theme = "bootstrap"/*getDemoTheme()*/,
+            urlMap = { "account"     		: "uaceyes6ubt0nc4ow6ng"
+					 , "register-buyer"	   	: "fruif01iaqqdgmqq1glu"
+					 , "balances"		   	: "23gd3r4v88h0qs5l904w"
+					 , "taxdocs"		   	: "qcy0zn273yllnor7daj7"
+					 , "tax-instructions"   : "2632vy7qroae9ehameno"
+					 , "citizen-us"		   	: "hcx6ce5fj22c0ru0uh7k"
+					 , "w9-pdf"			   	: "rcgrp03ur0omffihy6h7"
+					 , "w9-eSign"		   	: "eii2t8p9pj21o812ondu"
+					 , "citizen-nonus"	   	: "1w6qu34iki6orhn31va9"
+					 , "w8-pdf"			   	: "mffcnyn1dfxzfsqu8k8k"
+					 , "w8-eSign"		   	: "ahbcktn71r40oq5o6vut"
+					 , "deals"			   	: "2a6ib6wqih1po8amk9kp"
+					 , "private-listing"   	: "bim5yiet1iw5m6ey33zr"
+					 , "private-auction"	: "zllhi2v8cx7qre66q3z2"
+					 , "public-listing"   	: "cdl2t4npt1vpu0ukq7xw"
+					 , "public-auction"	    : "3k6d9487bgr6tc4h6cbl"
+					 , "training-manual"    : "tn46yr3m8dovd8pyfzl2"
+					 , "listings"	    	: "904dtdwo1rqyjaw5spjf"
+					 , "auctions"    		: "nbzuuuhxzxkkn3ln32m4"
+					};
+            // Create jqxTree
+            $("#splitter").jqxSplitter({theme:theme,width:'100%',height:1400,panels:[{size:215}]});
+            $('#jqxTree').jqxTree({theme:theme,height:'100%',width:'100%'});
+            $('#jqxTree').on('select',function(event){
+			    $.getJSON('https://script.google.com/macros/s/AKfycbzA3zsWtAil519GqQRmRmfYckmWVWhWmC0XHCL2iNmFmObfyViO/exec?jsoncallback=?',{k:urlMap[event.args.element.id]}).done(function(data){$('#ContentPanel').html(data.result);}) // Reference: http://api.jquery.com/jQuery.getJSON/ // jQuery automatically appends jsoncallback value (e.g. "jquery000123") to url as a parameter so server must parse it and return it as function name (e.g., "jquery000123({object data goes here})")
+			});
+        });
+    </script>
+</head>
+<body class='default'>
+    <div id="splitter">
+        <div>
+            <div style="border: none;" id='jqxTree'>
+                <ul>
+                    <li id="account"          item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Account       </span>
+						<ul>
+					<li id="register-buyer"   item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh5.googleusercontent.com/-9vpRnqzxLHo/Uddv2hhT-QI/AAAAAAAAHZw/sk9Paq4x1yQ/s144/Gear-icon.png' height='16'     ><span item-title="true">Registration  </span></li>
+					<li id="balances"         item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh5.googleusercontent.com/-hg_1z9m2pUo/UdgyuEwYL0I/AAAAAAAAHlw/YqrvprLjlpE/s800/tb.png' height='16'            ><span item-title="true">Balances      </span></li>
+                    <li id="taxdocs"          item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Tax Documents </span>
+							<ul>
+					<li id="tax-instructions" item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Instructions  </span></li>
+                    <li id="citizen-us"       item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/--Iu-6wCJsrc/UdejysfkktI/AAAAAAAAHhw/xMe5AkLIs4o/s144/gf.png' height='15' width='16' ><span item-title="true">United States </span>
+								<ul>
+					<li id="w9-pdf"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Print + Sign  </span></li>
+					<li id="w9-eSign"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Sign Online   </span></li>
+								</ul></li>
+                    <li id="citizen-nonus"    item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/--Iu-6wCJsrc/UdejysfkktI/AAAAAAAAHhw/xMe5AkLIs4o/s144/gf.png' height='15' width='16' ><span item-title="true">Non U.S.      </span>
+								<ul>
+					<li id="w8-pdf"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Print + Sign  </span></li>
+					<li id="w8-eSign"     	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Sign Online   </span></li>
+								</ul></li>
+							</ul>
+					</li>
+						</ul>
+					</li>
+					<li id="deals"            item-expanded='true' ><img style='float:left;margin-right:5px;' src='https://lh6.googleusercontent.com/-2qPIYPcOdgI/UdejzhK8c1I/AAAAAAAAHhc/4uyoIExqRzs/s144/yf.png' height='15' width='16' ><span item-title="true">Deals    	 </span>
+						<ul>
+					<li id="training-manual"  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-F4UqLP_bP_M/UczaETY2UcI/AAAAAAAAHUs/NN4AIe4RGVk/s144/doc.png' height='16'           ><span item-title="true">Documentation    </span></li>
+				<!--<li id="private-listing"  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-swL879X9T1A/Ue1ugDgJKuI/AAAAAAAAIBQ/a9esfPiMJPU/s144/hs.png' height='16' 			  ><span item-title="true">Private Listings </span></li>
+					<li id="private-auction"  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-INj60fMfoTc/Ue1f3r4TybI/AAAAAAAAIAk/4dIlR-CyMjs/s144/au.png' height='16'            ><span item-title="true">Private Auctions </span></li>
+					<li id="public-listing"   item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-AXnmnTd9fgQ/Udkkyi-LU8I/AAAAAAAAHx0/7_2a7CM1tLw/s144/sv.png' height='16'            ><span item-title="true">Public Listings  </span></li>
+					<li id="public-auction"   item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-NR6LWMANjC8/Ue40xs1vWwI/AAAAAAAAIC8/O-rDfOO1Uco/s144/pa.png' height='16'            ><span item-title="true">Public Auctions  </span></li>
+				--> <li id="listings"   	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh3.googleusercontent.com/-AXnmnTd9fgQ/Udkkyi-LU8I/AAAAAAAAHx0/7_2a7CM1tLw/s144/sv.png' height='16'            ><span item-title="true">Listings  		</span></li>
+					<li id="auctions"   	  item-expanded='false'><img style='float:left;margin-right:5px;' src='https://lh4.googleusercontent.com/-NR6LWMANjC8/Ue40xs1vWwI/AAAAAAAAIC8/O-rDfOO1Uco/s144/pa.png' height='16'            ><span item-title="true">Auctions  		</span></li>
+						</ul>
+					</li>
+				</ul>
+            </div>
+        </div>
+        <div id="ContentPanel"></div>
+    </div>
+</body>
+</html>

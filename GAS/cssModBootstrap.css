@@ -1,0 +1,38 @@
+	.modal{xposition:absolute;overflow-y:scroll;} /* Scrolls modal | Reference: http://stackoverflow.com/questions/7508576/twitter-bootstrap-modal-scrolling-issue%20%3E%20see%20comment%20on%20Dec%206%20'13%20by%20Philipp%20Wirth */
+	.modal-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:0;background-color:#000;} Reference: https://github.com/angular-ui/bootstrap/issues/2970 > see comment on feb 4 2015 by souinhua | Still requires fix for scrolling | Note: v3.3.0 provides similar fix | Future versions after 3.3.2 should fix .modal-backdrop issue and allow deletion of this line of .css */
+	 xhtml,xbody,.wizard,.step-content {font-family:Sans-Serif}
+	 body         {min-height:2000px;padding-top:30px} /* Padding necessary for fixed navbar not to overlap; Reference: http://getbootstrap.com/components/#body-padding-required */
+	.widewrapper       {width:100%} /* Reference: http://www.bootply.com/98247# */
+	.widewrapper > img {width:100%}
+	.newspaper {text-align:justify;text-justify:newspaper}
+  /*.jumbotron{background-color:#880088!important;color:white!important;} /* Not working | Reference: http://jsfiddle.net/juanmendez/C4Sjg/ */
+  /* Reference: http://stackoverflow.com/questions/18599778/decreasing-height-of-bootstrap-3-0-navbar
+  /*.tnav .navbar .container { height: 28px; }
+  /*.navbar-inner,.nav,.navbar-nav nav {min-height:0px}
+	.navbar-primary .navbar { background:#9f58b5; border-bottom:none; }
+	.navbar-primary .navbar .nav > li > a {color: #501762;}
+	.navbar-primary .navbar .nav > li > a:hover {color: #fff; background-color: #8e49a3;}
+	.navbar-primary .navbar .nav .active > a,.navbar .nav .active > a:hover {color: #fff; background-color: #501762;}
+	.navbar-primary .navbar .nav li > a .caret, .tnav .navbar .nav li > a:hover .caret {border-top-color: #fff;border-bottom-color: #fff;}
+	.navbar-primary .navbar .nav > li.dropdown.open.active > a:hover {}
+	.navbar-primary .navbar .nav > li.dropdown.open > a {color: #fff;background-color: #9f58b5;border-color: #fff;}
+	.navbar-primary .navbar .nav > li.dropdown.open.active > a:hover .caret, .tnav .navbar .nav > li.dropdown.open > a .caret {border-top-color: #fff;}
+	.navbar-primary .navbar .navbar-brand navbar-text {color:#fff;}
+   */
+   		       .nav-link-section                                               { padding-top : 45px                                          }
+               .navbar-primary .navbar .nav.pull-right     { margin-left : 10px; margin-right: 0;                        }
+	.navbar-xs .navbar-primary .navbar                                     { min-height  : 28px; height: 28px;                           }
+	.navbar-sm .navbar-primary .navbar                                     { min-height  : 40px; height: 40px;                           }
+	.navbar-xs .navbar-primary .navbar .navbar-brand          { padding     :  0px 12px;xfont-size:16px; line-height: 28px; }
+	.navbar-sm .navbar-primary .navbar .navbar-brand          { padding     :  0px 12px;xfont-size:16px; line-height: 40px; }
+	.navbar-xs .navbar-primary .navbar .navbar-text            { padding     :  0px  0px;xfont-size:16px; line-height:  0px; }
+	.navbar-xs .navbar-primary .navbar .navbar-nav > li > a { padding-top :  0px; padding-bottom: 0px; line-height: 28px; }
+	.navbar-sm .navbar-primary .navbar .navbar-nav > li > a { padding-top :  0px; padding-bottom: 0px; line-height: 40px; }
+
+	.alert                {border-left-width:5px;border-left-style:solid} /* Reference: http://getbootstrap.com/css/#less-variables */
+	.alert-default{border-left-color:#777   } /* User-created */
+	.alert-primary{border-left-color:#337ab7} /* @brand-primary: darken(#428bca, 6.5%); // #337ab7 */
+	.alert-success{border-left-color:#5cb85c} /* @brand-success: #5cb85c; */
+	.alert-info      {border-left-color:#377385} /* @brand-info:    #5bc0de; */
+	.alert-warning{border-left-color:#f0ad4e} /* @brand-warning: #f0ad4e; */
+	.alert-danger  {border-left-color:#d9534f} /* @brand-danger:  #d9534f; */

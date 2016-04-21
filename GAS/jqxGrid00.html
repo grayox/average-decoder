@@ -1,0 +1,85 @@
+<!DOCTYPE html> <!-- Reference: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm?(bootstrap)#demos/jqxgrid/paging.htm // Our file: jqxGrid.html | http://jsfiddle.net/Ynp5Z/6/ -->
+<html style="font-family:arial;font-size:75%;color:grey;">
+<head>
+    <title id='Description'>jqxGrid</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jquery-1.10.1.min.js"></script>
+ --><script type="text/javascript" charset="utf8" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx-all.js?attredirects=0&d=1"></script>
+    <link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.base.css?attredirects=0&d=1" type="text/css" />
+    <link rel="stylesheet" href="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqx.bootstrap.css?attredirects=0&d=1" type="text/css" />
+<!--<script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/gettheme.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcore.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxdata.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxbuttons.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxmenu.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxlistbox.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.js"></script>
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.sort.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.pager.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.selection.js"></script> 
+    <script type="text/javascript" src="https://www.sites.google.com/site/iae2mptmwylnrbz8iesqwkq8nvousn/home/jqxgrid.edit.js"></script> 
+ --><script type="text/javascript">
+        $(document).ready(function () {
+            var theme     = "bootstrap"/*getDemoTheme()*/
+			,	data      = /*generatedata(250)*/[["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"],["x","x","x","x","x","x"]]
+			,	source 	  = {
+					localdata  : data
+				,	datatype   : "array"
+				,	datafields : [
+                    ,	{ name : "name"        , type: "string" }
+                    ,	{ name : "productname" , type: "string" }
+                    ,	{ name : "available"   , type: "string" } // bool
+                    ,	{ name : "date"        , type: "string" } // date
+                    ,	{ name : "quantity"    , type: "string" } // number
+                    ,	{ name : "price"       , type: "string" } // number
+					]
+				};
+         /* var cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                if(value<20){return '<span style="margin:4px;float:'+columnproperties.cellsalign+';color:#ff0000;">'+value+'</span>';}
+                else        {return '<span style="margin:4px;float:'+columnproperties.cellsalign+';color:#008000;">'+value+'</span>';}
+            } */
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // initialize jqxGrid
+            $("#jqxgrid").jqxGrid({
+					width            : 670
+				,   source           : dataAdapter
+				,   theme            : theme
+                ,	showfilterrow	 : true
+                ,	filterable		 : true
+				,   pageable         : true
+				,   autoheight       : true
+				,   sortable         : true
+				,   altrows          : true
+				,   enabletooltips   : true
+				,   editable         : true
+				,   selectionmode    : "singlerow" // multiplecellsadvanced // singlecell
+			/*	,   columns			 : [
+						{ text: 'Product Name'     , datafield: 'ProductName'                                                             , width: 250 }
+					, 	{ text: 'Quantity per Unit', datafield: 'QuantityPerUnit' , cellsalign: 'right', align: 'right'                   , width: 120 }
+					, 	{ text: 'Unit Price'       , datafield: 'UnitPrice'       , cellsalign: 'right', align: 'right', cellsformat: 'c2', width: 100 }
+					, 	{ text: 'Units In Stock'   , datafield: 'UnitsInStock'    , cellsalign: 'right', cellsrenderer: cellsrenderer     , width: 100 }
+					, 	{ text: 'Discontinued'     , datafield: 'Discontinued'    , columntype: 'checkbox'                                             }
+					] */
+			/*	,	columns			 : [
+					,	{ text: "Name"	  , datafield: "name"        , filtertype: "textbox" , columntype: "textbox"                                                 , width: 115 }
+					,	{ text: "Product" , datafield: "productname" , filtertype: "textbox"                                                                         , width: 220 }
+                    ,	{ text: "Date"	  , datafield: "date"        , filtertype: "date"    , columntype: "datetimeinput" , cellsalign: "right" , cellsformat: "d"  , width: 210 }
+					,	{ text: "Qty"	  , datafield: "quantity"    , filtertype: "textbox" , columntype: "numberinput"   , cellsalign: "right"                     , width:  60 }
+					,	{ text: "Price"   , datafield: "price"       , filtertype: "textbox" , columntype: "numberinput"   , cellsalign: "right" , cellsformat: "c2"              }
+					] */
+				,	columns			 : [
+					,	{ text: "Name"	  , datafield: "name"        , filtertype: "textbox" , columntype: "textbox"                         , width: 115 }
+					,	{ text: "Product" , datafield: "productname" , filtertype: "textbox"                                                 , width: 220 }
+                    ,	{ text: "Date"	  , datafield: "date"        , filtertype: "textbox" , columntype: "textbox"   , cellsalign: "right" , width: 210 }
+					,	{ text: "Qty"	  , datafield: "quantity"    , filtertype: "textbox" , columntype: "textbox"   , cellsalign: "right" , width:  60 }
+					,	{ text: "Price"   , datafield: "price"       , filtertype: "textbox" , columntype: "textbox"   , cellsalign: "right" ,            }
+					]
+            });
+        });
+    </script>
+</head>
+<body class="default"><div id="jqxWidget" style="font-size:13px;font-family:arial;float:left;"><div id="jqxgrid"></div></div></body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="fuelux">
+
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css">
+    <!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css -->
+    <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+</head>
+
+<body>
+    <div class="container-fluid fuelux">
+        <div class="col-xs-12 xcol-xs-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Panel Heading</div>
+                <div class="panel-body">
+                    <div class="spinbox" data-initialize="spinbox" id="mySpinbox">
+                        <input type="text" class="form-control input-mini spinbox-input">
+                        <div class="spinbox-buttons btn-group btn-group-vertical">
+                            <button autocomplete="off" type="button" class="btn btn-default spinbox-up btn-xs">
+                                <span class="glyphicon glyphicon-chevron-up"></span><span class="sr-only">Increase</span>
+                            </button>
+                            <button autocomplete="off" type="button" class="btn btn-default spinbox-down btn-xs">
+                                <span class="glyphicon glyphicon-chevron-down"></span><span class="sr-only">Decrease</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+    <script>
+        // $('#myCheckbox').checkbox();
+        // $('#myComponent1').component1(); // Initializes components from FuelUx // Example: 
+        $('#mySpinbox').spinbox();
+        // $('#myComponent2').component2();
+    </script>
+</body>
+
+</html>

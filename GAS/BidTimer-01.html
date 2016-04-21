@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><title id='Description'>Bid Timer</title></head>
+<body><span id="timer" style="font-family:arial black;font-size:200%;color:black;<!--border:2px solid;border-radius:25px;-->"></span><script>
+    function tdate(){ // http://jsfiddle.net/8L4vW/16/ // Reference: https://mindgrader.com/tutorials/1-how-to-create-a-simple-javascript-countdown-timer
+	    var now=new Date(),dd=now.getDay(),hh=now.getHours(),text="";
+            sch=[[0,1,0]  // 0 Sun [open bid start hour, days to add, open bid end hour]
+                ,[9,1,0]  // 1 Mon
+                ,[9,1,0]  // 2 Tue
+                ,[9,1,0]  // 3 Wed
+                ,[9,1,0]  // 4 Thu
+                ,[9,3,0]  // 5 Fri
+                ,[0,2,0]] // 6 Sat
+       ;if(hh>=sch[dd][0]){now.setDate(now.getDate()+sch[dd][1]);now.setHours(sch[dd][2]);now.setMinutes(0);now.setSeconds(0);now.setMilliseconds(0);
+            text=("Today&#8217;s Bidding Ends <span style='font-family:arial;font-size:40%'>"+now.toString()+" <img height='25' title='Bid now! (refresh screen)' src='https://lh3.googleusercontent.com/-0VBJRjXzYLg/U6eerRXKOcI/AAAAAAAAL5c/lPTM39va7Tw/s144/go.png'><br></span>")}
+        else{now.setHours(sch[dd][0]);now.setMinutes(0);now.setSeconds(0);now.setMilliseconds(0);text=("Next Bidding Starts <span style='font-family:arial;font-size:40%'>"+now.toString()+" <img height='25' title='Please wait while we retrieve new opportunities for you.' src='https://lh6.googleusercontent.com/-d6XYeY0MSYo/U6eetK--EOI/AAAAAAAAL6A/9J4UaejRtqI/s144/no.png'><br></span>")}
+        return{"text":text,"time":now}/*now/*new Date(2014,5,22,9)*/} 
+    var tdate=tdate(),target=/*new Date(2014,5,22,9)*/tdate.time.getTime(),d,h,m,timer=document.getElementById("timer");
+    setInterval(function(){
+        var t=new Date().getTime(),s=(target-t)/1000;
+            d=parseInt(s/(60*60*24));
+            s=         s%(60*60*24 );
+            h=parseInt(s/(60*60   ));
+            s=         s%(60*60    );
+            m=parseInt(s/ 60       );
+            s=parseInt(s% 60       );
+	  //if(s<-5){tdate=tdate()} //Freezes @ -(x)h : -(y)m : -5s //Example: will freeze at -2h:-3m:-5s, will stay there for 55 sec, then will count normally for 5 sec from -2h:-4m:-0s to then freeze at -2h:-4m:-5s for 55 sec and so on
+        timer.innerHTML=tdate.text
+                       +d+"d : "
+                       +h+"h : "
+                       +m+"m : "
+                       +s+"s";  
+        },1000);
+</script></body></html>

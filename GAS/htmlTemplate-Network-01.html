@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--Instructions: 1. Copy paste this file into a GAS HTML file named account.html 2. In the script section at the bottom, copy/paste that into a .gs file called Account.gs -->
+<!--Change Log: v02: Uses CacheService() to manage user login status.-->
+<html class="fuelux">
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+</head>
+<body>
+<?var S="",user="x",i,len,u=cache2user(),disabled=u?"":"disabled"//LibraryjsUtil.cache2user() fails because can't access cache from a library function?
+    , siteName=SitesApp.getActiveSite().getName(),projName=LibraryjsUtil.googleSite2parseApp(siteName),nodes=LibraryjsUtil.getNodes_Network(u.username,projName),signups=LibraryjsUtil.getNodes_CountSignups(nodes),bids=LibraryjsUtil.getBids_BidderBidVolume(projName)?>
+<div class="container container-fluid fuelux">
+<?if(!cache2user()){?><?!=LibraryjsUtil.signInMsg()?><?}else{?>
+	<div  class="col-xs-12  col-xs-offset-0" style="text-align:center">
+		<div class="panel panel-default">
+			<div class="panel-heading">My Network
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-- >
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="">-->
+			</div>
+			<div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <tbody>
+                        <?var count_email=0,count_username=0,count_childrenCount=0,count_signups=0,count_bidCount=0,count_bidVolume=0
+						    , arr=nodes.reverse();len=arr.length;i=len;while(i--){var strAlt=(i%2)?"class='alt'":"";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td style="text-align:left" title="Node who invited this node">
+                                    <?=arr[i].parent?>
+                                </td>
+                                <td style="text-align:right" title="Sequential number">
+                                    <?=(len-i)?>
+                                </td>
+                                <td style="text-align:left" title="Email address of this node">
+                                    <?=arr[i].email?><?count_email++?>
+                                </td>
+                                <td style="text-align:left" title="Username of this node">
+                                    <?=arr[i].username||""?><?if(arr[i].username){count_username++}?>
+                                </td>
+                                <td xstyle="text-align:right" title="Number of invitations sent by this node">
+                                    <?=arr[i].username?arr[i].childrenCount:""?><?count_childrenCount+=arr[i].childrenCount?>
+                                </td>
+                                <!--<td><input autocomplete="off" <?=user?> type="checkbox" xchecked xonClick="alert('A')"  name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa."></td>-->
+                                <td xstyle="text-align:center" title="Number of nodes to signup directly under this node">
+                                    <?=(arr[i].username&&signups[arr[i].username])?signups[arr[i].username]:""?><?count_signups+=signups[arr[i].username]||0?>
+                                </td>
+								<td xstyle="text-align:right" title="Number of bids by this node">
+                                    <?=(arr[i].username&&bids[arr[i].username])?bids[arr[i].username]["bidCount"]:""?><?if(bids[arr[i].username]){count_bidCount+=bids[arr[i].username]["bidCount"]||0}?>
+                                </td>
+								<td xstyle="text-align:right" title="Total dollar value of bids by this node">
+                                    <?=(arr[i].username&&bids[arr[i].username])?LibraryjsUtil.num2cur(bids[arr[i].username]["bidVolume"],0,"$",""):""?><?if(bids[arr[i].username]){count_bidVolume+=bids[arr[i].username]["bidVolume"]||0}?>
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                    <thead style="vertical-align:bottom">
+                        <th>                                                                                                             Parent   </th>
+                        <th>                                                                                                             No#      </th>
+                        <th><span class="badge" title="Email count"      ><?=                      count_email              ?></span><br>Email    </th>
+                        <th><span class="badge" title="Member count"     ><?=                      count_username           ?></span><br>Username </th>
+                        <th><span class="badge" title="Invitation count" ><?=                      count_childrenCount      ?></span><br>Invites  </th>
+                        <th><span class="badge" title="Signup count"     ><?=                      count_signups            ?></span><br>Signups  </th>
+                        <th><span class="badge" title="Number of bids"   ><?=                      count_bidCount           ?></span><br>Bids     </th>
+                        <th><span class="badge" title="Bids dollar value"><?=LibraryjsUtil.num2cur(count_bidVolume,0,"$","")?></span><br>Bid Vol  </th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+							<td colspan="8">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+		</div>
+	</div>
+<?}?>
+</div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script> // Resources: Google Search Terms: google apps script success handler examples // Reference: http://www.mousewhisperer.co.uk/drivebunny/talking-to-the-server-from-apps-scripts-html-service/
+// For function examples, see htmlTemplate-Account-xx.html and htmlInvite-Account-xx.html
+</script>
+</body>
+</html>
+
+<!-- Tree Mapping
+<!--References: https://developers.google.com/chart/interactive/docs/gallery/treemap
+                http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/example1.html 
+                http://www.jstree.com/ -- >
+		<div class="panel panel-default">
+			<div class="panel-heading">Organization Chart
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-- >
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="">-- >
+			</div>
+			<div class="panel-body">
+				<div id="chart_div_org" style="width: 900px; height: 500px;"></div>
+            </div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Tree Chart
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-- >
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="">-- >
+			</div>
+			<div class="panel-body">
+				<div id="chart_div_tree"></div>
+            </div>
+		</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['orgchart','treemap']}]}"></script>
+-->

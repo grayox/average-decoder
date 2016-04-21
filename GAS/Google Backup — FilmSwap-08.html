@@ -1,0 +1,1398 @@
+<script>
+// Change Log:
+// v1. Working template for radio buttons, panes, tabs and modals — use this version home.html as future template; use repeater.html for repeater template - this also contains .navbar template
+// v1. Contained other examples of radio button attempts
+// v2. Added fully reduced / minimal height navbar; Deleted extraneous content including some tabs, panes and modals
+// v3. Added wizard from FuelUX; Key to this was to move class="fuelux" from <html> to internal <div> within modal to avoid css conflicts
+// v4. Modified FuelUX wizard to conform with actual business process instead of template;
+// v5. *NON-WORKING* Attempt to dynamically load and remove (with wizard modal) conflicting script; after moving it to <head>; <script type='text/javascript' src="//fuelcdn.com/fuelux/2.3.1/loader.min.js"></ script>
+// v5. *NON-WORKING* Reference: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml  Google Search Terms: dynamically load javascript // NOT WORKING // ABANDON THIS APPROACH
+// v6. Attempted to implement template from htmlTemplate-Wizard-02.html; .css and .js ...SUCCESS! The key was to replace <label><input type="radio"> with <button ...>
+// v7. Wizard Forms: 1. add functionality 2. improve look/feel
+// -------------------------------------- Code.gs --------------------------------------
+// JSON visualization | viewer: http://chris.photobooks.com/json/default.htm
+// function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
+// Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
+function auth    (){}
+function timer   (){Logger.log(new Date().getTime())}//1388228703613
+function backup  (){var desc="Argenta™ Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print_dbScript(){var desc="Argenta™ Print — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"note"});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"TaxLienExchange Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function size    (){var db=ScriptDb.getMyDb();Logger.log(/*ScriptDb.getMyDb()*/db.query({}).getSize());}
+function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
+function showOne (){Logger.log(/*Utilities.jsonStringify*/JSON.stringify(ScriptDb.getMyDb().query({item:"eXjKqn1"/*/table:"note"/* /"user",user:"atlaslive@gmail.com",seller:true/*,city:"test"*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function showAll (){var db=ScriptDb.getMyDb(),r,results=db.query({});while(results.hasNext()){r=results.next();Logger.log(/*Utilities.jsonStringify*/JSON.stringify(r));return arr}} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
+function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2fipwhwd75f9M6jkzvWk4TZmOzH2A4uRg"/*act*/)}
+function print2doc(str,proj,clas){var desc="Backup | "+proj+" | "+clas+" | timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id)}
+//function del     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({xtable:"note"/*,/*source:"fciEx_foo",* /table:db.not("report"),* /timestamp_posted:db.greaterThan(1388548425377),k:"8u0hjrtbd68s3hi1w9kl",/*"36sgd2m257w2j0sn5isa",* /"report"/* /"bid"/*"user"* /,xcity:"test"/*xseller:true,xuser* /,bidder:"atlaslive@gmail.com"*/});while(results.hasNext()){arr.push(results.next().getId());}db.removeByIdBatch(arr,false);} // Replaced: while(results.hasNext()){r=results.next();db.remove(r);}}
+//function mod     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({/*item* /city:true,/*db.not(db.anyValue())/*/xtable:"note"/*,pctLtv:db.between(0,1.1),lienPos:db.not(1)/*,/*use* /lienPos:db.anyOf(["1st"/*false,db.not(db.anyValue())/*"Hospitality"/*"Commercial"/*"Apt","Multifamily"* /])/*"Oth"/* /"bid"*/});while(results.hasNext()){r=results.next();try{r.pctLtv=Math.round(100*r.balCur/r.estValue)}catch(e){r.pctLtv="";Logger.log(e.message)}/*r.lienPos=1;/*LibraryjsUtil.stateConvert(r.state,"abbr");/*.use="X";/*"CRE";/*"MUL";/*r.city=LibraryjsUtil.toCaseTitle(r.city);/*r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));/*if(r.askPrice==""){r.askPrice=0}/* /r.remove=false;r.accepted=false;/*r.askRate=r.buyRate;r.askPrice=r.buyPts;* /r.bids=[];/*r.table="note";r.datePosted=new Date().getTime();* /var i=r.bids.length;while(i--){/*r.bids[i].timestamp=r.bids[i].time;* /r.bids[i].accepted=false;/*r.bids[i].target_id=r.getId();* /r.bids[i].time=""/* /if(r.bids[i].bidder=="atlaslive@gmail.com"){r.bids.splice(i,1)}* /db.save(r);*/arr.push(r);}db.saveBatch(arr,false)}
+//function xdoPost(e){ScriptDb.getMyDb().save(e.parameters);/*return;*/var out=ContentService.createTextOutput();out.setContent(JSON.stringify(e.parameters));return out;} // CreditReady: userId=2472, pswd=p@ssword, url=https://secure.progrexion.com/fsaffiliates/creditready/ // https://developers.google.com/apps-script/uiapp?hl=en#doGetParams // https://developers.google.com/apps-script/content_service?hl=en // Example: // <SCRIPT URL>?start=1325437200&end=1325439000;new Date(Number(request.parameters.start)*1000);new Date(Number(request.parameters.end)*1000));
+function  doPost(e){ // function xdoPost(e){return ContentService.createTextOutput("Hello World"/*"User says: "+JSON.stringify(e)*/)} // e.postData.getDataAsString()
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /* receive from fci */ "u2bmkg3mfkmwrxm0sc6p" : return receiveScrape (p,"fciEx"     ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from nmp */ "01ql19lrwaw5ow7svkti" : return receiveScrape (p,"noteMktPl" ) ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+            case   /* receive from ml  */ "yq6c90r2fcfrou9ag272" : return receiveScrape (p,"moolahList") ; break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
+         default                                                 :                                       ; break;}}}
+// function xdoGet (e){return ContentService.createTextOutput("Hello World")}
+function  doGet (e){ // References : https://developers.google.com/apps-script/uiapp, https://developers.google.com/apps-script/uiapp#ServerHandlers
+    if(e && e.parameter && e.parameter.k){var k=e.parameter.k,m=e.parameter.m,p=e.parameter;switch(k){
+            case   /*                      */ "5ydig15fw4m0c9pkbvr0" : var t= HtmlService.createTemplateFromFile("home");t.m=m;return HtmlService.createHtmlOutput/*FromFile*/(t.evaluate().getContent()).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycby6VLDr3BVAl2vfNFykwoCScAuKFX0_cOqmHzciRUR62OixQCk/exec?k=5ydig15fw4m0c9pkbvr0&m=5serbc4k7ciprmzfszhd // Added URL parameter passed to HTML page
+		//  case   /*                      */ "5ydig15fw4m0c9pkbvr0" : return HtmlService.createHtmlOutput/*FromFile*/(HtmlService.createTemplateFromFile("home").evaluate().getContent()               ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycby6VLDr3BVAl2vfNFykwoCScAuKFX0_cOqmHzciRUR62OixQCk/exec?k=5ydig15fw4m0c9pkbvr0 // .IFRAME is necessary to make glyphicons work so use this "nesting" approach
+    	//  case   /*                      */ "5ydig15fw4m0c9pkbvr0" : return HtmlService.createTemplateFromFile  ("home.html"                                                                          ).evaluate()                                                     ;break; // .IFRAME is necessary to make glyphicons work so use above "nesting" approach
+            case   /*                      */ "60s6kgeyb91lkz128c9o" : return HtmlService.createHtmlOutputFromFile("repeater.html"                                                                      ).setSandboxMode(HtmlService.SandboxMode.IFRAME)                 ;break; // https://script.google.com/macros/s/AKfycby6VLDr3BVAl2vfNFykwoCScAuKFX0_cOqmHzciRUR62OixQCk/exec?k=60s6kgeyb91lkz128c9o
+	        case   /* table  serve         */ "hyg0hu5umfobawuzwi1f" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveTable           ( )) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+            case   /* table  receive       */ "owos3zj5e6xvcmu6lje1" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveTable         (p)) + ")"             ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
+         default                                                     : break;}}
+	if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
+            case   "taxlienexchange"               : 
+					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+                            case   "home"          : return HtmlService.createTemplateFromFile  (       "order.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "account"       : return HtmlService.createTemplateFromFile  (     "account.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                            case   "charts"        : return HtmlService.createTemplateFromFile  (       "chart.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-up"       : return HtmlService.createTemplateFromFile  (      "signUp.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "sign-in"       : return HtmlService.createTemplateFromFile  (      "signIn.html").evaluate()                                      ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
+                         // case   "home"          : return HtmlService.createHtmlOutputFromFile(       "order.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+                         // case   "authorize"     : return authorize ();break;
+                         default                   :                    ;break;}}
+        //  case   "creditrepairnation"            : // acquire inventory
+		//			if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
+        //                  case   "home"          : return HtmlService.createHtmlOutputFromFile(     "collect.html").setSandboxMode(HtmlService.SandboxMode.NATIVE  );break;
+		//  			 default                   :                    ;break;}}
+         default                                   : break;}}}
+function authorize(){return HtmlService.createHtmlOutput("<div align='center' style='color:#808080;font-family:verdana;color:orange;font-weight:bold;margin-top:15px;'>Authorization successful!<div style='color:#808080;font-size:smaller;font-weight:normal;'>You may now access all features</div><img src='https://lh5.googleusercontent.com/-a81AytXYq0Q/Umtn0FrFdhI/AAAAAAAAIyE/xCYArSNCR1k/s144/orange-check-mark.png' height='100'></div>")}
+//function test(){print2doc(JSON.stringify(DateNightMovieFinder.getFandango("98148")))}
+//function test(){print2doc(JSON.stringify(getFilmSwap("98148")))}
+function getProjectProperties(zip,fan,key){zip=zip||"98148";fan=fan||DateNightMovieFinder.getFandango(zip);//key=key||"01232456789abcdefghijk";
+	/* Data Object Model
+	Class   "projectProperties" : {
+	Field Names                   "zips" :               {
+														 "12345" : ["AAAB","AAAC",...,<tids>] // Competitive theaters
+														 }
+								, "theatersById"       : {
+														 "AAAB" : {
+																  "tid"               : "AAAB"
+																, "theaterLink"       : "http://www.fandango.com/amcsouthcenter16_aauxg/theaterpage?q=98148"
+																, "theaterAddyLink"   : "http://www.fandango.com/maps/DrivingDirections.aspx?tid=AANJP"
+																, "theaterAddyString" : "5910 South 180th St, Tukwila, WA 98188"
+																, "theaterName"       : "Regal Parkway Plaza Stadium 12"
+													// computed , "paramKey"          : "01232456789abcdefghi..."  // per LibraryjsUtil.getStringsRandom()
+													// computed , "zip"               : "98081" // per: var ar=r.theaterAddyString.split(" ");r.zip=ar[ar.length-1];
+																  }
+													   , "AAAC" : {
+																  ...
+																  }
+														 }
+								, "theatersByParamKey" : {
+														 "01232456789abcdefghijk" : "AAAB"
+													   , "01232456789abcdefghijl" : "AAAC"
+														 }
+								  }
+	*/
+    var out={},str,ft=fan.theaters,p=LibraryjsUtil.dbParse({verb:"get",project:"filmSwap",className:"projectProperties"}).results[0]//@param{string} zip 5-digit zip code //@param{object} fan return object of DateNightMovieFinder.getFandango(zip) (run by a prior call) //@param{string} key 20-digit URL parameter //@return{object} {user:{tid:str,},showings:{codename:str,movieId:str;showcount:int}} //@return{void} Find new theaters, assign ID parameter keys and save to projectProperties 
+      , u=p["theatersById"][p["theatersByParamKey"][key]],i=ft.length,ar=LibraryjsUtil.getStringsRandom({num:i});
+      if(!p["zips"][zip]){p["zips"][zip]=[]}str=p["zips"][zip].toString();while(i--){
+      if(!p["theatersById"][ft[i].tid]){delete ft[i].showings;ft[i].zip=ft[i].zip||function(){var arr=ft[i].theaterAddyString.split(" ");return arr[arr.length-1]}();ft[i].paramKey=ft[i].paramKey||ar.shift();p["theatersById"][ft[i].tid]=ft[i];p["theatersByParamKey"][ft[i].paramKey]=ft[i].tid;
+          if( str.indexOf( ft[i].tid)==-1){p["zips"][zip].push(ft[i].tid)}
+      }else if( u&&(u.tid==ft[i].tid)){out.showings=ft[i].showings}}
+    LibraryjsUtil.dbParse({verb:"put",project:"filmSwap",className:"projectProperties",obid:p.objectId,ob:p})
+    out.user=u;return out}//function test(){Logger.log(JSON.stringify(getProjectProperties()))}
+function getBoxOfficeMojo(y,w){var act="http://boxofficemojo.com/weekend/chart/?view=main&yr="+y+"&wknd="+w/*07&sort=wknum&order=ASC*/+"&p=.htm"//@param{integer} w Week //@param{integer} y Year // Primary URL: http://boxofficemojo.com/weekend/chart/?view=main&yr=2014&wknd=10&sort=wknum&order=ASC&p=.htm // Additional data source: http://boxofficemojo.com/daily/chart/?view=7day&sortdate=2015-03-07&p=.htm
+    ,str=UrlFetchApp.fetch(act).getContentText().split("Standard Chart")[1].split("<table ").slice(1).join("<table ").replace(" (click to view)","").replace("> / <","></td><td><"),ob=LibraryjsUtil.htmlTable2object(str)//;Logger.log(str);
+    ;ob.links=LibraryjsUtil.extractHyperlinks(str)//;return ob} // Replaces attempt to attach links to extracted cells e.g., in extractHtmlTag(){...if(tag=="td"||tag=="th"){var i=ar.length;while(i--){var arr  =extractHyperlinks(ar[i]);if(arr&&arr.length){ar[i].push(arr)}}} // Extract hyperlinks from td (or th) cells only ...}
+    ;ob.th=ob.th.concat(["lw_weekendGross","lw_theaterCount","lw_avgGrossPerTheater","tw_weekendGross","tw_theaterCount","tw_avgGrossPerTheater","pctChg_avgGrossPerTheater","movieTitleCodename"])
+    ;var i=ob.tr.length-1;while(i--){var weg=LibraryjsUtil.str2num2(ob.tr[i][4]),wegc=LibraryjsUtil.str2num2(ob.tr[i][5]),tc=LibraryjsUtil.str2num2(ob.tr[i][6]),tcc=LibraryjsUtil.str2num2(ob.tr[i][7])
+        ,lwwg=/*lw_weekendGross*/parseInt(weg/(1+wegc/100)),lwtc=/*lw_theaterCount*/tc-tcc,lwgpt=/*lw_avgGrossPerTheater*/parseInt(lwwg/lwtc)
+        ,twwg=/*tw_weekendGross*/         weg              ,twtc=/*tw_theaterCount*/tc    ,twgpt=/*tw_avgGrossPerTheater*/parseInt(twwg/twtc),pcagpt=parseInt(1000*(twgpt/lwgpt-1))/10
+		;try{var mtcn=LibraryjsUtil.str2codename(ob.tr[i][2])}catch(e){var mtcn=false;Logger.log("Error Vb7z4: "+e.message+"\n"+JSON.stringify(ob.tr[i]))}
+         ob.tr[i]=ob.tr[i].concat([lwwg,lwtc,lwgpt,twwg,twtc,twgpt,pcagpt,mtcn])} //tw=lw*(1+c/100);lw=tw/(1+c/100)|lw=100;c=25;tw=125|lw=125/(1+25/100)=125/1.25=100
+    ;return ob}//function test(){/*Logger.log*/print2doc(JSON.stringify(getBoxOfficeMojo(2015,8)),"DNMF","Mojo")}
+function getBoxOfficeMojo_stats(y,w){y=y||2014;w=w||45;var out=[],temp=[],SSID="1qonPFn0qls36RSE3Bv82c4R8gslcQVSf8dlQE665tj8",arr=[2,11,18,16,17],ar=getBoxOfficeMojo(y,w).tr,j,i=ar.length;while(i--){
+    temp[i]=[];j=arr.length;while(j--){try{temp[i][j]=ar[i][arr[j]];if((temp[i][0].length&&temp[i][1]>1)&&((temp[i][2]==1*temp[i][2])&&temp[i][3]>50)){out.push(temp[i])}}catch(e){Logger.log(i+"-"+j+" "+e.message)}}}//Logger.log(JSON.stringify(out));
+    LibraryjsUtil.write2ss(false,out,(y+"-"+w),SSID,true)}//function test(){/*Logger.log/*print2doc* /(JSON.stringify(*/getBoxOfficeMojo_stats(2014,10)}//))}
+function getFilmSwap(u/*z*/){/*z=z||"98148";* /if(typeof u=="string"){u={zip:u}}*/var out=[],ob={},show,x,j,d=new Date(),y=d.getFullYear(),w=LibraryjsUtil.date2weekOfYear(d),moj=getBoxOfficeMojo(y,w),fan=DateNightMovieFinder.getFandango(u.zip),rt=DateNightMovieFinder.getRottenTomatoes()
+   ,i=rt.length        ;while(i--){rt[i].movieTitleCodename=LibraryjsUtil.str2codename(rt[i].title)}
+   ;i=fan.movies.length;while(i--){ob[fan.movies[i].movieTitleCodename]=fan.movies[i]}//Logger.log(JSON.stringify(ob));
+    i=moj.tr.length;while(i--){
+    j=moj.th.length;out[i]={};while(j--){out[i][moj.th[j]]=moj.tr[i][j]}
+        out[i].mktTheaters=[];out[i].mktShowings=[];j=fan.theaters.length;while(j--){if(fan.theaters[j].tid==u.tid){show=fan.theaters[j].showings}if(fan.theaters[j].showings&&fan.theaters[j]["showings"][out[i].movieTitleCodename]){
+        out[i].mktTheaters.push({tid:fan.theaters[j].tid,name:fan.theaters[j].theaterName})}}//;out[i].mktShowings+=fan.theaters[j]["showings"][out[i].movieTitleCodename]["showcount"]
+        out[i].mktTheatersCount=out[i].mktTheaters.length;x=LibraryjsUtil.queryArray(fan.movies,{movieTitleCodename:out[i].movieTitleCodename},"POSITION","FIRST");if(x){
+    try{out[i].mktShowings   =fan.movies[x].movieTimes.length       }catch(e){Logger.log(e.message)}}else{
+        out[i].mktTheatersCount=0;out[i].mktShowings=0}   x=LibraryjsUtil.queryArray(rt,        {movieTitleCodename:out[i].movieTitleCodename},"POSITION","FIRST");if(x){
+    try{out[i].audience_score=rt[x].ratings.audience_score
+       ;out[i].critics_score =rt[x].ratings.critics_score           }catch(e){Logger.log(e.message)}}else{
+        out[i].audience_score="--"
+       ;out[i].critics_score ="--"
+	   }out[i].availShare_theaters=parseInt(out[i].mktTheatersCount?out[i].tw_avgGrossPerTheater*out[i].mktTheatersCount/(out[i].mktTheatersCount+ 1):out[i].tw_avgGrossPerTheater)
+       ;out[i].availShare_showings=parseInt(out[i].mktShowings     ?out[i].tw_avgGrossPerTheater*out[i].mktShowings     /(out[i].mktShowings     +10):out[i].tw_avgGrossPerTheater)
+       }out.sort(LibraryjsUtil.ao_sortBy("availShare_theaters",true,parseInt));out.unshift(show);return out}//function test(){/*Logger.log*/print2doc(JSON.stringify(getFilmSwap({zip:"98118",tid:"AAWVZ"}/*"98118"*/)),"DNMF","FilmSwap")}//@param{string} z zip code
+//function receiveTable(p){var user=(Session.getActiveUser().getEmail())?Session.getActiveUser().getEmail():null;MailApp.sendEmail({name:"TaxLienExchange",to:ob.email,subject:"Your limit order has been filled",htmlBody:(""+p.item+","+p.price+","+p.volume+","+p.type")});if(user){ob.owner=user}/*ob.nameFirst=name[0];ob.nameLast=name[1];*/LibraryjsUtil.dbParse({verb:"post",project:"mojo",className:"invitation",ob:ob})} // Example: @return{objectId="CE05GdsyLR",createdAt=2014-07-16T06:45:19.526Z} // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+function orderSubmit(name,pos,tid){    LibraryjsUtil.dbParse({verb:"update",project:"filmSwap",className:"order",query:{movieTitleCodename:name,client:tid/*"atlaslive"*/},ob:{position:pos,movieTitleCodename:name,client:tid/*"atlaslive"*/}})
+						      //   if(!LibraryjsUtil.dbParse({verb:"count" ,project:"filmSwap",className:"order",query:{movieTitleCodename:name,position:pos,client:"atlaslive"}}).count)
+	                          //  {    LibraryjsUtil.dbParse({verb:"post"  ,project:"filmSwap",className:"order",ob   :{movieTitleCodename:name,position:pos,client:"atlaslive"}});return "Thank you for your order."}
+	                          //  else return "You already have an order matching those details."
+							      }
+function orderMatchArr(arr){//@return{array} Orders matching input array (excludes duplicates and user's own orders) //@param{array} Orders (usually all users orders)
+    var out=[],temp,j,user=cache2user().username/*Session.getActiveUser().getEmail()*/,i=arr.length;while(i--){temp=orderMatch(arr[i]);
+    j=temp.length;while(j--){if(temp[j]["username"/*"email"*/]!=user&&!LibraryjsUtil.queryArray(out,{objectId:temp[j]["objectId"]},"objectId").length){out.push(temp[j])}}}
+    return out}//function test(){var user=Session.getActiveUser().getEmail(),ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",query:{email:user,status:"Open"}}).results;Logger.log(JSON.stringify(orderMatchArr(ar)))}
+function orderMatch(ob){//ob=ob||{price:10,volume:5,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"}//@return{array or false} all open orders "matching" this order or false if no matches //@param{object} ob: the order that needs matching //function test(){Logger.log(JSON.stringify(orderMatch({yield:5.25,volume:5,type:"Buy",name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"})))} //function test(){Logger.log(JSON.stringify(orderMatch({yield:2,volume:5,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"})))}
+    var ar,q={},op=(ob.type=="Sell"/*"Buy"*/)?"$lte":"$gte";q[op]=ob.yield/*price*/;ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",query:{status:"Open",/*price*/yield:q,type:{"$ne":ob.type}},sortBy:"yield"}).results;return ar}//(ar.length>0)?ar:false}//Logger.log(ar)} // Reference: https://www.parse.com/docs/rest#queries
+function orderFill(ob){//For unmatched, new orders.//ob=ob||{price:3.6,volume:500,type:"Buy"/*"Sell"*/,name:"Atlas",phone:"2064862010",email:"atlaslive@gmail.com"}//@return{void} "fills" all open orders "matching" this order //@param{object} ob: the order that needs matching
+    var bal=ob.volume,ar=orderMatch(ob)/*.results.sort(function(a,b){var x="price";return(a[x]-b[x])})*/,i=ar.length;if(ob.type=="Buy"){ar.reverse()}//Logger.log(JSON.stringify(ar)); // Reference: https://www.parse.com/docs/rest#queries
+    while(bal&&i--){                      ar[i].status               = "Pending"              ;
+                                      //  ar[i].counterpartyName     = ob.name                ;
+                                      //  ar[i].counterpartyPhone    = ob.phone               ;
+                                      //  ar[i].counterparty         = ob.objectId            ;
+                                          ar[i].counterparty/*Email*/= ob.email               ;
+                                          if(bal>=ar[i].volume){bal -= ar[i].volume           }
+                                          else                 {       ar[i].volume-=bal;bal=0}
+                                          LibraryjsUtil.dbParse({verb:"put" ,project:"taxLienExchange",className:"order",ob:ar[i],obid:ar[i].objectId})
+                   }if(bal){ob.volume=bal;LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"order",ob:ob                       })}}
+//function receive_signIn    (ob){var u=LibraryjsUtil.dbParse({verb:"get"  ,project:"taxLienExchange",className:"User",ob:ob});LibraryjsUtil.user2cache(u);                                          return u} // function test(){Logger.log(JSON.stringify(receive_signIn({username:"cooldude6",password:"p_n7!-e8"})))}                               // returns: {"email":"atlaslive@gmail.com","objectId":"oNweYCKVG3","sessionToken":"SCAEaM99PJTc9qbd1BWUSXkp2","username":"cooldude6"}
+//function receive_resetPw   (ob){var u=LibraryjsUtil.dbParse({verb:"reset",project:"taxLienExchange",className:"User",ob:ob})                                                                               } // function test(){Logger.log(JSON.stringify(receive_resetPw({email:"atlaslive@gmail.com"})))}                                           // returns: undefined
+//function receive_signUp    (ob){var u=LibraryjsUtil.dbParse({verb:"post" ,project:"taxLienExchange",className:"User",ob:ob});LibraryjsUtil.user2cache(u)             ;LibraryjsUtil.user2cache(ob);return u} // function test(){Logger.log(JSON.stringify(receive_signUp({username:"cooldude6",password:"p_n7!-e8",email:"atlaslive@gmail.com"})))}   // returns: {"objectId":"GNsC2EqFaC","sessionToken":"KSMjeVVDnBsx3pBerimoykjcA"}
+//function receive_userUpdate(ob){var u=LibraryjsUtil.dbParse({verb:"put"  ,project:"taxLienExchange",className:"User",ob:ob,obid:LibraryjsUtil.cache2user().objectId});LibraryjsUtil.user2cache(ob);return u} // function test(){Logger.log(JSON.stringify(receive_userUpdate({name:"x",phone:"y",company:"z",emailList:"a,b,c",obid:"jUEp6HTjUv"})))} // returns: {"updatedAt":"2014-12-18T02:55:59.117Z"}
+//function userUpdate_receive(ob){var u=Session.getUser().getEmail();/*LibraryjsUtil.dbParse("put","taxLienExchange","user",{email:u},{current:false});*/ob.email=u;return LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"user",ob:ob})}//ob.price=Number(ob.price);ob.volume=Number(ob.volume);
+function order_receive(ob){var AR=["yield","volume"],i=AR.length;while(i--){ob[AR[i]]=Number(ob[AR[i]])}ob.username=cache2user().username;ob.status="Open";orderFill(ob)}//ob.email=Session.getUser().getEmail();//Handled by orderFill(ob):return LibraryjsUtil.dbParse({verb:"post",project:"taxLienExchange",className:"order",ob:ob})}//ob.price=Number(ob.price);ob.volume=Number(ob.volume);
+function order_cancel (id){var user=cache2user().username/*Session.getActiveUser().getEmail()*/;LibraryjsUtil.dbParse({verb:"put",project:"taxLienExchange",className:"order",obid:id,ob:{status:"Cancelled",counterparty:user}})}
+function order_fill   (id){var user=cache2user().username/*Session.getActiveUser().getEmail()*/;LibraryjsUtil.dbParse({verb:"put",project:"taxLienExchange",className:"order",obid:id,ob:{status:"Pending"  ,counterparty:user}}) // For matched, existing orders. Contrasted with orderFill() which is for unmatched new orders.
+    }//MailApp.sendEmail(["a.handy@sofadvisory.com","atlaslive@gmail.com"],"Argenta! was called "+out.Argenta.apiCalls+" times","during the 24-hour period ending "+out.date/*,{name:"Atlas",htmlBody:""}*/)}
+function serveTable(){var r,ob=[]//,d=new Date(),t=d.getTime(),user=Session.getUser().getEmail(),ar=LibraryjsUtil.dbParse("get","taxLienExchange"/*"marketMaker"*/,"order"/*,{owner:user},{status:"Open"}*/).results.sort(function(a,b){var x="price";return(a[x]-b[x])})
+                                                                                                 ar=LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",sortBy:"yield"}).results,i=ar.length,out={"totalResultsCount":i+1,"records":[]};while(i--){out.records[i]={};r=ar[i];
+	ob[i] = {
+		"nolink"                         : {
+				"item"                   : function(){try{return            r.objectId                              }catch(e){Logger.log(e.message);return "";}}() //
+			,	"email"                  : function(){try{return            r.email                                 }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"fill"                   : function(){try{return              false                                 }catch(e){Logger.log(e.message);return "";}}() //
+			,	"price"                  : function(){try{return                                r.yield             }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"priceStr"               : function(){try{return LibraryjsUtil.num2cur         (r.price,2)          }catch(e){Logger.log(e.message);return "";}}() //
+			,	"priceStr"               : function(){try{return            r.yield.toFixed(2)+"%"                  }catch(e){Logger.log(e.message);return "";}}() //
+			,	"status"                 : function(){try{return            r.status                                }catch(e){Logger.log(e.message);return "";}}() //
+			,	"datePosted"             : function(){try{return LibraryjsUtil.dateStrings2daysDiff(r.createdAt)    }catch(e){Logger.log(e.message);return "";}}() //
+			,	"dateFilled"             : function(){try{return LibraryjsUtil.dateStrings2daysDiff(r.updatedAt)    }catch(e){Logger.log(e.message);return "";}}() //
+			,	"type"                   : function(){try{return            r.type                                  }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
+			,	"volume"                 : function(){try{return                                r.volume            }catch(e){Logger.log(e.message);return "";}}() //
+		//	,	"volStr"                 : function(){try{return LibraryjsUtil.numberWithCommas(r.volume  )         }catch(e){Logger.log(e.message);return "";}}() //
+			,	"volStr"                 : function(){try{return LibraryjsUtil.num2cur         (r.volume,0)         }catch(e){Logger.log(e.message);return "";}}() //
+										   }
+	,	"link"		                     : {}
+	}
+	var keys=Object.keys(ob[i].nolink),z=keys.length;while(z--){out.records[i][keys[z]]=              ob[i].nolink[keys[z]]                                   }
+	    keys=Object.keys(ob[i].  link),z=keys.length;while(z--){out.records[i][keys[z]]='<a href="' + ob[i].  link[keys[z]] + '" target="_blank">&#10151;</a>'}//Logger.log(JSON.stringify(out.records[i]));
+	}return out}//Logger.log(JSON.stringify(out))}
+-------------------------------------- form.html (a template kit for implementing forms; must be unpacked) --------------------------------------
+function processForm(formObject){var formBlob=formObject.myFile,driveFile=DriveApp.createFile(formBlob);return driveFile.getUrl()} // Goes in Code.gs // Reference: https://developers.google.com/apps-script/guides/html-service-communication#forms
+<form id="myForm"><input name="myFile" type="file"><input type="button" value="Submit" onclick="google.script.run.withSuccessHandler(updateUrl).processForm(this.parentNode);this.parentNode.reset()"></form><div id="output"></div><script>function updateUrl(url){document.getElementById("output").innerHTML='<a href="'+url+'">Got it!</a>'}</script><!--Goes in index.html; Reference: https://developers.google.com/apps-script/guides/html/communication#forms-->
+-------------------------------------- chart.html --------------------------------------
+<!DOCTYPE html><html>
+<head>
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!--                                         Grey                                                              Blue                                                              Brown                                                             Green                                                             Purple                                                            Red                                                        -->
+<!--<link rel="stylesheet" type="text/css" href="https://googledrive.com/host/0B1LVOoV_2dFtMEQxYks5SnY4UDQ" xhref="https://googledrive.com/host/0B1LVOoV_2dFtSEtlUmdQcEZWUEE" xhref="https://googledrive.com/host/0B1LVOoV_2dFtUnBXa242eGlpdzg" xhref="https://googledrive.com/host/0B1LVOoV_2dFtMXFxVFFqalRyNGs" xhref="https://googledrive.com/host/0B1LVOoV_2dFtOTlfTU9xQ1RueWM" xhref="https://googledrive.com/host/0B1LVOoV_2dFta1NwUVZheXR0ZFE"  />
+<!--<link rel="stylesheet"                 href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Reference: https://developers.google.com/apps-script/add-ons/css -->
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bo/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> <!-- Optional theme -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+    <style></style>
+</head>
+<body><div class="container-fluid">
+    <?var r=LibraryjsUtil.getBankRates();?>
+	<div class="row">
+	<div class="col-xs-5 col-xs-offset-3"><div class="panel panel-default"><div class="panel-heading" xstyle="text-align:center">Bond Yield and Market Rate Indexes
+						  <!--<span class="glyphicon glyphicon-question-sign"></span>--><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="The Bond Buyer 20 bond index is a barometer for yields on tax-free bonds issued by state governments and local municipalities. The Fannie Mae 30-year mortgage commitment for delivery within 60 days helps mortgage lenders determine what rates to charge on 30-year fixed rate mortgages that are to be sold to Fannie Mae within the next 60 days. The LIBOR rates, which stand for London Interbank Offered Rate, are benchmark interest rates for many adjustable rate mortgages, business loans, and financial instruments traded on global financial markets."></div>
+		<div class="panel-body datagrid" xclass="" xstyle="margin:auto;width:300px;xwidth:50%">
+		<table class="table table-striped table-hover" xstyle="text-align:center;margin:auto;width:100%"><thead><th></th><th></th><th>This week</th><th>Month ago</th><th>Year ago</th></thead><tfoot><tr><td colspan="5" style="font-size:80%;text-align:right">Updated: <?=r.updated?></td></tr></tfoot>
+		<tbody>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: Bond Buyer is a daily publication, commonly known as the Red Book, featuring many essential statistics and index figures relative to the fixed income markets. This index tracks the prices of a selected group of municipal bonds. How it’s used: It’s an index that is used to set the cost of municipal debt. It helps indicate the direction of municipal bond prices, but otherwise has little impact on most ordinary investors."></td>
+		    <td>Bond Buyer’s 20 bond index    </td><td><?=r.bb_wk  ?></td><td><?=r.bb_mo  ?></td><td><?=r.bb_yr  ?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: FFNMA is the stock symbol for Fannie Mae, a corporation created by Congress to support the secondary mortgage market. It buys mortgages from lenders, securitizes them, and sells the securities to investors. The index measures mortgage commitments (Mtg Com) for delivery (del) within 30 to 60 days; that is the required net yield on mortgage loans that lenders sell to FNMA, which in turn sells mortgage-backed securities to investors. How it’s used: It’s an index that is used primarily by lenders that sell their loans to Fannie Mae. The lenders use it to price their loans. It has little direct impact on ordinary investors."></td>
+		    <td>FNMA 30 yr Mtg Com del 60 days</td><td><?=r.fm_wk  ?></td><td><?=r.fm_mo  ?></td><td><?=r.fm_yr  ?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: This is the interest rate charged by banks to brokers for money used to finance investors’ margin loans. How it’s used: This is the benchmark rate for what investors pay to buy securities on margin. A service charge or markup is typically added by the broker."></td>
+		    <td>Call Money                    </td><td><?=r.cm_wk  ?></td><td><?=r.cm_mo  ?></td><td><?=r.cm_yr  ?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: LIBOR stands for London Interbank Offered Rate. It’s the rate of interest at which banks offer to lend money to one another in the wholesale money markets in London. It is a standard financial index used in U.S. capital markets and can be found in the Wall Street Journal. In general, its changes have been smaller than changes in the prime rate. How it’s used: It’s an index that is used to set the cost of various variable-rate loans. Lenders use such an index, which varies, to adjust interest rates as economic conditions change. They then add a certain number of percentage points called a margin, which doesn't vary, to the index to establish the interest rate you must pay. When this index goes up, interest rates on any loans tied to it also go up. Although it is increasingly used for consumer loans, it has traditionally been a reference figure for corporate financial transactions."></td>
+		    <td>1 Month LIBOR Rate            </td><td><?=r.L30_wk ?></td><td><?=r.L30_mo ?></td><td><?=r.L30_yr ?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: LIBOR stands for London Interbank Offered Rate. It’s the rate of interest at which banks offer to lend money to one another in the wholesale money markets in London. It is a standard financial index used in U.S. capital markets and can be found in the Wall Street Journal. In general, its changes have been smaller than changes in the prime rate. How it’s used: It’s an index that is used to set the cost of various variable-rate loans. Lenders use such an index, which varies, to adjust interest rates as economic conditions change. They then add a certain number of percentage points called a margin, which doesn't vary, to the index to establish the interest rate you must pay. When this index goes up, interest rates on any loans tied to it also go up. Although it is increasingly used for consumer loans, it has traditionally been a reference figure for corporate financial transactions."></td>
+		    <td>3 Month LIBOR Rate            </td><td><?=r.L90_wk ?></td><td><?=r.L90_mo ?></td><td><?=r.L90_yr ?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: LIBOR stands for London Interbank Offered Rate. It’s the rate of interest at which banks offer to lend money to one another in the wholesale money markets in London. It is a standard financial index used in U.S. capital markets and can be found in the Wall Street Journal. In general, its changes have been smaller than changes in the prime rate. How it’s used: It’s an index that is used to set the cost of various variable-rate loans. Lenders use such an index, which varies, to adjust interest rates as economic conditions change. They then add a certain number of percentage points called a margin, which doesn't vary, to the index to establish the interest rate you must pay. When this index goes up, interest rates on any loans tied to it also go up. Although it is increasingly used for consumer loans, it has traditionally been a reference figure for corporate financial transactions."></td>
+		    <td>6 Month LIBOR Rate            </td><td><?=r.L180_wk?></td><td><?=r.L180_mo?></td><td><?=r.L180_yr?></td></tr>
+		<tr><td><!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="What it means: LIBOR stands for London Interbank Offered Rate. It’s the rate of interest at which banks offer to lend money to one another in the wholesale money markets in London. It is a standard financial index used in U.S. capital markets and can be found in the Wall Street Journal. In general, its changes have been smaller than changes in the prime rate. How it’s used: It’s an index that is used to set the cost of various variable-rate loans. Lenders use such an index, which varies, to adjust interest rates as economic conditions change. They then add a certain number of percentage points called a margin, which doesn't vary, to the index to establish the interest rate you must pay. When this index goes up, interest rates on any loans tied to it also go up. Although it is increasingly used for consumer loans, it has traditionally been a reference figure for corporate financial transactions."></td>
+		    <td>1 Year LIBOR Rate             </td><td><?=r.L365_wk?></td><td><?=r.L365_mo?></td><td><?=r.L365_yr?></td></tr>
+		</tbody></table></div></div></div></div></div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+</body></html>
+-------------------------------------- account.html --------------------------------------
+<!-- See file called htmlTemplate-Account -->
+-------------------------------------- order.html --------------------------------------
+<!DOCTYPE html><html><!-- Transfer .fuelux class to interior elements to avoid conflicts eg., .navbar .modal etc. -->
+<head>
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+	<link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<style>
+    </style>
+</head>
+<body>
+      <?var S="",user="x",u=cache2user(),disabled=u?"":"disabled"; // Copy/paste from account.html
+	    var user=/*(Session.getActiveUser().getEmail())*/u.email?/*Session.getActiveUser().getEmail()*/u.email:"disabled",arr,mm=orderMatchArr(LibraryjsUtil.dbParse({verb:"get",project:"taxLienExchange",className:"order",query:{email:user,status:"Open"}}).results)
+	            ,ar_mm=[],ar_ao=[],ar_mo=[],ar_ap=[],ar_mp=[],ar_ac=[],ar_mc=[],ar_ob=[],ar_os=[],ar=serveTable().records,i=ar.length;while(i--){
+		    if(ar[i].status=="Pending"){ar_ap.push(ar[i]);        if(ar[i].email==user ){ar_mp.push(ar[i])}} // Load pending arrays , All + My
+		    if(ar[i].status=="Closed" ){ar_ac.push(ar[i]);        if(ar[i].email==user ){ar_mc.push(ar[i])}} // Load closed  arrays , All + My
+		    if(ar[i].status=="Open"   ){ar_ao.push(ar[i]);        if(ar[i].email==user ){ar_mo.push(ar[i])}  // Load open    arrays , All + My
+                                                                  if(ar[i].type=="Buy" ){ar_ob.push(ar[i])}  // Load open             Orders Buy
+                                                             else if(ar[i].type=="Sell"){ar_os.push(ar[i])}} // Load open             Orders Sell
+		    if(LibraryjsUtil.queryArray(mm,{objectId:ar[i]["item"]},"objectId").length ){ar_mm.push(ar[i]) } // Load Matched orders ,       My
+	   }//Below two lines replace this line //arr=ar_ao;var mp,i=arr.length,temp=arr[i-1].type;while(i--){if(temp!=arr[i].type){mp=[arr[i].price,arr[i+1].price].sort(function(a,b){return(a-b)});break}else{temp=arr[i].type}}
+        var mktBuy  = function(){if(!ar_ob.length){return{price:"--",item:"--"}}else{return ar_ob.sort(function(a,b){var x="price";return(a[x]-b[x])})/*.reverse()*/[0]}}();
+        var mktSell = function(){if(!ar_os.length){return{price:"--",item:"--"}}else{return ar_os.sort(function(a,b){var x="price";return(a[x]-b[x])})  .reverse()  [0]}}();
+		?>
+<div class="container container-fluid">
+<?!=u?"":LibraryjsUtil.signInMsg()?>
+	<div class="col-xs-3 xcol-xs-offset-3">
+        <div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">My Open Orders
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all your unfilled orders. Click “Cancel” to delete.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Type</th>
+                        <th title="Cancel order"><!--&#x2717;--></th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_mo.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <td style="text-align:center" title="">
+                                    <?=arr[i].type?>
+                                </td>
+                                <td>
+                                    <button autocomplete="off" role="button" class="btn btn-default btn-xs" onClick="myFunction_orderCancel(<?=arr[i].item?>)" name="cancelOrder" title="Click to cancel order.">Cancel</button>
+                                    <!--<input type="checkbox" xchecked onClick="myFunction_orderCancel(<?=arr[i].item?>)" name="cancelOrder" title="Check to cancel order.">-->
+                                    <!--<div class="checkbox checkbox-custom" id="myCheckbox" data-initialize="checkbox">
+											<input autocomplete="off" type="checkbox" xchecked class="sr-only" onClick="myFunction_orderCancel(<?=arr[i].item?>)" name="cancelOrder" title="Check to cancel order." value="">
+										</div>-->
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!--<div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">My Matched Orders
+                <!--<span class="glyphicon glyphicon-question-sign"></span>-- ><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="All open orders that “match” your open orders; i.e., potential counterparties. Click “Accept” button to move it on to “Pending.”">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-- >
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Type</th>
+                        <th><!--Fill-- ></th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-- >
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_mm.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <td>
+                                	<?var t_out=["--","--"];if(arr[i].type=="Buy"){t_out=["Sell","danger"]}else if(arr[i].type=="Sell"){t_out=["Buy","success"]}else{t_out=["--","default"]}?>
+									<button autocomplete="off" <?=user?> type="button" class="btn btn-block btn-xs btn-<?=t_out[1]?>" role="button" id="fillOrder" xvalue="Submit Order" onclick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderFill(<?=arr[i].item?>)}" title="Click to fill this order.">
+										<?=t_out[0]?>
+									</button>
+                                <!--<input autocomplete="off" <?=user?> type="checkbox" xchecked onClick="myFunction_orderFill(<?=arr[i].item?>)" name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa.">-- >
+                                </td>
+                                <td style="text-align:center" title="">
+                                    <?=arr[i].type?>
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    --> <div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">My Pending Transactions
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all your filled orders in process to close.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Type</th>
+                        <th title="Cancel order"><!--&#x2717;--></th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_mp.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <td style="text-align:center" title="">
+                                    <?=arr[i].type?>
+                                </td>
+                                <td>
+                                    <button autocomplete="off" role="button" class="btn btn-default btn-xs" onClick="myFunction_orderCancel(<?=arr[i].item?>)" name="cancelOrder" title="Click to cancel order.">Cancel</button>
+                                <!--<input autocomplete="off" type="checkbox" xchecked onClick="myFunction_orderCancel(<?=arr[i].item?>)" name="cancelOrder" title="Click to cancel order.">-->
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">My Closed Transactions
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of most recent closed trades.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Type</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_mc.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:center" title="This is what your counterparty wants to do. If this column says Buy, then to fill the order, you will Sell. And vice versa.">
+                                    <?=arr[i].type?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <!--<td><input autocomplete="off" type="checkbox" xchecked xonClick="alert('A')"  name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa."></td>-->
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3 xcol-xs-offset-3">
+        <div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">Limit Order
+            <!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="Place your indicative (non-binding) “limit order” for a tax lien certificate here. A limit order is an order where you specify your buy or sell price and wait for a counterparty to come along and match it. Or, you can look at open orders and match one that has already been placed.">-->
+                <img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Place your indicative (non-binding) “limit order” for a tax lien certificate here. A limit order is an order where you specify your buy or sell price and wait for a counterparty to come along and match it. Or, you can look at open orders and match one that has already been placed.">
+			</div>
+            <div class="panel-body">
+                <form id="order" name="order" class="form form-inline xform-horizontal" role="form">
+                    <!--References: https://developers.google.com/apps-script/guides/html-service-communication#forms https://developers.google.com/apps-script/guides/html-service-communication#user_objects-->
+                    <div class="btn-group col-xs-6">
+                        <label for="btnSubmitOrder" xhidden>Create New</label>
+                        <button autocomplete="off" <?=user?> type="button" class="btn btn-block btn-primary" role="button" id="btnSubmitOrder" xclass="blue|#428bca" value="Submit Order" onclick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderCreate();alert('Success!\n\nWe received your order.')}" title="">Submit Order</button>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="type" xhidden>Type
+                            <!--<span class="glyphicon glyphicon-question-sign"></span>--><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="There are two types of orders: “Buy” and “Sell.”">
+                        </label>
+                        <select autocomplete="off" x<?=user?> class="form-control" required name="type" id="type">
+                            <option value="">--Select--</option>
+                            <option value="Buy"> Buy </option>
+                            <option value="Sell"> Sell </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="yield" xhidden>Yield
+                            <!--<span class="glyphicon glyphicon-question-sign"></span>--><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Rate of effective yield you offer (to sell) or seek (to buy)? The “current yield.” Annual earned interest divided by trade price.">
+                        </label>
+                        <span class="input-group">
+							<input autocomplete="off" x<?=user?> class="form-control" type="number" xsize="5" id="yield" name="yield" required placeholder="Net" min="0" max="72" step="0.25">
+                            <span class="input-group-addon">%</span>
+                        </span>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="volume" xhidden>Volume
+                            <!--<span class="glyphicon glyphicon-question-sign"></span>--><img height="15" class="help-icon" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Dollar volume you seek to trade. Enter the face value of the certificate/s you seek to sell. Or, if buyer, the total investment you want to make. We calculate discounts and premiums from the agreed yield and payoff amount of the certificate; then, accordingly, adjust the amount the seller receives.">
+                        </label>
+                        <span class="input-group">
+							<span class="input-group-addon">$</span>
+                        <input autocomplete="off" x<?=user?> class="form-control" type="number" xsize="5" id="volume" name="volume" required placeholder="Target" min="0" step="1">
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">All Pending Transactions
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of all filled orders in process to close.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Age</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_ap.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <!--<td><input autocomplete="off" <?=user?> type="checkbox" xchecked xonClick="alert('A')"  name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa."></td>-->
+                                <td style="text-align:center" title="How many days ago the order was filled">
+                                    <?=arr[i].dateFilled?>
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3 xcol-xs-offset-3">
+        <div class="panel  panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">Market Order
+                <!--<span class="glyphicon glyphicon-question-sign"></span>--><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Press “Buy” to fill the highest yielding open sell order. Press “Sell” to fill the lowest yielding open buy order.">
+            </div>
+            <div class="panel-body">
+                <div class="btn-group col-xs-6" xrole="group" xaria-label="Market Action">
+			        <button autocomplete="off" <?=user?> type="button" class="btn btn-block  btn-success xbtn-danger" role="button" id="btnMktBuy" xvalue="Submit Order" onclick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderFill(<?=mktSell.item?>)}" title="Clicking this button results in the same action as (i.e, a shortcut to) finding the HIGHEST yielding open SELL order in the “open orders” table, then clicking the “Buy” button next to it. In both cases, we will notify your counterparty and move the order to your “pending” list to set you up to close the transaction.">
+                        Buy <span class="badge"><?=function(){try{return /*LibraryjsUtil.num2cur*/(/*mp[1]*/mktSell.price).toFixed(2)}catch(e){Logger.log("Error G2OfN: "+e.message);return "--"}}()?>%</span>
+                    </button>
+                </div>
+			    <div class="btn-group col-xs-6" xrole="group" xaria-label="Market Action">
+                    <button autocomplete="off" <?=user?> type="button" class="btn btn-block xbtn-success  btn-danger" role="button" id="btnMktSell" xvalue="Submit Order" onclick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderFill(<?=mktBuy.item?>)}" title="Clicking this button results in the same action as (i.e, a shortcut to) finding the LOWEST yielding open BUY order in the “open orders“ table, then clicking the “Sell” button next to it. In both cases, we will notify your counterparty and move the order to your “pending” list to set you up to close the transaction.">
+                        Sell <span class="badge"><?=function(){try{return /*LibraryjsUtil.num2cur*/(/*mp[0]*/mktBuy.price).toFixed(2)}catch(e){Logger.log("Error B2Rcy: "+e.message);return "--"}}()?>%</span>
+                    </button>
+			    </div>
+            </div>
+        </div>
+        <div class="panel  panel-default xpanel-primary xpanel-success">
+            <div class="panel-heading">All Open Orders
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of unfilled orders others have placed. Buy or sell by clicking the button.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                    <!--<th>Age</th>-->
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Match</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_ao.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+							<!--<td style="text-align:center" title="How many days ago the order was posted">
+                                    <?=arr[i].datePosted?>
+                                </td>-->
+								<td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <td>
+                                	<?var t_out=["--","--"];if(arr[i].type=="Buy"){t_out=["Sell","danger"]}else if(arr[i].type=="Sell"){t_out=["Buy","success"]}else{t_out=["--","default"]}?>
+									<button autocomplete="off" <?=user?> type="button" class="btn btn-block btn-xs btn-<?=t_out[1]?>" role="button" id="fillOrder" xvalue="Submit Order" onclick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderFill(<?=arr[i].item?>)}" title="Click to fill this order.">
+										<?=t_out[0]?>
+									</button>
+                            	<!--<input autocomplete="off" <?=user?> type="checkbox" xchecked onClick="if(<?=user?>=='disabled'){alert('Please login')}else{myFunction_orderFill(<?=arr[i].item?>)}" name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa.">-->
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3 xcol-xs-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">All Closed Transactions
+                <!--<span class="glyphicon glyphicon-question-sign"></span> --><img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="List of most recent closed trades.">
+                <!--<span class="glyphicon glyphicon-user"         ></span>-- ><img height="14" src="https://lh4.googleusercontent.com/-qfsYcPDhFpk/VGMjemXK03I/AAAAAAAANF8/mj2BfzU0e44/s800/icons-plus.png">-->
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Item</th>
+                        <th>Volume</th>
+                        <th>Yield</th>
+                        <th>Age</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div id="no-paging" xid="paging">&nbsp;
+                                    <!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?arr=ar_ac.reverse();i=arr.length;while(i--){var strAlt=(i%2)? "class='alt'": "";//vol=arr[i].volume?LibraryjsUtil.numberWithCommas(arr[i].volume): "",price=arr[i].price ? "$"+LibraryjsUtil.numberWithCommas(arr[i].price ): "" ?>
+                            <tr <?!=strAlt?>>
+                                <td title="This is the order made by your counterparty">
+                                    <?=arr[i].item?>
+                                </td>
+                                <td style="text-align:right" title="The number of shares to be traded">
+                                    <?=arr[i].volStr?>
+                                </td>
+                                <td title="The transaction price" style="text-align:right">
+                                    <?=arr[i].priceStr?>
+                                </td>
+                                <!--<td><input autocomplete="off" <?=user?> type="checkbox" xchecked xonClick="alert('A')"  name="fillOrder" title="Click to fill this order. To fill an order means to take the opposite side of the transaction. i.e., Buy if the order is to sell. And vice versa."></td>-->
+                                <td style="text-align:center" title="How many days ago the order was filled">
+                                    <?=arr[i].dateFilled?>
+                                </td>
+                            </tr>
+                            <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script>
+function onFailure(e){alert(e.message)}function onSuccess(){}//document.getElementById("result").innerHTML=str}//iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+function myFunction_orderFill  (obid){if(obid!="--"){google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).order_fill  (obid);alert("Success!\n\nWe filled item# "+obid+".\n\nRefresh your browser to view it in your “My Pending Orders” table.")}else if(obid="--"){alert("There are no matching open orders.")}}
+function myFunction_orderCancel(obid){if(obid!="--"){google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).order_cancel(obid);alert("We deleted item# "           +obid                                                                          )}else if(obid="--"){alert("There are no matching open orders.")}}
+function myFunction_orderCreate(){var r=document.getElementById("order")//alert(/*document.forms["referral"]["cFullName"].value/*"Hello world"*/);document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+    google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).order_receive(r/*this.parentNode*/);/*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+</script></body></html>
+-------------------------------------- repeater.html --------------------------------------
+<!-- Reference: http://getfuelux.com/javascript.html#repeater -->
+<!-- Reference: https://github.com/ExactTarget/fuelux/wiki/Repeater-DataSource-Examples -->
+<!DOCTYPE html>
+<html class="fuelux">
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <style>
+        body { padding-top: 70px; } // To prevent overlap with .navbar
+    </style>
+</head>
+<body>
+<div class="jumbotron">
+<h4>Hello, world</h4>
+<p>Lorem ipsum...</p>
+</div>
+
+<div class="container-fluid">
+
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">Panel Heading</div>
+            <div class="panel-body">
+			
+<div class="fu-example section">
+    <div class="repeater" data-staticheight="400" id="myRepeater">
+      <div class="repeater-header">
+        <div class="repeater-header-left">
+          <span class="repeater-title">Awesome Repeater</span>
+          <div class="repeater-search">
+            <div class="search input-group">
+              <input type="search" class="form-control" placeholder="Search"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                  <span class="glyphicon glyphicon-search"></span>
+                  <span class="sr-only">Search</span>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="repeater-header-right">
+          <div class="btn-group selectlist repeater-filters" data-resize="auto">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <span class="selected-label">&nbsp;</span>
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Filters</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li data-value="all" data-selected="true"><a href="#">all</a></li>
+              <li data-value="bug"><a href="#">bug</a></li>
+              <li data-value="dark"><a href="#">dark</a></li>
+              <li data-value="dragon"><a href="#">dragon</a></li>
+              <li data-value="electric"><a href="#">electric</a></li>
+              <li data-value="fairy"><a href="#">fairy</a></li>
+              <li data-value="fighting"><a href="#">fighting</a></li>
+              <li data-value="fire"><a href="#">fire</a></li>
+              <li data-value="flying"><a href="#">flying</a></li>
+              <li data-value="ghost"><a href="#">ghost</a></li>
+              <li data-value="grass"><a href="#">grass</a></li>
+              <li data-value="ground"><a href="#">ground</a></li>
+              <li data-value="ice"><a href="#">ice</a></li>
+              <li data-value="normal"><a href="#">normal</a></li>
+              <li data-value="poison"><a href="#">poison</a></li>
+              <li data-value="psychic"><a href="#">psychic</a></li>
+              <li data-value="rock"><a href="#">rock</a></li>
+              <li data-value="steel"><a href="#">steel</a></li>
+              <li data-value="water"><a href="#">water</a></li>
+            </ul>
+            <input class="hidden hidden-field" name="filterSelection" readonly="readonly" aria-hidden="true" type="text"/>
+          </div>
+          <div class="btn-group repeater-views" data-toggle="buttons">
+            <label class="btn btn-default active">
+              <input name="repeaterViews" type="radio" value="list"><span class="glyphicon glyphicon-list"></span>
+            </label>
+            <label class="btn btn-default">
+              <input name="repeaterViews" type="radio" value="thumbnail"><span class="glyphicon glyphicon-th"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="repeater-viewport">
+        <div class="repeater-canvas"></div>
+        <div class="loader repeater-loader"></div>
+      </div>
+      <div class="repeater-footer">
+        <div class="repeater-footer-left">
+          <div class="repeater-itemization">
+            <span><span class="repeater-start"></span> - <span class="repeater-end"></span> of <span class="repeater-count"></span> items</span>
+            <div class="btn-group selectlist" data-resize="auto">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="selected-label">&nbsp;</span>
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li data-value="5"><a href="#">5</a></li>
+                <li data-value="10" data-selected="true"><a href="#">10</a></li>
+                <li data-value="20"><a href="#">20</a></li>
+                <li data-value="50" data-foo="bar" data-fizz="buzz"><a href="#">50</a></li>
+                <li data-value="100"><a href="#">100</a></li>
+              </ul>
+              <input class="hidden hidden-field" name="itemsPerPage" readonly="readonly" aria-hidden="true" type="text"/>
+            </div>
+            <span>Per Page</span>
+          </div>
+        </div>
+        <div class="repeater-footer-right">
+          <div class="repeater-pagination">
+            <button type="button" class="btn btn-default btn-sm repeater-prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous Page</span>
+            </button>
+            <label class="page-label" id="myPageLabel">Page</label>
+            <div class="repeater-primaryPaging active">
+              <div class="input-group input-append dropdown combobox">
+                <input type="text" class="form-control" aria-labelledby="myPageLabel">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right"></ul>
+                </div>
+              </div>
+            </div>
+            <input type="text" class="form-control repeater-secondaryPaging" aria-labelledby="myPageLabel">
+            <span>of <span class="repeater-pages"></span></span>
+            <button type="button" class="btn btn-default btn-sm repeater-next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next Page</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+			
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script>
+dataSource = function(options, callback){
+    //...
+  };
+$('#myRepeater').repeater({dataSource: dataSource});
+</script>
+</body>
+</html>
+-------------------------------------- home.html --------------------------------------
+<!DOCTYPE html><html><!-- Transfer .fuelux class to interior elements to avoid conflicts eg., .navbar .modal etc. -->
+<head>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/bootstrap/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+<!--<link href="//fuelcdn.com/fuelux/2.3.1/css/fuelux.css" type="text/css" rel="stylesheet">
+  -->
+    <meta charset="utf-8"/> <!--Improve search box: http://view.jquerymobile.com/1.4.0/demos/controlgroup/#Textinputs -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<meta http-equiv="content-type" content="text/html; charset=UTF-8"> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" href="https://lh5.googleusercontent.com/--7xW9k8_xTk/VRELjxM871I/AAAAAAAANlM/3rVAsmTvJHE/s144/movies2.png">
+	<title>FilmSwap&trade; &emdash; triple your theater traffic</title>
+<!--<link rel="stylesheet" type="text/css" href="https://ssl.gstatic.com/docs/script/css/add-ons.css"> <!-- Google styles | Reference: https://developers.google.com/apps-script/add-ons/css -->
+<!--<link rel="stylesheet" type="text/css" href="https://googledrive.com/host/0B1LVOoV_2dFtMzM0LXE2QTU4b1E"><!--Tables-->
+<!--<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- To work, must be repositioned after main bootstrap .css -->
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"> <!-- Makes magic wizard wand icon work (located in wizard modal) -->
+    <link rel="stylesheet" type="text/css" href="//fuelcdn.com/fuelux/2.3/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+    <link rel="stylesheet" type="text/css" href="//fuelcdn.com/fuelux/2.3/css/fuelux-responsive.css">
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css"><!-- Reference: http://vitalets.github.io/x-editable/index.html -->
+    <link rel="stylesheet" type="text/css" href="//googledrive.com/host/0B1LVOoV_2dFtNnZYdmlGNlF1SDQ" id="cssModBootstrap.css"><!-- Preferences for .navbar .jumbotron etc. -->
+	<style>
+	</style>
+</head>
+<body>
+<?
+var i,j,len,keys,lab;
+var pKey=m/*"g4300lhjbw7uzbq35lbl"*/,p=LibraryjsUtil.dbParse({verb:"get",project:"filmSwap",className:"projectProperties"}).results[0],u=p["theatersById"][p["theatersByParamKey"][pKey]];
+	//Switch from userName ID to u.tid //u.userName="atlaslive";
+var x,q=LibraryjsUtil.dbParse({verb:"get",project:"filmSwap",className:"order",query:{client:u.tid/*"atlaslive",movieTitleCodename:name,position:pos,*/}}).results,r=getFilmSwap(u/*.zip/*"98148"*/),show=r.shift(),len=r.unshift();r.reverse();i=q.length;while(i--){
+	x=LibraryjsUtil.queryArray(r,{movieTitleCodename:q[i].movieTitleCodename},"POSITION","FIRST")
+	;if(x){		                       r[x].pos=(q[i].client==u.tid/*userName*/)?q[i].position:0;
+				 if(q[i].position== 1){r[x].ctTake=r[x].ctTake?r[x].ctTake+1:1}
+			else if(q[i].position==-1){r[x].ctGive=r[x].ctGive?r[x].ctGive+1:1}}}
+?>
+<!-- Modal : User Account -->
+<div class="modal fade" id="myModal_account" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog xmodal-lg xmodal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel_account">
+					<a href="#" id="theaterName" data-type="text" data-placement="bottom" data-title="Edit theater name"><strong><?=u.theaterName?></strong></a>
+				</h4>
+					<a href="<?=u.theaterLink?>" target="_blank">
+						<span class="glyphicon xglyphicon-link glyphicon-new-window" aria-hidden="true"></span>
+					</a>
+					<a href="#" id="problemName" data-type="textarea" data-placement="bottom" data-title="Report error and correction"><i class="icon-pencil" style="padding-right:5px"></i>Correct</a>
+			</div>
+			<div class="modal-body">
+				<p style="xtext-align:center;font-style:italic"><small>Click links to edit.</small></p>
+				<div class="col-xs-10 col-xs-offset-2"><a href="#" id="addyMain"  data-type="textarea" data-placement="right" data-title="Edit main address"><?=u.theaterAddyString?></a></div>
+				<!--<address>
+					<!--<strong>Twitter, Inc.</strong><br>
+					795 Folsom Ave, Suite 600<br>
+					San Francisco, CA 94107<br>
+					<abbr title="Phone">P:</abbr> (123) 456-7890-- >
+				</address>-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal : Transaction Wizard -->
+<div class="modal fade" id="myModal_match_demo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog  modal-lg xmodal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h1 class="modal-title" id="myModalLabel_account">
+					Complete the Deal &nbsp;
+					<small>
+						<!-- <i class="fa fa-magic"></i> <!-- Icon requires header to include <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" type="text/css" rel="stylesheet"> -->
+						<i class="icon-magic"></i>
+						Transaction Wizard
+						<small>(Demo Only)</small>
+					</small>
+				</h1>
+			</div>
+			<div class="modal-body">
+				<!-- Wizard -->
+				<div class="fuelux well xwizard-example">
+					<div id="MyWizard" class="wizard">
+						<ul class="steps">
+							<li data-target="#step1" class="active"><!--Step 1--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge badge-info">1</span><span class="glyphicon glyphicon-map-marker"          ></span><span class="chevron"></span></li>
+							<li data-target="#step2"               ><!--Step 2--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >2</span><span class="glyphicon glyphicon-edit xlist-alt xfile"></span><span class="chevron"></span></li>
+							<li data-target="#step3"               ><!--Step 3--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >3</span><span class="glyphicon glyphicon-time xhand-right"    ></span><span class="chevron"></span></li>
+						    <li data-target="#step4"               ><!--Step 4--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >4</span><span class="glyphicon glyphicon-plane xbarcode"      ></span><span class="chevron"></span></li>
+							<li data-target="#step5"               ><!--Step 5--><!--<i class="icon-clock-o"></i>--><!--Step--><span class="badge"           >5</span><span class="glyphicon glyphicon-globe"               ></span><span class="chevron"></span></li>
+						</ul>
+						<div class="actions">
+							<button class="btn btn-mini btn-prev"> <i class="icon-arrow-left"></i>Prev</button>
+							<button class="btn btn-mini btn-next" data-last="Finish">Next<i class="icon-arrow-right"></i></button>
+						</div>
+					</div>
+					<div class="step-content">
+						<div class="step-pane active" id="step1"> <!-- Confirm Your Address -->
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-map-marker"></span>
+								&nbsp; 1. Confirm Your Address <small>(step 1 of 5)</small>
+							</h3>
+							<hr>
+							<h4>Deliver to</h4>
+							<p>Where do you want your shipment delivered?</p>
+							<div class="col-xs-11 col-xs-offset-1">
+								<table><tbody>
+									<tr><td>Address</td><td>&nbsp:&nbsp</td><td><a href="#" id="addyShip"     data-type="textarea" data-placement="right" data-title="Enter shipping address">123 Main St</a></td></tr>
+									<tr><td>Phone  </td><td>&nbsp:&nbsp</td><td><a href="#" id="contactPhone" data-type="text"     data-placement="right" data-title="Enter contact phone"   >555-555-1212</a></td></tr>
+									<tr><td>Contact</td><td>&nbsp:&nbsp</td><td><a href="#" id="contactName"  data-type="text"     data-placement="right" data-title="Enter contact name"    >superuser</a></td></tr>
+									<tr><td>Email  </td><td>&nbsp:&nbsp</td><td><a href="#" id="contactEmail" data-type="text"     data-placement="right" data-title="Enter contact email"   >superuser</a></td></tr>
+								<!--<tr><td>Status </td><td>&nbsp:&nbsp</td><td><a href="#" id="status"></a></td></tr>-->
+								</tbody></table>
+							</div>
+							<!--<br><img class="img-polaroid" src="//placehold.it/200x150">-->
+							<!--<form class="form-horizontal">
+								<fieldset>
+									<!-- Form Name -- >
+									<legend>Where do you want your shipment delivered?</legend>
+									<!-- Textarea -- >
+									<div class="control-group">
+										<label class="control-label" for="textarea">Shipping Address</label>
+										<div class="controls">
+											<textarea class="form-control" id="textarea" name="textarea">default text</textarea>
+										</div>
+									</div>
+									<!-- Text input-- >
+									<div class="control-group">
+										<label class="control-label" for="textinput">Phone</label>
+										<div class="controls">
+											<input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control" style="height:35px" title="10-digit phone number. Ex: 555-789-1234">
+											<!--<p class="help-block">help</p>-- >
+										</div>
+									</div>
+									<!-- Text input-- >
+									<div class="control-group">
+										<label class="control-label" for="textinput">Contact Person</label>
+										<div class="controls">
+											<input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control" style="height:35px" title="First and last names">
+											<!--<p class="help-block">First and last names</p>-- >
+										</div>
+									</div>
+									<!-- Text input-- >
+									<div class="control-group">
+										<label class="control-label" for="textinput">Email</label>
+										<div class="controls">
+											<input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control" style="height:35px" title="of above contact person">
+											<!--<p class="help-block">of contact person</p>-- >
+										</div>
+									</div>
+								</fieldset>
+							</form>-- >
+							<br>Click &ldquo;Next&ldquo; to continue.-->
+						</div>
+						<div class="step-pane" id="step2">        <!-- Promise to Ship -->
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-edit xglyphicon-list-alt xglyphicon-file"></span>
+								&nbsp; 2. Promise to Ship <small>(step 2 of 5)</small>
+							</h3><hr>
+							<h4>Ship to</h4>
+							<!--<div class="col-xs-10 xcol-xs-offset-1">--><!-- Generally, these column, row and panel controls seem to cause interference causing them to malfunction -->
+							<!--<div class="panel panel-default xpanel-primary xpanel-success">
+									<div class="panel-heading">Your Counterparty</div>
+									<div class="panel-body">-->
+							<div class="row">
+								<div class="col-xs-11 col-xs-offset-1">
+									<table>
+										<tbody>
+											<tr><td>Movie       </td><td>&nbsp:&nbsp</td><td><strong>Cinderella               </strong></td></tr>
+											<tr><td>Counterparty</td><td>&nbsp:&nbsp</td><td><strong>Grauman’s Chinese Theater</strong></td></tr>
+											<tr><td>Address     </td><td>&nbsp:&nbsp</td><td>        Hollywood &amp; Highland          </td></tr>
+											<tr><td>            </td><td>           </td><td>        6925 Hollywood Blvd               </td></tr>
+											<tr><td>            </td><td>           </td><td>        Hollywood, CA 90028               </td></tr>
+											<tr><td>Phone       </td><td>&nbsp:&nbsp</td><td>        (555) 456-7890                    </td></tr>
+											<tr><td>Contact     </td><td>&nbsp:&nbsp</td><td>        Clark Chaplain                    </td></tr>
+										<!--<tr><td>            </td><td>           </td><td>
+																							<abbr title="Phone">P:</abbr> (555) 456-7890
+																							<!--<a href="< ?=u.theaterLink?>" target="_blank"><strong>< ?=u.theaterName?></strong></a>
+																							<br>< ?=u.theaterAddyString?>-- >
+																						 </td>
+											</tr>-->
+										</tbody>
+									</table><br>
+								</div>
+							</div>
+							<!--</div>
+								</div>-->
+							<h4>Agreement</h4>
+							<div class="row newspaper">
+								<div class="col-xs-11 col-xs-offset-1">
+								<!--<div class="panel panel-default xpanel-primary xpanel-success">
+										<div class="panel-heading">Shipping Agreement</div>
+										<div class="panel-body">-->
+									<p>
+										I will ship within 24 hours the indicated film via guaranteed overnight express delivery to the above Counterparty.
+										I will supply courier&rsquo;s name and accurate tracking number upon request.
+										I acknowledge that I enter into this transaction at my own risk and, accordingly,
+										I promise to indemnify and hold harmless the owners and operators of this website and all of its affiliated parties against any future claims of liability or damages.
+									</p>
+									<p>By clicking Next, I agree to be bound by these terms.</p>
+									<!--</div>-- >
+								</div>-->
+								</div>
+							</div>
+						<!--</div>-->
+						</div>
+						<div class="step-pane" id="step3">        <!-- Wait for Counterparty -->
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-time xhand-right"></span>
+								&nbsp; 3. Wait for Counterparty <small>(step 3 of 5)</small>
+							</h3><hr>
+							We will let you know when your counterparty has signed the shipping agreement. After they do, you can proceed to the next step.
+							<h4 style="text-align:center">
+								<span class="label xlabel-default  label-danger xlabel-success">
+									Wait
+									<span class="glyphicon glyphicon-remove"></span>
+								</span>
+								<span class="label xlabel-default xlabel-danger  label-success">
+									Okay
+									<span class="glyphicon glyphicon-ok"></span>
+								</span>
+							</h4>
+						</div>
+						<div class="step-pane" id="step4">        <!-- Ship Product -->
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-plane xglyphicon-barcode"></span>
+								&nbsp; 4. Ship Product <small>(step 4 of 5)</small>
+							</h3>
+							<hr>
+							<h4>Shipping Details <small></small></h4>
+							<p>Ship your order then enter your courier and tracking number here.</p>
+							<div class="col-xs-11 col-xs-offset-1">
+								<table><tbody>
+									<tr><td>Courier        </td><td>&nbsp:&nbsp</td><td><a href="#" id="courierName"></a> (or
+																					    <a href="#" id="courierOther" data-type="text" data-placement="right" data-title="Enter different courier" ><small>add a different one</small></a>)
+									                                                </td></tr>
+									<tr><td>Tracking Number</td><td>&nbsp:&nbsp</td><td><a href="#" id="trackNumber"  data-type="text" data-placement="right" data-title="Enter tracking number" >superuser</a></td></tr>
+								</tbody></table>
+								<br>
+							</div>
+							<!--<form class="form-horizontal">
+								<fieldset>
+									<!-- Form Name -- >
+									<legend>Shipping Details</legend>
+									<!-- Select Basic -- >
+									<div class="control-group">
+										<label class="control-label" for="selectbasic">Courier</label>
+										<div class="controls">
+											<div class="btn-group selectlist" data-resize="auto" data-initialize="selectlist" id="selectbasic">
+												<button class="btn btn-default dropdown-toggle " data-toggle="dropdown" type="button"> <span class="selected-label">Carrier</span> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+												<ul class="dropdown-menu" role="menu">
+													<li data-value="UPS"><a href="#">UPS</a></li>
+													<li data-value="FedEx"><a href="#">FedEx</a></li>
+													<li data-value="DHL"><a href="#">DHL</a></li>
+												</ul>
+												<input class="hidden hidden-field" name="selectbasic" readonly="readonly" aria-hidden="true" type="text"> </div>
+										</div>
+									</div>
+									<!-- Text input-- >
+									<div class="control-group">
+										<label class="control-label" for="textinput">Tracking Number</label>
+										<div class="controls">
+											<input id="textinput" name="textinput" type="text" placeholder="placeholder" class=" form-control">
+											<p class="help-block">help</p>
+										</div>
+									</div>
+								</fieldset>
+							</form>-->
+						</div>
+						<div class="step-pane" id="step5">        <!-- Track Delivery -->
+							<h3>
+								<!--<i class="icon-clock-o"></i>-->
+								<span class="glyphicon glyphicon-globe"></span>
+								&nbsp; 5. Track Delivery <small>(step 5 of 5)</small>
+							</h3><hr>
+							<h4>Tracking Details</h4>
+							<p>Below is your tracking number and counterparty contact information.</p>
+							<div class="col-xs-11 col-xs-offset-1">
+								<table><tbody>
+									<tr><td>Courier        </td><td>&nbsp:&nbsp</td><td><strong>UPS</strong></td></tr>
+									<tr><td>Tracking Number</td><td>&nbsp:&nbsp</td><td><strong>12345678999987654</strong></td></tr>
+									<tr><td>               </td><td>           </td><td><a href="#" id="problemShip" data-type="textarea" data-placement="right" data-title="Report problem or complaint"><i class="icon-pencil" style="padding-right:5px"></i>Report problem</a></td></tr>
+								</tbody></table>
+							</div>
+							<!--<div>
+								<a href="#" id="pencil"><i class="icon-pencil" style="padding-right:5px"></i>Report problem</a>
+								<div id="problemReport" data-pk="1" data-type="wysihtml5" data-toggle="manual" data-title="Report problem or complaint" data-placement="top"></div>
+							</div>-->
+							<!--<a href="#" id="btnStep2">Go back to step 2.</a>-->
+						</div>
+					</div>
+					<p style="text-align:center;font-style:italic"><small>Click links to edit.</small></p>
+					<p style="text-align:center">
+						<input type="button" class="btn"             id="btnWizardPrev" value="Back">
+						<input type="button" class="btn btn-primary" id="btnWizardNext" value="Next">
+					</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					<span class="glyphicon glyphicon-remove"></span>
+					Close
+				</button>
+			<!--<button type="button" class="btn btn-primary">
+					<span class="glyphicon glyphicon-ok"></span>
+					I agree
+				</button>-->
+			</div>
+		</div>
+	</div>
+</div>
+<div class="navbar-xs"> <!-- Navbar -->
+	<div class="navbar-primary">
+		<nav class="navbar xnavbar-default navbar-inverse navbar-fixed-top xnavbar-static-top"> <!-- Reference: http://getbootstrap.com/examples/navbar-fixed-top/ -->
+			<div class="container xcontainer-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+					<a class="navbar-brand" href="#">FilmSwap&trade;</a> <!--<img height="15" src="https://lh5.googleusercontent.com/--7xW9k8_xTk/VRELjxM871I/AAAAAAAANlM/3rVAsmTvJHE/s144/movies2.png">-->
+					<p class="navbar-text" style="font-style:italic">
+						<!-- <i class="quote-left"></i> Icons appear not to work inside the .nav bar -->
+						Trade movies. Triple your traffic.
+					</p>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn xbtn-default btn-link btn-sm" data-toggle="modal" data-target="#myModal_account">
+								<span class="glyphicon xglyphicon-cog glyphicon-user" aria-hidden="true"></span>
+								<?=u.theaterName?>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+<div class="jumbotron" style="background-color:#005B9A"> <!-- Jumbotron --> <!-- Colors | Alt #220066 | Reference: http://www.colorcombos.com/combotester.html?color0=005B9A&color1=0191C8&color2=74C2E1&color3=8C8984 -->
+	<div class="container">
+		<h1 style="color:white">
+			<span style="font-family:Georgia,serif;font-weight:bold">FilmSwap&trade;</span>
+			<small style="color:#ffcc00">The Movie Trading Post</small>
+		</h1>
+        <p style="color:#cccccc">
+			Trade movies to maximize your theater&rsquo;s box office and foot traffic.
+			<span style="font-style:italic;font-family:Georgia,serif;color:#ffcc00">&ldquo;Trade movies. Triple your traffic.&rdquo;</span>
+		</p>
+		<!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>-->
+	</div>
+</div>
+<div class="container container-fluid"> <!-- Main Body -->
+	<div class="col-xs-12 col-xs-offset-0"><br><!--< ?=JSON.stringify(show)?>-->
+		<div class="alert  alert-info xalert-warning xalert-success  alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<p>
+				<span class="glyphicon glyphicon-info-sign"></span>
+				Films sorted by potential <strong>market share</strong>. <strong>1.</strong> Identify which films you want to add or delete this week. <strong>2.</strong> Place your <strong>trade order</strong>. <strong>3.</strong> Click
+				<button type="button" class="btn xbtn-default  btn-danger xbtn-sm" data-toggle="modal" data-target="#myModal_match_demo">
+					<span class="glyphicon xglyphicon-ok xglyphicon-plus xglyphicon-exclamation-sign glyphicon-chevron-right"  aria-hidden="true"></span>
+				</button>
+				to complete match.
+			</p>
+		</div>
+		<div class="alert xalert-info xalert-warning  alert-success  alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<p>
+				<span class="glyphicon glyphicon-info-sign"></span>
+				Highlighted rows are films your theater might (or might not) be showing.
+			</p>
+		</div>
+		<div class="page-header"><h2>Trading Post<small></small></h2></div>
+		<table class="table xtable-striped table-hover" style="table-layout:fixed;width:100%;xmargin:0" >
+			<thead>
+				<th xclass="col-xs-2 col-xs-offset-0" style="text-align:right;width:auto">
+					Rank</th>
+				<th  class="col-xs-4 col-xs-offset-0" style="text-align:left"   >
+					Title</th>
+				<th xclass="col-xs-1 col-xs-offset-0" style="text-align:center" ><abbr title="Courtesy: Rotten Tomatoes. Critics and audience percent favorable rating">
+					Score</abbr></th>
+				<th xclass="col-xs-1 col-xs-offset-0" style="text-align:center" ><abbr title="Weeks since release">
+					Week</abbr></th>
+				<th xclass="col-xs-1 col-xs-offset-0" style="text-align:center" ><abbr title="Number of total domestic theaters showing this film">
+					Total Theaters</abbr></th>
+				<th xclass="col-xs-1 col-xs-offset-0" style="text-align:center" ><abbr title="Average box office gross revenue per theater (nationwide)">
+					Avg Gross</abbr></th>
+				<th xclass="col-xs-1 col-xs-offset-0" style="text-align:center" ><abbr title="Number of local theaters showing this film">
+					Market Theaters</abbr></th>
+				<th xclass="col-xs-2 col-xs-offset-0" style="text-align:center" class="alert alert-warning" role="alert"><abbr title="Your potential box office gross revenue from this film. Prior week avg gross per theater divided by (one plus) number of competing theaters showing this film. Your estimated share of gross had you shown this film last weekend.">
+					Market Share</abbr></th>
+				<th  class="col-xs-2 col-xs-offset-0" style="text-align:center" ><abbr title="Submit your order to trade this film. Take it or give it.">
+					Trade</abbr></th>
+				<th xclass="col-xs-2 col-xs-offset-0" style="text-align:center" ><abbr title="If button shows, you have a matched order. Click to fulfill trade.">
+					Match</abbr></th>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="10">
+						<div id="no-paging" xid="paging">&nbsp;
+							<!--<ul><li><a href="#" ><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>-->
+						</div>
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+			<?  i=len;while(i--){
+				try{code     = r[i].movieTitleCodename   ||""}catch(e){code     =false}
+				try{title    = r[i].Title                ||""}catch(e){title    =""   }
+				try{critics  = r[i].critics_score        ||""}catch(e){critics  =""   }critics =(critics ==-1)?"--":critics;
+				try{audience = r[i].audience_score       ||""}catch(e){audience =""   }audience=(audience==-1)?"--":audience;
+				try{week     = r[i].Week                 ||""}catch(e){week     =""   ;/*r.splice(i,1);* /continue*/}if(!week.length){continue}
+				try{theaters = r[i].TheaterCount             }catch(e){theaters =""   }
+				try{market   = r[i].mktTheatersCount         }catch(e){market   =""   }
+				try{avgGross = r[i].tw_avgGrossPerTheater    }catch(e){avgGross =""   }
+				try{share    = r[i].availShare_theaters      }catch(e){share    =""   }
+				try{pos      = r[i].pos    ? r[i].pos    : 0 }catch(e){share    =""   }
+				try{ctTake   = r[i].ctTake ? r[i].ctTake : 0 }catch(e){share    =""   }
+				try{ctGive   = r[i].ctGive ? r[i].ctGive : 0 }catch(e){share    =""   }
+			//		 if(                         r.movies[i].score>=70){r.movies[i].lab="label-success"}
+			//	else if(r.movies[i].score>=50 && r.movies[i].score< 70){r.movies[i].lab="label-warning"}
+			//	else if(r.movies[i].score< 50                         ){r.movies[i].lab="label-danger" }
+			?>  <tr <?!=(show[code]/*code=="a71"*/)?'class="xinfo success"':''?> >
+					<td style="text-align:right  ;word-wrap:break-all"><?=len-i?><small> | <?=len-1?></small></td>
+					<td style="text-align:left   ;word-wrap:break-all"><a href="http://www.rottentomatoes.com/search/?search=<?=title?>" target="_blank"><?=title?></a><!--< ?=pos?>|< ?=ctTake?>|< ?=ctGive?>|< ?=Boolean(show[code])?>|< ?=JSON.stringify(show[code])?>|< ?=code?>|--></td>
+					<td style="text-align:center ;word-wrap:break-all"><abbr title="Critics Score — courtesy: Rotten Tomatoes">  <?=critics?> </abbr>
+																	  |<abbr title="Audience Score — courtesy: Rotten Tomatoes"> <?=audience?></abbr></td>
+					<td style="text-align:center ;word-wrap:break-all"><abbr title="Week — since release">                       <?=week?>    </abbr></td>
+					<td style="text-align:center ;word-wrap:break-all"><abbr title="Theaters — domestic">                        <?=theaters?></abbr></td>
+					<td style="text-align:right  ;word-wrap:break-all"><abbr title="Avg Gross — per theater, weekend only">      <?=LibraryjsUtil.num2cur(avgGross,0,"$")?></abbr></td>
+					<td style="text-align:center ;word-wrap:break-all"><abbr title="Market — theaters showing in local market">  <?=market?>  </abbr></td>
+					<td style="text-align:right  ;word-wrap:break-all" class="alert alert-warning" role="alert">
+																	   <abbr title="New Share — expected gross with additional theater in your market (you)"><?=LibraryjsUtil.num2cur(share,0,"$")?></abbr></td>
+					<td style="text-align:center ;word-wrap:break-all" xid="< ?=code?>">
+						<div class="btn-group" data-toggle="buttons-radio">
+							<button type="button" class="btn btn-default <?=( pos==-1)?'active':''?>" autocomplete="off" xtype="radio" xname="<?=code?>" id="<?=code?>-give" <?=( pos==-1)?"xchecked":""?> onclick="myFunction(<?=code?>,-1,<?=u.tid?>)" title="GIVE this film in trade." ><span                     class="glyphicon xglyphicon-remove glyphicon-minus"       aria-hidden="true" xactive></span></button>
+							<button type="button" class="btn btn-default <?=(!pos    )?'active':''?>" autocomplete="off" xtype="radio" xname="<?=code?>" id="<?=code?>-stay" <?=(!pos)    ?"xchecked":""?> onclick="myFunction(<?=code?>, 0,<?=u.tid?>)" title="STAY or CANCEL all trade orders on this film."><span class="glyphicon xglyphicon-remove glyphicon-remove-sign" aria-hidden="true" xactive></span></button>
+							<button type="button" class="btn btn-default <?=( pos== 1)?'active':''?>" autocomplete="off" xtype="radio" xname="<?=code?>" id="<?=code?>-take" <?=( pos== 1)?"xchecked":""?> onclick="myFunction(<?=code?>, 1,<?=u.tid?>)" title="TAKE this film in trade."><span                      class="glyphicon xglyphicon-remove glyphicon-plus"        aria-hidden="true" xactive></span></button>
+						</div>
+					</td>
+					<td style="text-align:center ;word-wrap:break-all" >
+						<?if(code=="greygarden"){?>
+						<button class="btn xbtn-primary  btn-danger">
+							<span class="glyphicon xglyphicon-ok xglyphicon-plus xglyphicon-exclamation-sign glyphicon-chevron-right"  aria-hidden="true"></span>
+						</button>
+						<?}?>
+					</td>
+				</tr>
+			<?}?>
+			</tbody>
+		</table>
+	</div>
+</div>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//fuelcdn.com/fuelux/2.3.1/loader.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+<!--<script type='text/javascript' src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>--> <!--Included with <script src="...loader.js">-->
+<script>$(function(){$("#tabs").tabs()})</script>
+<script type='text/javascript'>
+//  $(document).ready(function() { // FuelUX Wizard
+        $('#MyWizard'     ).on('change'    , function(e , data) {
+            console.log('change');
+            if (data.step === 3 && data.direction === 'next') {
+                // return e.preventDefault();
+            }
+        });
+        $('#MyWizard'     ).on('changed'   , function(e , data) {
+            console.log('changed');
+        });
+        $('#MyWizard'     ).on('finished'  , function(e , data) {
+            console.log('finished');
+        });
+        $('#btnWizardPrev').on('click'     , function(        ) {
+            $('#MyWizard').wizard('previous');
+        });
+        $('#btnWizardNext').on('click'     , function(        ) {
+            $('#MyWizard').wizard('next', 'foo');
+        });
+        $('#btnWizardStep').on('click'     , function(        ) {
+            var item = $('#MyWizard').wizard('selectedItem');
+            console.log(item.step);
+        });
+        $('#MyWizard'     ).on('stepclick' , function(e , data) {
+            console.log('step' + data.step + ' clicked');
+            if (data.step === 1) {
+                // return e.preventDefault();
+            }
+        });
+        $('#btnStep2'     ).on('click'     , function(e , data) { // optionally navigate back to 2nd step
+            $('[data-target=#step2]').trigger("click");
+        });
+//  });
+</script>
+<script>
+//	$(document).ready(function() { // X-editable
+		$.fn.editable.defaults.mode = 'popup'; // toggle `popup` / `inline` mode
+	//	$("#username"     ).editable();        // make username editable
+		$("#theaterName"  ).editable();
+		$("#addyMain"     ).editable();
+		$("#addyShip"     ).editable();
+		$("#contactPhone" ).editable();
+		$("#contactName"  ).editable();
+		$("#contactEmail" ).editable();
+		$("#courierOther" ).editable();
+		$("#trackNumber"  ).editable();
+		$("#problemShip"  ).editable();
+		$("#problemName"  ).editable();
+	/*	$("#status"       ).editable({         // make status editable
+			type       : 'select',
+			title      : 'Select status',
+			placement  : 'right',
+			value      : 2,
+			source     : [
+				{value : 1 , text: 'status 1'},
+				{value : 2 , text: 'status 2'},
+				{value : 3 , text: 'status 3'}
+			]
+			/*
+			//uncomment these lines to send data on server
+			,pk: 1
+			,url: '/post'
+			* /
+		}); */
+		$("#courierName" ).editable({
+			type       : 'select',
+			title      : 'Select courier',
+			placement  : 'right',
+			value      : 1,
+			source     : [
+				{value : 1 , text: 'Select one'} ,
+				{value : 2 , text: 'UPS'       } ,
+				{value : 3 , text: 'FedEx'     } ,
+				{value : 4 , text: 'DHL'       } ,
+				{value : 5 , text: 'USPS'      } ,
+				{value : 6 , text: 'Airborne'  } ,
+				{value : 7 , text: 'BAX'       } ,
+				{value : 8 , text: 'Emery'     }
+			]
+			/*
+			//uncomment these lines to send data on server
+			,pk: 1
+			,url: '/post'
+			*/
+		});
+//	});
+</script>
+<script>
+function onFailure(e){alert(e.message)} //"Attribute provided with invalid value: method" — believe this to be caused by dual call to dbParse() using verb:"update"; since "update" is internally created/generated first call might create problem if not transformed to standard Parse API method (idea/possibility); Temporary solution: mute onFailure handler
+function onSuccess(callback){//document.getElementById("result").innerHTML=callback.result;$("#tabs").tabs();drawChart(callback.data)} // jQueryUi // http://jqueryui.com/tabs/ //DISREGARD THIS COMMENT... iframe doesn't work bc get request is only sent on page load. So we have the user click a link. //"<iframe src='https://googledrive.com/host/0B1LVOoV_2dFtNUZuRTZ6T0pPT00' width='1200' height='1200'></iframe>"}//alert(/*"Input received!"* /document.getElementById("address").value)}
+    }//alert(callback)}//alert("Thank you for your order.")}
+function myFunction(name,pos,tid){//document.getElementById("result").innerHTML="<div class='row' style='text-align:center'><img src='https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif' xsrc='https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif'><!--<br><abbr title='If this takes longer than one minute to load, it might be a bug. Please email us a note at atlas.argenta@gmail.com to let us know. Please include the property address.'><img height='15' src='https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png'></abbr>--></div>";
+  //var type,other,classMap={take:"success",give:"danger"};if(pos==1){type="take";other="give"}else{type="give";other="take"}
+  //var t=document.getElementById(name+"-"     +type );t.setAttribute("class","btn btn-sm btn-default"         );t.disabled=true ;//t.title="Your trade order is: "+type;
+  //var o=document.getElementById(name+"-"     +other);o.setAttribute("class","btn btn-sm btn-"+classMap[other]);o.disabled=false;o.title="Click to cancel.";//o.value="Cancel";
+  //      document.getElementById(name+"-icon-"+type ).innerHTML='<span class="glyphicon glyphicon-ok"                      aria-hidden="true"></span>';
+  //      document.getElementById(name+"-icon-"+other).innerHTML='<span class="glyphicon glyphicon-trash xglyphicon-remove" aria-hidden="true"></span>';
+  //if(type=="take"){t.innerHTML=}
+  //document.getElementById(name).innerHTML=fn(name);
+	google.script.run/*.withFailureHandler(onFailure).withSuccessHandler(onSuccess)*/.orderSubmit(name,pos,tid)}//(document.getElementById("address").value/*this.parentNode.address*/)} // References: https://developers.google.com/apps-script/guides/html/communication#forms  http://stackoverflow.com/questions/7996572/making-a-submit-button-respond-to-hitting-enter-and-click Google search (and page search): this.parentNode // Use for form "onsubmit" event (with button.type="submit") vs button "onclick" event
+</script></body></html>

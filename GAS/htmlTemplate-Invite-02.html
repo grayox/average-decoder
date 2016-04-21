@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--Instructions: 1. Copy paste this file into a GAS HTML file named invite.html 2. In the script section at the bottom, copy/paste that into a .gs file called Invite.gs  -->
+<!--Change Log: v02: Upgraded Code.gs to allow different sites to send customized invitations. Assigned corresponding variables to repeated Library methods. Added referrer property to invite object posted to dbParse() -->
+<html class="fuelux">
+<head>
+    <title>NewCo&trade;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css"><!-- http://getfuelux.com/getting-started.html#templates Fuel UX extends Bootstrap with additional lightweight JavaScript controls for your web applications. -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!-- Latest compiled and minified CSS --> <!-- http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css --> <!-- Color definitions: http://getbootstrap.com/customize/#colors | Blue:#428bca(hover:#3071a9) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> <!-- Optional theme --> <!-- Must come after main bootstrap.css -->
+</head>
+<body>
+<?var S="",user="x",u=cache2user(),disabled=u?"":"disabled"//LibraryjsUtil.cache2user() fails because can't access cache from a library function?
+    , siteName=SitesApp.getActiveSite().getName(),docs=LibraryjsUtil.googleSite2docLinks(siteName);?>
+<div class="container container-fluid fuelux">
+<!--<?!=LibraryjsUtil.signInMsg()?>-->
+	<div  class="col-xs-2  col-xs-offset-5" style="text-align:center">
+		<div class="panel panel-default">
+			<div class="panel-heading">Status
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-- >
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="">-->
+			</div>
+			<div class="panel-body">
+				<?if(u){?>
+					<button autocomplete="off" role="button" class="btn btn-default btn-xs" onClick="myFunction_signOut()" name="signOut" title="">Sign Out</button>
+					<br>You are signed in as:<br><?=u.username?>
+				<?}else{?>
+					You are not signed in.<br>Please sign in or sign up.<?=S?>
+				<?}?>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-2 col-xs-offset-5"> <!-- My Info -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Invite
+			    <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+				<!--<img height="15" src="https://lh5.googleusercontent.com/-Czi3VENVvuw/VGR4WFWA_CI/AAAAAAAANIQ/l99_UI8Shb0/s144/question.png"      title="">-->
+					<img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Invite others to this web site.">
+			</div>
+			<div class="panel-body">
+                <form class="form xform-inline xform-horizontal" role="form" id="formInvite">
+                    <div class="form-group col-xs-12">
+                        <label for="email" hidden class="control-label">Email</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="email" id="email1" placeholder="Email" xvalue="x<?!=u.email||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="nameFull" hidden class="control-label">Name</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="nameFull" id="nameFull1" placeholder="Name" xplaceholder="First and Last" xvalue="x<?!=u.nameFull||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="phone" hidden class="control-label">Phone</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="phone" id="phone1" placeholder="Phone" xplaceholder="10-digits" xvalue="x<?!=u.phone||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="cell" hidden class="control-label">Cell</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="cell" id="cell1" placeholder="Cell" xplaceholder="10-digits" xvalue="x<?!=u.cell||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="company" hidden class="control-label">Company
+						    <!--<span class="glyphicon glyphicon-question-sign"></span> -->
+                            <img height="15" src="https://lh6.googleusercontent.com/-eY7ym_Fp4BM/VGMjeM1ugiI/AAAAAAAANGI/nCzT6fqLUjM/s800/icon-question.png" title="Enter the full legal name in which you take title.">
+						</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="company" id="company1" placeholder="Company" xvalue="x<?!=u.company||''?>">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="website" hidden class="control-label">Website</label>
+                        <input autocomplete="off" x<?!=disabled?> type="text" class="form-control" name="website" id="website1" placeholder="Website" xplaceholder="Source or reference" xvalue="x<?!=u.website||''?>">
+                    </div>
+                	<div class="form-group col-xs-12">
+                        <label for="submitButton" hidden class="control-label">Submit Button</label>
+                        <button autocomplete="off" xhidden xdisabled=<?=user?> type="button" class="btn btn-block xbtn-default btn-primary" role="button" xclass="blue|#428bca" id="submitButton" value="Invite" onclick="myFunction_invite()" title="">Invite</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
+<script> // Resources: Google Search Terms: google apps script success handler examples // Reference: http://www.mousewhisperer.co.uk/drivebunny/talking-to-the-server-from-apps-scripts-html-service/
+function emailValidate(str){return /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i.test(str/*email*/)} //@return{boolean} True if str is valid email address //@param{string} str The string to be tested // Should be copy/pasted to client-side JS // function test(){var ar=["random@example","random@example.com","randomexample.com"],i=ar.length,out=[];while(i--){out.push(emailValidate(ar[i]))}Logger.log(out)} // Sample call: if(!LibraryjsUtil.emailValidate(email)){alert("Enter valid email address.");return} // References: http://www.regular-expressions.info/email.html | http://www.regexmagic.com/patterns.html // Note: Since this function is usually called client-side, we might want to copy/paste; a sample call might resemble this: if(!/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i.test(email)){alert("Enter valid email address.");return}
+function phoneStrip(str){return str.replace(/\D/gmi,"")} // Strips phone number of all non-digit characters // Should be copy/pasted to client-side JS // function test(){(Logger.log(phoneStrip("(555) 555-1212;!")))}
+function onFailure_invite(){}
+function onSuccess_invite(callback){var msg=callback.error?("Error: "+callback.error+".\nFail. Try again."):("Success!");alert(msg)}
+function myFunction_invite(){var r=document.getElementById("formInvite"),email=document.getElementById("email1").value ;if(!emailValidate(email)){alert("Enter valid email address.");return} // Check: Entered email //document.forms["referral"]/*getElementById("referral")*/.reset();}//;document.getElementById("result").innerHTML="<img src='https://lh4.googleusercontent.com/-S3rRVyRoXeA/U62uSnnsXLI/AAAAAAAAMA4/N10K1jdADPY/s800/ajax-loader.gif'>";
+						     var                                         phone=document.getElementById("phone1").value,ps=phoneStrip(phone),len=ps.length;if(!len==10){alert("The phone number should have 10 digits.\n"+phone+" has "+len+" digits.\nPlease double check the phone number and try again.");return} // Check: Phone number has 10 digits
+						  // var L=5,M=25,                               user =document.getElementById("username3").value;if(user.length<L||user.length>M){alert("Username must be between "+L+"-"+M+" characters.\nPlease try again.");return} // Check: Username length
+	                      // var match=false,v=SitesApp.getActiveSite().getViewers(),i=v.length;while(i--){if(email==v[i].getEmail()){match=true;break}}if(!match){alert(email+" is not on the invitation list.\nPlease enter the email address where you received your invitation.");return}} // Check: Email on invitation list // Fails right now
+  //if(r.pw1==r.pw2){r.password=r.pw1;delete r.pw1;delete r.pw2}else{alert("Passwords don’t match.");return} // r does not appear to be an object that can be manipulated
+	google.script.run.withFailureHandler(onFailure_signUp).withSuccessHandler(onSuccess_invite).receive_invite(r/*this.parentNode*/);/*this.parentNode*/r.reset()}//**IMPORTANT**“this” gets the “name” property of the parent element, i.e., the form tag/element. In order to use the “this.parnentNote” method (as opposed to the document.getElementById() method) verify the form element has a proper “name” property. Otherwise, the function will fail “silently.”//document.getElementById("address").value)}//document.getElementById("address").value}//Date()} //xonclick="google.script.run.withSuccessHandler(updateButton).withUserObject(this).processForm_registerSeller(this.parentNode)" //function numberWithCommas(x){var parts=x.toString().split(".");parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return parts.join(".")} // http://stackoverflow.com/questions/2901102/how_to_print_a_number_with_commas_as_thousands_separators_in_javascript // function test(){var arr=[88,99,1000,1005,1000050,10500000,10500000.123456],i=arr.length;while(i__){Logger.log(numberWithCommas(arr[i]))}}
+/* ---------- Code.gs (Copy and paste the following into the Invite.gs file) ---------- // Store cache files locally (i.e., in a .gs file, not in a library)
+function receive_invite(ob){var u=cache2user();if(!u){return {error:"Invitation not sent. Please sign in then try again."}}//ob.signup=false;Replaced with username field//ob.username=ob.username.toLowerCase();var u=
+    var ename="";ob.referrer=u.username;if(Boolean(u.nameFull && u.nameFull.length)){ename=u.nameFull+" "}ename+=u.email;
+	var subj,subjDef,site=SitesApp.getActiveSite(),surl=site.getUrl(),sname=site.getName(),pname=LibraryjsUtil.googleSite2parseApp(sname),snameCap=LibraryjsUtil.capitalize(pname)
+   ,r=LibraryjsUtil.dbParse({verb:"count",project:pname,className:"invite",query:{email:ob.email}})
+   ,postNew=true,str=("Copy and paste the following url into your browser: "+surl),body=("<a href='"+surl+"'>Click</a><br><br>If the above link does not work:<br>"+str)
+   ;if(r.count){if(r.results[0].referrer==u.username){postNew=false}else{return {error:r.results[0].email+"\nInvitation not sent. Already invited by another member."}}}
+   ;subjDef=(ename+" invites you join "+snameCap);switch(sname){
+		case "dealdiggeronline2" : subj=subjDef                                 ;break;
+		case "ddpmgt"            : subj="We Need Property Management Proposals" ;break;
+		default                  : subj=subjDef                                 ;break;
+    }MailApp.sendEmail(ob.email,subj,str,{name:ename,htmlBody:body});
+    return postNew?LibraryjsUtil.dbParse({verb:"post" ,project:pname,className:"invite",ob:ob}):{}}//;if(!u.error){user2cache(u);user2cache(ob);u.username=ob.username}return u} // function test(){Logger.log(JSON.stringify(receive_signUp({username:"cooldude6",password:"p_n7!-e8",email:"atlaslive@gmail.com"})))}   // returns: {"objectId":"GNsC2EqFaC","sessionToken":"KSMjeVVDnBsx3pBerimoykjcA"}
+   -------------------------- End Code.gs (copy and paste) -------------------------- */
+//$('#myComponent1').component1(); // Initializes components from FuelUx // Example: $('#mySpinbox').spinbox();
+//$('#myComponent2').component2();
+</script>
+</body>
+</html>

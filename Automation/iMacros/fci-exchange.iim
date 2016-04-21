@@ -1,0 +1,412 @@
+VERSION BUILD=8961227 RECORDER=FX
+
+'RegEx pattern of result: https://regex101.com/r/zJ4uU7/1
+',re=/
+'Product\sID\s:\s.*?\shref=\"\"(\S*?)\"\">(\S*?)<.*?<a.*?>([^,]+),\s([a-zA-Z]{2}).*?Seller\sID\s:\s.*?\shref=\"\"(\S*?)\"\">(\S*?)<.*?<img\ssrc=\"\"(\S*?)\"\".*?Loan\sStatus.*?<td.*?>(.*?)<.*?Lien\sPosition.*?<td.*?>(.*?)<.*?Original\sBalance.*?<td.*?>(.*?)<.*?Principal\sBalance.*?<td.*?>(.*?)<.*?Note\sRate.*?<td.*?>(.*?)<.*?Indicative\sOffer.*?<span.*?>(.*?)<.*?<td.*?>(.*?)%
+'/g
+
+
+'Setup
+'Enable looping "imacros negative loop trick"
+'http://forum.imacros.net/viewtopic.php?t=13572
+'http://forum.imacros.net/viewtopic.php?f=7&t=23328
+'SET !LOOP -48
+'To get a positive looping counting variable
+'SET !VAR1 49
+'ADD !VAR1 {{!LOOP}}
+'Disable testing popups
+SET !EXTRACT_TEST_POPUP NO
+SET !ERRORIGNORE YES
+'Name to save file
+SET !VAR2 "fci-exchange.txt"
+'Wait seconds - random portion
+SET !VAR3 2
+'Wait seconds - fixed portion
+SET !VAR4 1
+
+'Open tabs
+TAB OPEN
+TAB T=2
+
+'Navigate to main site
+URL GOTO=http://www.fciexchange.com/all-loans.php
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Sort items (newest last)
+TAG POS=1 TYPE=A ATTR=ID:c16
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Sort items (newest first)
+TAG POS=1 TYPE=A ATTR=ID:c16
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 01
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+
+'Try HTTP POST
+'URL GOTO=javascript:post("https://script.google.com/macros/s/AKfycbzDwc66sUiYeNX2AZvVEoHDPAgnKV4LGaaRO-vVeOPOK7yA9bU/exec", {data: "bar"});
+
+'Try HTTP POST - Second attempt
+'URL GOTO=javascript:alert("TEST");   
+''  function post(path, params, method) {
+''    // Reference: http://stackoverflow.com/a/133997/1640892
+''    method = method || "post";
+''    var form = document.createElement("form");
+''    form.setAttribute("method", method);
+''    form.setAttribute("action", path);
+''    for (var key in params) {
+''      if (params.hasOwnProperty(key)) {
+''        var hiddenField = document.createElement("input");
+''        hiddenField.setAttribute("type", "hidden");
+''        hiddenField.setAttribute("name", key);
+''        hiddenField.setAttribute("value", params[key]);
+''        form.appendChild(hiddenField);
+''      }
+''    }
+''    document.body.appendChild(form);
+''    form.submit();
+'' }
+
+'Page 02
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 03
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 04
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 05
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 06
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 07
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 08
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 09
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 10
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 11
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 12
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 13
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 14
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 15
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 16
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 17
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 18
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 19
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Page 20
+
+'Extract data
+TAG POS=1 TYPE=HTML ATTR=* EXTRACT=HTM
+
+'Save file
+SAVEAS TYPE=EXTRACT FOLDER=* FILE={{!VAR2}}
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}
+
+'Go to next page
+TAG POS=1 TYPE=A ATTR=TXT:Next
+'Wait a random interval
+SET !VAR1 EVAL("Math.floor(Math.random()*{{!VAR3}} + {{!VAR4}});")
+WAIT SECONDS={{!VAR1}}

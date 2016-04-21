@@ -1,0 +1,73 @@
+<!DOCTYPE html> <!-- -------------------------------------- AvmReport.html (incorporated into application as <iframe>) -------------------------------------- -->
+<!-- Change log: v6. Added Bootstrap and panels; redesigned gauges -->
+<html>
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','table','gauge']}]}"></script>
+<style>html{font-family:sans-serif;color:gray;xtext-align:center;margin:auto}</style>
+<script>
+(function(){ // References: http://api.jquery.com/append/ | http://api.jquery.com/jQuery.getJSON/ See example: "Loads the four most recent pictures of Mount Rainier from the Flickr JSONP API." //var act="http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",ob={tags:"mount rainier",tagmode:"any",format:"json"}
+                var act="https://script.google.com/macros/s/AKfycbzoGUnMKwwbb-xKkjnla4y1Z4TrGmF-Q_trr-OXLq1NpbhLM59J/exec?jsoncallback=?",ob={k:"3bc9cpv6wb54gyqv6kl3",m:document.URL}
+                $.getJSON(act,ob).done(function(data){
+   	var dataBar   = google.visualization.arrayToDataTable(data.dataBar  ) // See prior versions (v.03 and earlier) of this script for examples of these variables' values
+ 	  , dataTable = google.visualization.arrayToDataTable(data.dataTable)
+ 	  , dataGauge = google.visualization.arrayToDataTable(data.dataGauge)
+      , options   = data.options
+      ; $("#spinner").remove();var X={"gmap":"Google","homeSnap":"Snap","zillow":"Zillow","propertyShark":"Shark","neighborhoodScout":"Scout","zipSkinny":"Skinny","chase":"Chase","boa":"BOA","homesCom":"Homes","trulia":"Trulia"," realEstate":"RealEstate"," realtor":"Realtor","photo":"Photo"};//,j=X.length;
+		$("#charts" ).append(drawChart(dataBar,dataTable,dataGauge,options))
+        $.each(data.link,function(i,link){$("<a>"   ).attr("href",link).attr("target","_blank").html(X[i] ).appendTo("#links") // Note the index, i, is the (string) name of the object's property (e.g.,zipSkinny,homesCom,etc.), not an iterating integer // Reference: http://stackoverflow.com/questions/4260308/javascript-getting-the-objects-property-name
+		       /*;if(j--){return false};*/$("<span>")                                          .html(" | ").appendTo("#links")/*;if(i===3){return false}*/}) })})() //.append("test")})})()
+function drawChart(dataBar,dataTable,dataGauge,options){
+ // new google.visualization.NumberFormat({prefix:"$",negativeColor:"red",negativeParens:true,pattern:"#,###"}).format(dataTable,1).format(dataTable,2).format(dataTable,3); // Reference: https://developers.google.com/chart/interactive/docs/reference#numberformatter
+    new google.visualization.BarChart(document.getElementById("chartBar"  )).draw(dataBar  ,options);
+    new google.visualization.Table   (document.getElementById("chartTable")).draw(dataTable,{showRowNumber:true});
+    new google.visualization.Gauge   (document.getElementById("chartGauge")).draw(dataGauge,{/*width:500,height:120,min:0,max:100,*/majorTicks:["0","10","20","30","40","50","60","70","80","90","100"],redFrom:0,redTo:30,yellowFrom:30,yellowTo:70,greenFrom:70,greenTo:100,minorTicks:2}); // Reference: https://developers.google.com/chart/interactive/docs/gallery/gauge
+}
+</script>
+    <div id="charts">
+	    <div id="spinner" style="text-align:center">
+		        Please wait while we generate your report...
+			<br><img src="https://lh3.googleusercontent.com/-BxuFb4Jcm1w/VDCDVUNtUpI/AAAAAAAAM5U/M9JhqNFdnTU/s1600/gears-anim.gif" xsrc="https://lh5.googleusercontent.com/-WsUsFefoGLQ/U_1TvMrrfvI/AAAAAAAAMnI/PDrmxMB9aZ4/s800/load666666.gif">
+			<br>This could take up to one minute.<br>If the page does not load after one minute,<br>please double check that you entered the address correctly<br>and that it generally resembles the format:<br>123 Main St, Los Angeles, CA
+		</div>
+        <div id="links" style="text-align:center"></div>
+		<table><tbody><tr>
+		<td><div id="chartBar"   style="width:900px;height:400px;margin:auto"></div></td>
+		<td><div id="chartTable" style="width:400px;height:300px;margin:auto"></div></td>
+		</tr></tbody></table>
+		<div id="chartGauge" style="margin:auto;xtext-align:center;xwidth:500px;xheight:120px;"></div>
+	</div>
+</body>
+</html>
+
+========================================= NEW CHART ========================================= (works with SetSandboxMode.IFRAME)
+<!DOCTYPE html><html class="fuelux"><!--http://jsfiddle.net/8g2xbm4c/-->
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+<script>
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+<body>
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
+
+</body>
+</html>
