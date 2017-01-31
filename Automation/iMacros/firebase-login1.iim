@@ -1,0 +1,9 @@
+﻿'firebase-login.iim
+'Login to Firebase.com
+'Assumes currently logged into Google
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://www.firebase.com/
+TAG POS=1 TYPE=A ATTR=ID:nav-login
+TAG POS=1 TYPE=BUTTON FORM=ID:form-login ATTR=ID:login-google
+TAG POS=1 TYPE=BUTTON FORM=ID:gaia_loginform ATTR=ID:choose-account-0

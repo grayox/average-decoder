@@ -1,0 +1,9 @@
+﻿'facebook-logout.iim
+'Logout of Facebook.com
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+'SET !ERRORIGNORE YES
+URL GOTO=https://www.facebook.com/
+TAG POS=1 TYPE=DIV ATTR=ID:userNavigationLabel
+TAG POS=2 TYPE=SPAN ATTR=TXT:Log<SP>Out
+URL GOTO=http://example.com/

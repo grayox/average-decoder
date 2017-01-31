@@ -1,0 +1,9 @@
+﻿'twitter-logout.iim
+'Logout of Twitter.com
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+'SET !ERRORIGNORE YES
+URL GOTO=https://twitter.com/
+TAG POS=1 TYPE=A ATTR=ID:user-dropdown-toggle
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Log<SP>out
+URL GOTO=http://example.com/

@@ -1,0 +1,4 @@
+﻿'tab-close-all.iim
+'Close tabs to begin and end session
+VERSION BUILD=8970419 RECORDER=FX
+TAB CLOSEALLOTHERS

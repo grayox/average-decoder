@@ -1,0 +1,23 @@
+﻿'https://www.firebase.com/docs/web/guide/login/google.html
+'Automates above page, paragraph 1
+
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://console.developers.google.com/project
+
+'Must handle 3 dialogs that pop up the first time a user visits the page
+'These dialogs do not appear on subsequent visits to the page
+
+'Create new project
+
+'The following block of code is capable of creating new projects AFTER the first project has been created
+'START BLOCK
+'Open dialog
+EVENT TYPE=CLICK SELECTOR="#projects-create" BUTTON=0
+'Enter project name into field
+EVENTS TYPE=KEYPRESS SELECTOR="#p6n-project-name-text" CHARS="My Project"
+'Save project name and close dialog
+TAG POS=1 TYPE=SPAN ATTR=TXT:Create
+'EVENT TYPE=CLICK SELECTOR="#p6n-project-creation-dialog-ok-button>BUTTON" BUTTON=0
+'URL GOTO=https://console.developers.google.com/apis/library?project=instant-keel-129614
+'END BLOCK

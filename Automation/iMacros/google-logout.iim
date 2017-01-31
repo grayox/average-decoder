@@ -1,0 +1,31 @@
+﻿'google-logout.iim
+'Logout of Google.com
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+SET !ERRORIGNORE YES
+URL GOTO=accounts.google.com/
+'Logout
+TAG POS=1 TYPE=SPAN ATTR=CLASS:gb_2a<SP>gbii&&TXT:
+TAG POS=1 TYPE=A ATTR=ID:gb_71
+'Pull up account list
+TAG POS=1 TYPE=A ATTR=ID:account-chooser-link
+'Remove account from list
+TAG POS=1 TYPE=A ATTR=ID:edit-account-list
+TAG POS=1 TYPE=BUTTON FORM=ID:gaia_loginform ATTR=ID:choose-account-0
+TAG POS=1 TYPE=A ATTR=ID:edit-account-list
+
+''BEGIN EVENT mode
+'Below is EVENT mode version
+'http://stackoverflow.com/a/36940665/1640892
+'VERSION BUILD=8970419 RECORDER=FX
+'TAB T=1
+'URL GOTO=accounts.google.com/
+'EVENT TYPE=CLICK SELECTOR="#gb>DIV>DIV>DIV:nth-of-type(2)>DIV:nth-of-type(4)>DIV>A>SPAN" BUTTON=0
+'EVENT TYPE=CLICK SELECTOR="#gb_71" BUTTON=0
+'EVENT TYPE=CLICK SELECTOR="#account-chooser-link" BUTTON=0
+'EVENT TYPE=CLICK SELECTOR="#edit-account-list" BUTTON=0
+'EVENT TYPE=CLICK SELECTOR="#choose-account-0" BUTTON=0
+'EVENT TYPE=CLICK SELECTOR="#edit-account-list" BUTTON=0
+'END EVENT mode
+
+URL GOTO=http://example.com/

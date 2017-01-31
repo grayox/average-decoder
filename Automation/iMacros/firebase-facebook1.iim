@@ -1,0 +1,17 @@
+﻿'DEPRECATED 5/20/2016
+'Firebase updated its app console to better integrate with Google app engine
+
+'firebase-facebook.iim
+'Port credentials from Facebook to Firebase
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+SET !ERRORIGNORE YES
+URL GOTO=firebase.com/
+TAG POS=1 TYPE=A ATTR=ID:nav-login
+TAG POS=2 TYPE=A ATTR=TXT:Manage<SP>App
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Skip<SP>Tour
+TAG POS=1 TYPE=I ATTR=CLASS:icon-users&&TXT:
+TAG POS=1 TYPE=A ATTR=ID:selectFacebook
+TAG POS=1 TYPE=INPUT:CHECKBOX ATTR=ID:authFacebookEnabled CONTENT=YES
+TAG POS=1 TYPE=INPUT:TEXT ATTR=ID:authFacebookAppId CONTENT={{ID}}
+TAG POS=1 TYPE=INPUT:TEXT ATTR=ID:authFacebookAppSecret CONTENT={{SECRET}}

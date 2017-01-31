@@ -1,0 +1,19 @@
+'write-to-file.iim
+'http://forum.imacros.net/viewtopic.php?f=7&t=5330
+'http://wiki.imacros.net/SAVEAS
+
+VERSION BUILD=8970419 RECORDER=FX
+'TAB T=1
+'SET !ERRORIGNORE YES
+
+'SET URI https://developers.facebook.com/sa/apps/1730240533921828/fb-login/
+'SET CALLBACK https://jessemy-aam.firebaseapp.com/__/auth/handler
+'SET MYDELAY 5
+
+'SET !EXTRACTADD {{!URLCURRENT}}
+
+'FILEDELETE NAME=c:\output\mydata.csv
+FILEDELETE NAME={{NAME}}
+'SAVEAS appends; Do FILEDELETE;
+SET !EXTRACT {{DATA}}
+SAVEAS TYPE=EXTRACT FOLDER={{FOLDER}} FILE={{FILE}}

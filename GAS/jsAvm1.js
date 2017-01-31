@@ -6,7 +6,7 @@ function avmJson (str){var out=avmCore(str); // Main AVM call
     return out}//function test(){/*Logger.log*/print(JSON.stringify(avmJson("5008 corson ave s, seattle, wa")))}//"1505 S Bennett St, seattle, wa" "4009 pittwood dr, danville, va"
 function avmCore(str){var out={},addy={}; // Broken out due to asynchronous callbacks making all functions complete before calling avmStat(); otherwise dataset can be incomplete
     function fixAddy(ob1,ob2){var ar=["sa","city","state","zip","full"],i=ar.length;while(i--){if(ob2[ar[i]]){ob1[ar[i]]=ob2[ar[i]]}}}
-    try{out.zipRealty = avmZipRealty(str );fixAddy(addy,out.zipRealty  )}catch(e){Logger.log("Error fyeBX: "+e.message);return} // ZipRealty® // Yields 3 estimates: 1. SmartZip®, 2. Zillow®, 3. Eppraisal® (as of 9/10/2015) // Defacto geocode 
+    try{out.zipRealty = avmZipRealty(str );fixAddy(addy,out.zipRealty  )}catch(e){Logger.log("Error fyeBX: "+e.message);return} // ZipRealty® // Yields 3 estimates: 1. SmartZip®, 2. Zillow®, 3. Eppraisal® (as of 9/10/2015) // Defacto geocode
     try{out.trulia    = avmTrulia   (str );fixAddy(addy,out.trulia.addy)}catch(e){Logger.log("Error duR4E: "+e.message)       } // Trulia®    // Will not provide estimate on listed properties  // Yields annual taxes — replaces PropertyShark® because it also yields an AVM estimate, thus saving an http fetch / URL call
     try{out.remax     = avmRemax    (addy)/*No fixAddy();ar[0]==null?*/ }catch(e){Logger.log("Error tQa1E: "+e.message)       } // ReMax®     // 350+ estimates of surrounds // Uses Homes.com AVM (so does HomeSnap)
     try{out.homeSnap  = avmHomeSnap (addy)                              }catch(e){Logger.log("Error zHu8A: "+e.message)       } // HomeSnap®  // Scores appreciation and cash flow potential // Uses Homes.com AVM (so does ReMax) // Only works for UNLISTED properties (currently). Listings reorder the data fields and throw off the scrape.
@@ -69,7 +69,7 @@ try{   if(avm.homeSnap   .taxEst                ){out.taxExp        = avm.homeSn
 try{   if(avm.realtor    .status                ){out.status        = avm.realtor     .status                }}catch(e){Logger.log("Error LgH28: "+e.message)}  // e.g., "6/16/2013" // Not used in display table // Uses year only instead, requires conversion/processing
     return out}
 function avmStat(avm){ // Array.prototype.avmStat=function(bid){ // Returns array of statistics of AVM data points; includes max bid, ARV = median AVM, margin & ratio
-  //** /Logger.log/**/print(JSON.stringify(avm)); 
+  //** /Logger.log/**/print(JSON.stringify(avm));
     var out={},avmSet=[],x=Object.keys(avm),i=x.length;while(i--){
         try{if((x[i]==="remax")&&(avm.remax.estimate==avm.homeSnap.estimate)){continue}}catch(e){} // Deduplicate remax estimate — avmHomeSnap() returns 3 estimates including avmRemax() which might be duplicated
         try{if(avm[x[i]].estimate){if(typeof avm[x[i]].estimate=="object"){avmSet=avmSet.concat(avm[x[i]].estimate)} // For zipRealty: A-smartZip, B-zillow, C-eppraisal
@@ -88,7 +88,7 @@ function avmRealtor(addy){//function test(){var a={sa:"7317 S Dorchester Ave",ci
         var THIS = [,"--","=-"," ",",",", "]
         , WITH = [,"-" ,"=" ,"-","-","-" ]
         , STEM = // "http://www.realtor.com/realestateandhomes-search/" // "For Sale"      http://www.realtor.com/realestateandhomes-search/Costa-Mesa_CA/92627/1139-Aviemore-Terrace
-                                                                      // "Recently Sold" 
+                                                                      // "Recently Sold"
             "http://www.realtor.com/propertyrecord-search/"     // "Not For Sale"  http://www.realtor.com/propertyrecord-search/Shelton_WA/98584/1522-Fairmount-Ave
                                                                           //                 http://www.realtor.com/propertyrecord-search/Costa-Mesa_CA/92627/1147-Aviemore-Terrace
           , out=(STEM+addy.city.replace(/ /g,"-")+"_"+addy.state+"/"+addy.zip+"/"+addy.sa.replace(/ /g,"-")).trim(),i=THIS.length;while(i---1){out=LibraryjsUtil._replaceAll(out,THIS[i],WITH[i])}
@@ -114,7 +114,7 @@ function avmHomeSnap (addy){ //addy=addy||{city:"Highland Lakes",sa:"27 Lakeshor
     var data=UrlFetchApp.fetch(act/*,{muteHttpExceptions:true}*/).getContentText(),out=LibraryjsUtil._scrapeDataset(data,KEY,QUE,BEG,END,DEL,INS);out.link=act;
   try{out.baths=(1*function(){return(out.bathsFull*1==out.bathsFull)?out.bathsFull:0}() + 0.5*function(){return(out.bathsHalf*1==out.bathsHalf)?out.bathsHalf:0}())||""}catch(e){Logger.log("Error 0SON7: "+e.message);out.baths=""}
   return out} // function test(){print/*Logger.log*/(JSON.stringify(avmHomeSnap({city:"Seattle",sa:"5008 Corson Ave S",state:"WA","zip":"98108","csz":"Seattle, WA 98108",full:"5008 Corson Ave S, Seattle, WA 98108"})))}
-function avmHomeSnap_list2url(addy){//@return{string} — Url of matching subject from a list 
+function avmHomeSnap_list2url(addy){//@return{string} — Url of matching subject from a list
     var KEY = [ , "link" , "ad" ]
     , QUE = [ , "href" , "id" ]
     , BEG = [ , '"'    , ">"  ]
@@ -178,7 +178,7 @@ function avmRemax(addy){//@param{object} addy: full, city, state, zip // Value e
     try{   out.array[0].state=LibraryjsUtil.str2caseTitle(out.array[0].state)}catch(e){out.array=out.array.shift();continue}
     try{if(out.array[0].sa.toLowerCase()==addy.sa.toLowerCase()){out.subject=out.array[0];out.estimate=out.subject.estimate}}catch(e){}
     }return out}//function test(){print/*Logger.log*/(JSON.stringify(avmRemax({sa:"5008 corson ave s",city:"seattle",state:"wa",full:"5008 corson ave s, seattle, wa"})))}
-function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =function(tMax    ){ // Fetch data from Zillow API. 
+function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =function(tMax    ){ // Fetch data from Zillow API.
     // Need to add new version of avmZillowAPI() that first queries mapQuest() to find addy params for avmZillowAPI() call. This will reduce the number of double calls to separate the addy params.
   /* References
     // Corelogic....... http://express.realquest.com/search.aspx?location=5008%20corson%20ave%20s,%20seattle,%20wa
@@ -189,7 +189,7 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
     // Sample API call. http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id=<ZWSID>&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA
   */
   /* Archive
-    Notes: 
+    Notes:
       // The method for acquiring most of the property data is to use the Yahoo Real Estate web site because Zillow requires a property ID
       // first in order to access the property data. Yahoo provides this property ID and a subset of property details also supplied to Yahoo from Zillow.
       // Therefore, this method of using Yahoo is the quickest, most efficient method to acquire the property data.
@@ -405,8 +405,8 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
          {"searchresults":{"request":{"citystatezip":{"Text":"Seattle, Wa"},"address":{"Text":"2114 Bigelow Ave"}},"schemalocation":"http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/6ec2563/static/xsd/SearchResults.xsd","response":{"results":{"result":{"localRealEstate":{"region":{"type":"neighborhood","zindexValue":{"Text":"653,000"},"id":"271856","name":"East Queen Anne","links":{"forSaleByOwner":{"Text":"http://www.zillow.com/east-queen-anne-seattle-wa/fsbo/"},"forSale":{"Text":"http://www.zillow.com/east-queen-anne-seattle-wa/"},"overview":{"Text":"http://www.zillow.com/local-info/WA-Seattle/East-Queen-Anne/r_271856/"}}}},"zpid":{"Text":"48749425"},"zestimate":{"percentile":{"Text":"0"},"amount":{"currency":"USD","Text":"1386729"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"35142","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"1289658"},"high":{"currency":"USD","Text":"1525402"}},"last_updated":{"Text":"09/11/2014"}},"links":{"comparables":{"Text":"http://www.zillow.com/homes/comps/48749425_zpid/"},"homedetails":{"Text":"http://www.zillow.com/homedetails/2114-Bigelow-Ave-N-Seattle-WA-98109/48749425_zpid/"},"mapthishome":{"Text":"http://www.zillow.com/homes/48749425_zpid/"},"graphsanddata":{"Text":"http://www.zillow.com/homedetails/2114-Bigelow-Ave-N-Seattle-WA-98109/48749425_zpid/#charts-and-data"}},"address":{"street":{"Text":"2114 Bigelow Ave N"},"city":{"Text":"Seattle"},"longitude":{"Text":"-122.347938"},"latitude":{"Text":"47.637933"},"state":{"Text":"WA"},"zipcode":{"Text":"98109"}}}}},"message":{"text":{"Text":"Request successfully processed"},"code":{"Text":"0"}},"xsi":"urn:x-prefix:xsi"}}
       SAMPLE RESPONSE — XML
       <?xml version="1.0" encoding="utf-8"?><SearchResults:searchresults
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-      xsi:schemaLocation="http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/11346f0ed65354ce3e550eff2713981a/static/xsd/SearchResults.xsd" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/11346f0ed65354ce3e550eff2713981a/static/xsd/SearchResults.xsd"
       xmlns:SearchResults="http://www.zillow.com/static/xsd/SearchResults.xsd">
       <request>
         <address>2114 Bigelow Ave</address>

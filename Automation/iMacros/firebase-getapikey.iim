@@ -1,0 +1,11 @@
+'firebase-getapikey.iim
+'Fetches Firebase API Key needed for polymerfire/firebase-app.html element
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://console.firebase.google.com/project/{{FBID}}/authentication/users
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Web<SP>setup
+'Copies API Key field value only
+TAG POS=1 TYPE=SPAN ATTR=CLASS:str EXTRACT=TXT
+'Copies entire snippet
+'TAG POS=1 TYPE=BUTTON ATTR=TXT:Copy
+TAG POS=2 TYPE=BUTTON ATTR=TXT:close

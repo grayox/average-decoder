@@ -1,0 +1,20 @@
+﻿'https://www.firebase.com/docs/web/guide/login/google.html
+'Automates above page, paragraph 1
+
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://console.developers.google.com/project
+
+'Must handle 3 dialogs that pop up the first time a user visits the page
+'These dialogs do not appear on subsequent visits to the page
+
+'Create new project
+
+'The following block of code is necessary to create a project for the first time
+'START BLOCK
+EVENT TYPE=CLICK SELECTOR="HTML>BODY>DIV:nth-of-type(4)>DIV:nth-of-type(2)>DIV>HEADER>DIV:nth-of-type(2)>DIV:nth-of-type(3)>DIV>DIV>DIV>A>SPAN" BUTTON=0
+EVENT TYPE=CLICK SELECTOR="#p6ntest-create-project>SPAN>SPAN>SPAN" BUTTON=0
+EVENT TYPE=CLICK SELECTOR="#p6n-test-projectcreationform>FORM>TOS-CHECKBOXES>FIELDSET>DIV>DIV>LABEL:nth-of-type(2)>SPAN" BUTTON=0
+EVENT TYPE=CLICK SELECTOR="#p6n-test-projectcreationform>FORM>TOS-CHECKBOXES>FIELDSET:nth-of-type(2)>DIV>DIV>LABEL>SPAN" BUTTON=0
+EVENT TYPE=CLICK SELECTOR="#p6n-project-creation-dialog-ok-button>BUTTON" BUTTON=0
+'END BLOCK

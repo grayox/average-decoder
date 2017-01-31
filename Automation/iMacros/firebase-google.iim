@@ -1,0 +1,13 @@
+'firebase-google.iim
+'Setup Google auth in Firebase
+VERSION BUILD=8970419 RECORDER=FX
+
+'SET URI https://console.firebase.google.com/project/jessamy-aam/authentication/providers
+'SET ID cUT1JR5ADmzSJsqNLMA6ToEOw
+'SET SECRET EpUojy1QIzh9rmVO5mCLBolpgI0i4erF1CfZfJWlEgDZf36aSg
+
+TAB T=1
+'SET !ERRORIGNORE YES
+URL GOTO={{URI}}
+TAG POS=2 TYPE=DIV ATTR=MD-INK-RIPPLE-CHECKBOX:&&MD-INK-RIPPLE:&&CLASS:md-thumb<SP>md-ink-ripple&&TXT:
+TAG POS=2 TYPE=BUTTON FORM=NAME:form ATTR=TXT:Save

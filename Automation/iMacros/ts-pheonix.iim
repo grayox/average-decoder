@@ -1,4 +1,4 @@
-VERSION BUILD=8961227 RECORDER=FX
+﻿VERSION BUILD=8961227 RECORDER=FX
 
 'RegEx pattern of result: https://regex101.com/r/iT6fL3/1
 ',re=/
@@ -8,6 +8,7 @@ VERSION BUILD=8961227 RECORDER=FX
 
 'Setup
 'Enable looping "imacros negative loop trick"
+‘http://forum.imacros.net/viewtopic.php?f=21&t=23309
 'SET !LOOP -48
 'To get a positive looping counting variable
 'SET !VAR1 49

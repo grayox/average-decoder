@@ -1,0 +1,26 @@
+'firebase.facebook.iim
+VERSION BUILD=8970419 RECORDER=FX
+
+'Parameters
+'SET URI https://console.firebase.google.com/project/jessamy-aam/authentication/providers
+'SET ID 482266368635551
+'SET SECRET b12c5c91bf447a3d83e9b7dadbc86585
+
+TAB T=1
+'SET !ERRORIGNORE YES
+
+'Navigate
+'URL GOTO=https://console.firebase.google.com/project/liberating-architect/authentication/providers
+URL GOTO={{URI}}
+
+'Enable service
+TAG POS=3 TYPE=DIV ATTR=MD-INK-RIPPLE-CHECKBOX:&&MD-INK-RIPPLE:&&CLASS:md-thumb<SP>md-ink-ripple&&TXT:
+
+'Populate fields
+'TAG POS=1 TYPE=INPUT:TEXT FORM=NAME:form ATTR=TYPE:text&&NG-REQUIRED:controller.local.enabled<SP>&&<SP>controller.idp.isOauth&&NG-DISABLED:!controller.local.enabled<SP>||<SP>!controller.canEdit&&NG-MODEL-OPTIONS:{updateOn:<SP>'blur'}&&CLASS:a12n-input<SP>ng-pristine<SP>ng-untouched<SP>ng-empty<SP>ng-invalid<SP>ng-invalid-required&&NG-MODEL:controller.local.clientId&&NAME:clientId&&FULL:&&AUTOCOMPLETE:off&&SPELLCHECK:false&&ARIA-INVALID:true&&REQUIRED:required CONTENT={{ID}}
+TAG POS=3 TYPE=INPUT:TEXT FORM=NAME:form ATTR=NAME:clientId CONTENT={{ID}}
+'TAG POS=1 TYPE=INPUT:TEXT FORM=NAME:form ATTR=TYPE:text&&NG-REQUIRED:controller.local.enabled<SP>&&<SP>controller.idp.isOauth&&NG-DISABLED:!controller.local.enabled<SP>||<SP>!controller.canEdit&&NG-MODEL-OPTIONS:{updateOn:<SP>'blur'}&&CLASS:a12n-input<SP>ng-pristine<SP>ng-untouched<SP>ng-empty<SP>ng-invalid<SP>ng-invalid-required&&NG-MODEL:controller.local.secret&&NAME:clientSecret&&FULL:&&AUTOCOMPLETE:off&&SPELLCHECK:false&&ARIA-INVALID:true&&REQUIRED:required CONTENT={{SECRET}}
+TAG POS=3 TYPE=INPUT:TEXT FORM=NAME:form ATTR=NAME:clientSecret CONTENT={{SECRET}}
+
+'Click save button
+TAG POS=3 TYPE=BUTTON FORM=NAME:form ATTR=TXT:Save

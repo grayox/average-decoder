@@ -1,0 +1,29 @@
+'https://www.firebase.com/docs/web/guide/login/google.html
+'Automates above page, paragraph 1
+
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+'URL GOTO=https://console.developers.google.com/iam-admin/projects
+URL GOTO=https://console.developers.google.com
+
+'Must handle 3 dialogs that pop up the first time a user visits the page
+'These dialogs do not appear on subsequent visits to the page
+
+'Create new project
+
+'The following block of code is capable of creating new projects AFTER the first project has been created
+'START BLOCK
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Create<SP>project
+TAG POS=1 TYPE=INPUT:TEXT FORM=NAME:createProjectForm ATTR=ID:p6n-project-name-text CONTENT={{APP}}
+TAG POS=1 TYPE=BUTTON ATTR=NAME:ok
+'END BLOCK
+
+'The following block is an alternative to what is above this line
+'START BLOCK
+'VERSION BUILD=8970419 RECORDER=FX
+'TAB T=1
+'URL GOTO=https://console.developers.google.com/apis/library
+'TAG POS=1 TYPE=SPAN ATTR=TXT:Credentials
+'TAG POS=1 TYPE=INPUT:TEXT FORM=NAME:projectPickerForm ATTR=ID:p6n-project-name-text CONTENT={{APP}}
+'TAG POS=1 TYPE=SPAN ATTR=TXT:Create
+'END BLOCK

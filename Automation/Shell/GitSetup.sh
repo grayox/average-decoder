@@ -1,7 +1,7 @@
 #!/bin/bash
 # chmod u+x /Users/atlasgroup/Git/CodeBase/Automation/Shell/GitSetup.sh # At command line # Make executable
 
-# LOCAL='/Users/atlasgroup/Git/Themes/'
+# LOCAL='/Users/atlasgroup/Git/NewApp/'
 # Local repository location
 LOCAL=$1
 
@@ -10,7 +10,7 @@ LOCAL=$1
 REMOTE=$2
 
 cd $LOCAL
-# git remote remove origin
+git remote remove origin # Remove prior origin from copy operation
 git init
 git remote add origin $REMOTE
 git add -A

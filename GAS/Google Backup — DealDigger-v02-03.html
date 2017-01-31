@@ -8,9 +8,9 @@ HTML markup for GAS served app is being depricated in this version. For that, se
 function auth    (){}
 function timer   (){Logger.log(new Date().getTime())}//1388228703613
 //function importDataFromFile(id){id=id||"0B1LVOoV_2dFtZGVkQW1MeGNyNnM";ScriptDb.getMyDb().saveBatch(JSON.parse(DocsList.getFileById(id).getContentAsString()),false)} // Imports array of objects from, say, a backup file
-function backup  (){var desc="Scrape Realtor Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out./*unshift*/push(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
-function print   (){var desc="Scrape Realtor Print — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"filesList"/*isRaw:false* /source:{name:"ZipRealty"/*db.not("Realtor")* /}*/});while(results.hasNext()){out./*unshift*/push(results.next())}out.reverse();id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);} // .push() is faster than .unshift() // Reference: http://jsperf.com/array-push-vs-unshift
-function print_test(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"Scrape Realtor Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function backup  (){var desc="Scrape Realtor Backup ï¿½ timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out./*unshift*/push(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print   (){var desc="Scrape Realtor Print ï¿½ timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({table:"filesList"/*isRaw:false* /source:{name:"ZipRealty"/*db.not("Realtor")* /}*/});while(results.hasNext()){out./*unshift*/push(results.next())}out.reverse();id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);} // .push() is faster than .unshift() // Reference: http://jsperf.com/array-push-vs-unshift
+function print_test(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"Scrape Realtor Print ï¿½ timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
 function size    (){var db=ScriptDb.getMyDb();Logger.log(db.query({/*isRaw:false*/source:{name:"ZipRealty"/*db.not("Realtor")*/}}).getSize())}
 function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
 function showOne (){var db=ScriptDb.getMyDb();Logger.log(JSON.stringify(db.query({item:"MH7rUOs"/*source:{name:"ZipRealty"}/*table:db.anyValue()/*isRaw:false*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
@@ -20,7 +20,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 //function mod     (){var db=ScriptDb.getMyDb(),arr=[],r,results=db.query({source:{name:"ZipRealty"},table:"situs"/*"note"/*lienPos:db.anyOf(["1st",false,db.not(db.anyValue())])*/});while(results.hasNext()){r=results.next();try{/*r.statusArray.sort(function(a,b){var x="timestamp";return(a[x]-b[x])}).reverse();*/var i=r.statusArray.length;while(i--){if(r.statusArray[i].status=="Clicked"){r.statusCurrent={status:"Clicked",timestamp:r.statusArray[i].timestamp};break;}else if(r.statusArray[i].status=="Opened"){r.statusCurrent={status:"Opened",timestamp:r.statusArray[i].timestamp}}}/*while(r.bids[0].bidder!="ssanchez0322@gmail.com"){Logger.log(r.bids[0]);r.bids.shift()}*/}catch(e){Logger.log(e.message)}/*r.lienPos=1;*/arr.push(r);}db.saveBatch(arr,false)} //function mod    (){var db=ScriptDb.getMyDb(),arr=[],r,results=db.query({source:{name:"ZipRealty"},table:"situs"/*"note"/*lienPos:db.anyOf(["1st",false,db.not(db.anyValue())])*/});while(results.hasNext()){r=results.next();j=r.bids.length;while(j--){if(r.bids[j].amount==0){r.bids.splice(j,1)}}arr.push(r)}db.saveBatch(arr,false)}
 //function getEmailQuota(){Logger.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());}
 //function testCall(){Logger.log(UrlFetchApp.fetch("https://script.google.com/macros/s/AKfycbx_mgY9DdVYpBA3iGI2CYE0Aq3CbKrCrPQUJZu5S1unVUYaRP0/exec?k=9l4y95xhwwi8q2hbkslp&callback=jQuery1101041615460510365665_1390895886465&filterscount=0&groupscount=0&pagenum=0&pagesize=20&recordstartindex=0&recordendindex=18&featureClass=P&style=full&maxRows=50&_=1390895886466").getContentText())}
-/*function marketData(){ // Replaced by m=LibraryjsUtil.DDgetMarketData("CA","Los Angeles") var out = // Note: "emailHour" — a number between 1 and 12 representing the latest hour (AM or PM) of any email received from ZipRealty. We will fetch the emails via trigger at the indicated hour plus 2 every 12 hours (AM and PM). Ex: If markets.emailHour == 4, we will fetch emails at 6am and 6pm.
+/*function marketData(){ // Replaced by m=LibraryjsUtil.DDgetMarketData("CA","Los Angeles") var out = // Note: "emailHour" ï¿½ a number between 1 and 12 representing the latest hour (AM or PM) of any email received from ZipRealty. We will fetch the emails via trigger at the indicated hour plus 2 every 12 hours (AM and PM). Ex: If markets.emailHour == 4, we will fetch emails at 6am and 6pm.
     { "markets" : [ // MARKETS designate one or more BUYERS // Agents assigned to buyers, not markets, to minimize agent/buyer crosstalk
                     /*   0 * / { "state":"CA" , "city":"Los Angeles" , "buyers":[0] /* , "agents":[0] * / , "emailHour": 9/*see note* / , "rss":{"zipRealty":{ "Redux":"12toeb4-atcsow-7cg"  , "Foreclosure":"12tpwtc-atcsow-4g"   , "Shortsales":"12tzs7s-atcsow-1avs" , "Keyword_01":"12tp788-atcsow-109k" }} }
 	          //  , /*   1 * / { "state":"CA" , "city":"San Diego"   , "buyers":[0] /* , "agents":[0] * / , "emailHour": 4/*see note* / , "rss":{"zipRealty":{ "Redux":"12toe5k-a1m6g0-18lk" , "Foreclosure":"12touao-a1m6g0-1oqo" , "Shortsales":"12toe5k-a1m6g0-18lk" , "Keyword_01":"12say00-a1m6g0-1ikg" }} }
@@ -79,15 +79,15 @@ function postNewSiti(source){ob={fbid:"radiant-heat-5197",path:"siti",verb:"patc
   Logger.log(JSON.stringify(LibraryjsUtil.write2fb(ob)));
 }//function test(){var ar=["auction","trustee_pheonix"],i=ar.length;while(i--){postNewSiti(ar[i])}}
 function feScrape(){ // function test(){Logger.log(JSON.stringify(feScrape()))}
-    var i,ar,str,out=[],act="http://www.finestexpert.com/Search/Search?searchType=search&locationid=4748000&filter.location=Memphis&filter.SortOrders=DESC&filter.minAskingPriceDiscount=10&filter.maxAskingPriceDiscount=100" 
+    var i,ar,str,out=[],act="http://www.finestexpert.com/Search/Search?searchType=search&locationid=4748000&filter.location=Memphis&filter.SortOrders=DESC&filter.minAskingPriceDiscount=10&filter.maxAskingPriceDiscount=100"
     //         http://www.finestexpert.com/Search/Page/2?searchType=search&                   filter.Location=Memphis&filter.ForRent=False&filter.ForSale=True&filter.MinBedrooms=&filter.MaxBedrooms=&filter.MinBathrooms=&filter.MaxBathrooms=&filter.MinSize=&filter.MaxSize=&filter.MinYearBuilt=&filter.MaxYearBuilt=&filter.MinRentRatio=&filter.MaxRentRatio=&filter.MinPrice=&filter.MaxPrice=&filter.MinAskingPriceDiscount=10&filter.MaxAskingPriceDiscount=100&filter.MinSqFootPrice=&filter.MaxSqFootPrice=&filter.MinCapRate=&filter.MaxCapRate=&filter.MinCFBT=&filter.MaxCFBT=&filter.MinCCR_BT=&filter.MaxCCR_BT=&filter.MinCFAT=&filter.MaxCFAT=&filter.MinCCR_AT=&filter.MaxCCR_AT=&filter.MeasureType.MeasureId=20&filter.Box.North=0&filter.Box.West=0&filter.Box.South=0&filter.Box.East=0&filter.PropertyTypes=UNKNOWN&filter.MeasureType.MeasureId=20&filter.SortOrders=DESC&filter.ForeclosureStages=No_foreclosure&filter.ForeclosureStages=Pre_foreclosure&filter.ForeclosureStages=Foreclosure&filter.ForeclosureStages=Real_Estate_Owned&page=2
     // Source: http://www.finestexpert.com/Search/Search?searchType=search&locationid=4748000&filter.location=Memphis&filter.MinBedrooms=2&filter.MaxBedrooms=4&filter.MeasureType.MeasureId=19&filter.SortOrders=DESC&filter.minAskingPriceDiscount=10&filter.maxAskingPriceDiscount=100
     //         http://www.finestexpert.com/Search/Search?searchType=search&locationid=4748000&filter.location=Memphis&filter.SortOrders=DESC&filter.minAskingPriceDiscount=10&filter.maxAskingPriceDiscount=100
     //                                                                                                                     omit;intermittent
     ,   KEY = [ , "addyFull" , "imgSrc" , "grpUse"                  , "grpFact"           , "sa"   , "csz"  , "askPrice"  /* , "pricePerSf"     */ , "estVal"     , "foo"       , "discountPosted" , "estRent"   , "cashFlow"   , "foo"               , "cashcashReturn" , "feScore"         , "feDate"         , "link_report" , "providedBy"   ]
-    ,   QUE = [ , " value"   , " src"   , "<div"                    , "<div"              , "<div" , "<div" , "Ask Price" /* , "finance_column" */ , "Est Value:" , "Discount:" , "<span"          , "Est Rent:" , "Cash Flow:" , "Cash/Cash Return:" , "<span"          , 'class="FEScore"' , 'class="FEDate"' , "href"        , "Provided by:" ]              
+    ,   QUE = [ , " value"   , " src"   , "<div"                    , "<div"              , "<div" , "<div" , "Ask Price" /* , "finance_column" */ , "Est Value:" , "Discount:" , "<span"          , "Est Rent:" , "Cash Flow:" , "Cash/Cash Return:" , "<span"          , 'class="FEScore"' , 'class="FEDate"' , "href"        , "Provided by:" ]
     ,   BEG = [ , "\""       , "\""     , ">"                       , ">"                 , ">"    , ">"    , "$"         /* , "$"              */ , "$"          , "td"        , ">"              , "$"         , "$"          , "td"                , ">"              , ">"               , ">"              , '"'           , " "            ]
-	,   END = [ , "\""       , "\""     , "<"                       , "<"                 , "<"    , "<"    , "<"         /* , "/"              */ , "<"          , "td"        , "%"              , "/"         , "/"          , "td"                , "%"              , "<"               , "<"              , '"'           , "<"            ]
+	  ,   END = [ , "\""       , "\""     , "<"                       , "<"                 , "<"    , "<"    , "<"         /* , "/"              */ , "<"          , "td"        , "%"              , "/"         , "/"          , "td"                , "%"              , "<"               , "<"              , '"'           , "<"            ]
     ,   DEL = [ , null       , null     , ["&nbsp;","\r","\n","  "] , ["\r","\n"," ",","] , null   , null   , [","]       /* , null             */ , [","]        , null        , null             , null        , null         , null                , null             , null              , null             , null          , null           ]
     ,   INS = [ , null       , null     , [""      ,""  ,""  ,""  ] , [""  ,""  ,"" ,"" ] , null   , null   , [""]        /* , null             */ , [""]         , null        , null             , null        , null         , null                , null             , null              , null             , null          , null           ]
     ;   try{str=UrlFetchApp.fetch(act).getContentText().split(">Next<")[1]}catch(e){Logger.log("Error SEYKD: "+e.message);return false}//Logger.log(str);return;
@@ -98,10 +98,10 @@ function autoFlow(){ var db=ScriptDb.getMyDb(),ar=[],d=new Date(),t=d.getTime(),
                             ,{table:"situs",status:{isBid      :       true                 }} // bid  Bids made              // Different structure already working, entrenchment/inertia
                          // ,{table:"situs",status:{isBid:true,isAppended:{value:true},isOffer:db.not(db.anyValue())}}        // pCon Offers pending construction
                             ,{table:"situs",status:{isAppended :{value:true,method:"auto"  }}} // apa  Appended automatically // replaced: isAppended_auto   + isAppended_record
-                            ,{table:"situs",status:{isAppended :{value:true,method:"manual"}}} // apm  Appended manually      // replaced: isAppended_manual + isAppended_record	
+                            ,{table:"situs",status:{isAppended :{value:true,method:"manual"}}} // apm  Appended manually      // replaced: isAppended_manual + isAppended_record
                             ,{table:"situs",status:{isOffer    :{value:true                }}} // off  Offers constructed
-                            ,{table:"situs",status:{isEmailed  :{value:true                }}} // sent Emails sent	
-                            ,{table:"situs",status:{isOpened   :{value:true                }}} // op   Emails opened	
+                            ,{table:"situs",status:{isEmailed  :{value:true                }}} // sent Emails sent
+                            ,{table:"situs",status:{isOpened   :{value:true                }}} // op   Emails opened
                             ,{table:"situs",status:{isClicked  :{value:true                }}} // cl   Emails clicked
                             ,{table:"situs",status:{isRejected :{value:true                }}} // re   Emails rejected
                             ,{table:"situs",status:{isCountered:{value:true                }}} // co   Emails countered
@@ -127,7 +127,7 @@ function autoFlow(){ var db=ScriptDb.getMyDb(),ar=[],d=new Date(),t=d.getTime(),
 // Seattle, WA: John L. Scott => http://www.jlsforeclosures.com/listings.php
 // Seattle, WA: www.vestus.com/
 // ------------------------------------------------------------------------------------------------------
-// function print   (str){var desc="DealDigger™ Print — timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
+// function print   (str){var desc="DealDiggerï¿½ Print ï¿½ timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
 function trustee_pheonix_ob(){var SOURCE_ID="w0GQ",key,out={},ar=trustee_pheonix(),i=ar.length;while(i--){key=[SOURCE_ID,ar[i]["fileNum"]].join(":");
     out[key]              = {}                   ;
     out[key]["detail"   ] = ar[i]                ;
@@ -159,7 +159,7 @@ function trustee_pheonix(){ // Tiffany & Bosco, P.A. // ATTORNEYS AT LAW // SEVE
   ; INS[2] = [ []          , []        , []         , []                                            ]
   ; try{s=UrlFetchApp.fetch(act/** /,{"method":method,"payload":payload}/**/).getContentText()}catch(e){Logger.log("Error c0el8: "+e.message);return}s=str+s.split(str).slice(1).join(str);//.replace(/></g,"> <");
   ; ar=s.split("images/Line1.gif");i=ar.length;
-  //return i; //TODO: Get all records on one page (i.e., ddlNumRows=300 or request multiple pages in sequence; right now, max records = 20 
+  //return i; //TODO: Get all records on one page (i.e., ddlNumRows=300 or request multiple pages in sequence; right now, max records = 20
   while(i--){out[i]={};ar[i]=ar[i].split("itemRow");ar[i]=ar[i].slice(1,-1);j=/**/ar[i].length/**/;while(j--){
     ar[i][j]=ar[i][j].split("<td");ar[i][j]=ar[i][j].slice(1);k=ar[i][j].length;while(k--){
     ar[i][j][k]=LibraryjsUtil._scrapeDataset(ar[i][j][k],[,KEY[j][k]],[,QUE[j][k]],[,BEG[j][k]],[,END[j][k]],[,DEL[j][k]],[,INS[j][k]]);
@@ -178,7 +178,7 @@ function trustee_pheonix(){ // Tiffany & Bosco, P.A. // ATTORNEYS AT LAW // SEVE
   }}return out}//ar}//s}//function test(){/*print*/Logger.log(/**/JSON.stringify(/**/trustee_pheonix()/**/)/**/)}
 // --------------------------- INCOMING DATA SOURCE: SCRAPE : HOMESEEKERS.COM per MLSCLOUD.COM/--------------------------- http://www.homeseekers.com/homes-for-sale/CA/Monrovia/91016/416-Jeffries-Avenue-120326316 <<from http://www.homeseekers.com/Listing/ListingSearch.aspx?Search=90ee28c8-4f8b-4965-96b0-cc83d0deb575&ListingNumber=214006939 <<from http://idp.mrmls.safemls.net/idp/Authn/UserPassword <<from http://www.mlscloud.com/
 // Use this secondary data pull to append: listing agent email addy, phone number and verify listing status and price // Realtor.com does not supply agent email // At a later time, add an automatic search result email from this (local) MLS to add reduncancy to the primary data source (ZipRealty)
-function homeseekers_fetchEmail(){var SOURCE_ID="ZejA"; //1 TRIGGER/hour // Adapted from zipRealty_fetchEmail // Scrape email from Home Seekers @homeseekers.com of new property listings // @return{arr[ob]} — Array of properties/situs as objects from parsed string
+function homeseekers_fetchEmail(){var SOURCE_ID="ZejA"; //1 TRIGGER/hour // Adapted from zipRealty_fetchEmail // Scrape email from Home Seekers @homeseekers.com of new property listings // @return{arr[ob]} ï¿½ Array of properties/situs as objects from parsed string
 	var KEY = [ , "link_detail" , "mlsNum_1" , "mlsNum_2" , "table"/*"foo"*/ , "link_agent" , "agent_name" , "agent_email" , "agent_phone" , "agent_broker"                 ]
     ,   QUE = [ , "href="       , "MLS"      , "MLS#:"    , "Contact:"       , "href="      , "<span"      , "REALTOR"     , ""            , "Listing Provided Courtesy Of" ]
     ,   BEG = [ , "\""          , ":"        , "\">"      , "<td "           , "\""         , ">"          , ","           , ""            , ":"                            ]
@@ -201,7 +201,7 @@ function homeseekers_fetchEmail(){var SOURCE_ID="ZejA"; //1 TRIGGER/hour // Adap
                          // out[i]* /data[k][j][i].isRaw=true;data[k][j][i].source={name:"ZipRealty"/*,data:data[k][j][i]* /};data[k][j][i].market={city:inCity,state:inState}; // Moved to scrape_zipRealty_ss2details() because here, could not read object from (flat) ss field and under zipRealty_scrapeDetail(act,pre), was under root.detail instead of at root.
                             out.push(data[k][j][i])}msgs[k][j].moveToTrash();//db.saveBatch(data[k][j],false);//LibraryjsUtil.write2ss(true,data[k][j],"ScrapedEmail","0AlLVOoV_2dFtdGhYUWRRNFB0Z1JMeENETk1McnFJWHc");
 						  }}db.saveBatch(out,false);LibraryjsUtil.write2ss(false,[report],/*"Sheet1"*/"Data","1oppaTtG1y6JbmAPOseINpL6AJ4ssVKr17r_jIe7TPGg")}//print_test(JSON.stringify(/*out/*data*/report),"homeseekers_fetchEmail")}//return /*out* /data*/}
-/* function homeseekers_fetchPagelink(){ // @return{string} — Link to details page contained in first email of first thread from Home Seekers @homeseekers.com of new property listings
+/* function homeseekers_fetchPagelink(){ // @return{string} ï¿½ Link to details page contained in first email of first thread from Home Seekers @homeseekers.com of new property listings
     // NOTE: We archive this function because its original purpose is not possible. Originally, we noticed the automatic email notices sent from the site was limited to only 10 properties each.
     // So we planned to navigate to the details page where we thought all the properties would be listed. We were wrong. Only 10 properties were listed on the details page too.
     // So we decided to go with the original email scraping procedure but generating 26 (one per letter of the phonetic alphabet) saved searches (as we noticed there were no duplicates).
@@ -219,7 +219,7 @@ function homeseekers_fetchEmail(){var SOURCE_ID="ZejA"; //1 TRIGGER/hour // Adap
 // var SOURCE_ID="oGEl";
 // Google search: online house auction
 // --------------------------- INCOMING DATA SOURCE: SCRAPE : CRAIGSLIST.COM ---------------------------
-function cl_scrapeList(){var SOURCE_ID="GAuy";var pg=0,data,out,act // Example: http://losangeles.craigslist.org/search/rea?s=100&query=fixer&sale_date=- // @param{int}s — pagination (x100) e.g., page 2 => s=200 // Utilities.sleep(1000); // Prevents error thrown by invoking UrlFetch too frequently in a given time frame // Might need to try settimeout method instead
+function cl_scrapeList(){var SOURCE_ID="GAuy";var pg=0,data,out,act // Example: http://losangeles.craigslist.org/search/rea?s=100&query=fixer&sale_date=- // @param{int}s ï¿½ pagination (x100) e.g., page 2 => s=200 // Utilities.sleep(1000); // Prevents error thrown by invoking UrlFetch too frequently in a given time frame // Might need to try settimeout method instead
     , KEY  = [ , "link"  , "title" , "party"            ]
     , QUE  = [ , "href=" , "href=" , "real estate - by" ]
     , BEG  = [ , "\""    , ">"     , " "                ]
@@ -230,7 +230,7 @@ function cl_scrapeList(){var SOURCE_ID="GAuy";var pg=0,data,out,act // Example: 
                           try{out.searchTerm = AR[i]                                       }catch(e){Logger.log(e.message)}//print_test(JSON.stringify(out));Logger.log(JSON.stringify(out));
     Logger.log(out)}}while(data.length)}} // Work in progress. Need to connect with data storage. Temp spreadsheet and object store. Need to scrape detail page.
 // --------------------------- INCOMING DATA SOURCE: SCRAPE : AUCTION.COM - v.2 ---------------------------
-//function print(str){var desc="DealDigger™ Print — timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
+//function print(str){var desc="DealDiggerï¿½ Print ï¿½ timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
 function ac_scrapeList_ob(){var SOURCE_ID="LWgG",key,out={},ar=ac_scrapeList(),i=ar.length;while(i--){key=[SOURCE_ID,ar[i]["item_id"]].join(":");
     out[key]              =   {}                          ;
     out[key]["detail"   ] =   ar[i]                       ;
@@ -243,7 +243,7 @@ function ac_scrapeList_ob(){var SOURCE_ID="LWgG",key,out={},ar=ac_scrapeList(),i
     out[key]["salePlace"] =   ar[i]["venue_title"        ];
     out[key]["openBid"  ] =   ar[i]["starting_bid"       ];
   }return out}
-function ac_scrapeList(act){// @return{object} // 
+function ac_scrapeList(act){// @return{object} //
   act=act||"https://www.auction.com/residential/Arizona_qs/az/2016-01-18_2016-01-21_dt/aed_st/48_rpp/1_cp/list_vt/y_ag/";
   var s,out // Abandoned scraping HTML page in favor of scraping JSON data object at bottom of page; might return to HTML scrape if/when necessary
   , KEY = [ , "r"                        ] // See v.1 for traditional page scraping parameters
@@ -252,7 +252,7 @@ function ac_scrapeList(act){// @return{object} //
   , END = [ , ";ADC.model.feature_flags" ]
   , DEL = [ , [/** /"$",",","%"/**/]     ]
   , INS = [ , [/** /""/*"","",""/**/]    ]
-  ; try{s=UrlFetchApp.fetch(act).getContentText()}catch(e){Logger.log(e.message);return} // return s;   
+  ; try{s=UrlFetchApp.fetch(act).getContentText()}catch(e){Logger.log(e.message);return} // return s;
     out=LibraryjsUtil._scrapeDataset(s,KEY,QUE,BEG,END,DEL,INS).r.asset;//.trim();//.slice(0,-1))/**/; //.slice() removes semicolon at end
     return out}//function test(){print(/**/JSON.stringify(/**/ac_scrapeList()/**/)/**/)}
 // --------------------------- INCOMING DATA SOURCE: SCRAPE : AUCTION.COM - v.1 ---------------------------
@@ -298,7 +298,7 @@ function ac_scrapeListSearch_v1(city,state){var LIMIT=50,MILES=25,offset=0,actNe
 	    db.saveBatch(arr,false);//db.removeByIdBatch(darr,false); // LibraryjsUtil.write2ss(true,arr,"ScrapedAuction","1wfOfPeKO9PxmrN6W6OypSrc0uuxG1OH1UZYD1Ow4eBU"); // Problem: Successive loop cycles do not keep field headings in fixed sequential order, making fields misalign in table; Solutions: Bypass SS and save directly to DB
 	    offset+=LIMIT;actNext=act+"&offset="+offset;try{out=ac_scrapeList(actNext)}catch(e){Logger.log(e.message);return}}while(count>offset)return}
 // --------------------------- INCOMING DATA SOURCE: SCRAPE : ZIP REALTY ---------------------------
-function zipRealty_fetchEmail(){var SOURCE_ID="fY27"; // Forked to homeseekers_fetchEmail // Scrape email from Zip Realty @ziprealty.com of new property listings // @return{arr[ob]} — Array of properties/situs as objects from parsed string
+function zipRealty_fetchEmail(){var SOURCE_ID="fY27"; // Forked to homeseekers_fetchEmail // Scrape email from Zip Realty @ziprealty.com of new property listings // @return{arr[ob]} ï¿½ Array of properties/situs as objects from parsed string
     function getZipDetailUrl(fstr){//fstr=fstr||"2Fproperty2F4410-DELTA-ST-_UNIT_28-SAN-DIEGO-CA-921132F97536712Fdetail"
             fstr                  = fstr                 .replace( /^2Fproperty2F/ , "/property/" )
                                                          .replace(  /2Fdetail$/    , "/detail"    )
@@ -358,10 +358,10 @@ function zipRealty_fetchList(){var page=0 // Fetches list data; // Separate fetc
                                              // "JSESSIONID=608EE08150C51D9FAD31564AB8D4169A.vwapp2b; Domain=.ziprealty.com; Path=/; HttpOnly, website_user_id=431427847;" // LOCAL
     // Logger.log(UrlFetchApp.fetch("http://www.ziprealty.com/homes/for-sale/search/sandiego/proximity",{method:"post",payload:payload/*,headers:{Cookie:cookie}*/}).getAllHeaders()["Set-Cookie"])
     , data   // = UrlFetchApp.fetch("http://www.ziprealty.com/homes-for-sale/search-results/sandiego/detailed",{method:"get",headers:{Cookie:cookie}}).getContentText()
-             // = UrlFetchApp.fetch("http://www.ziprealty.com/homes/for-sale/search/sandiego/saved?action=search&home_search_id=58631364")            .getContentText() // KEYWORD — SAN DIEGO
+             // = UrlFetchApp.fetch("http://www.ziprealty.com/homes/for-sale/search/sandiego/saved?action=search&home_search_id=58631364")            .getContentText() // KEYWORD ï¿½ SAN DIEGO
                 = scrape_zipRealty_ss() // Fetch data from spreadsheet temporarily until we can automate the fetching process
 	; /*Logger.log* /print_test(/*JSON.stringify(* /data/*cookie* /);*/return data}
-function zipRealty_scrapeList(str,inCity,inState){str=str||zipRealty_fetchList();inCity=inCity||"San-Diego";inState=inState||"CA";var i,data=[],out=[] // @return{arr[ob]} — Array of properties/situs as objects from parsed string // @param{str} — List html doc returned from search
+function zipRealty_scrapeList(str,inCity,inState){str=str||zipRealty_fetchList();inCity=inCity||"San-Diego";inState=inState||"CA";var i,data=[],out=[] // @return{arr[ob]} ï¿½ Array of properties/situs as objects from parsed string // @param{str} ï¿½ List html doc returned from search
     ,   KEY = [ , "mlsNumber_1"  , "mlsName" , "isForeclosure"   , "link_detail_1" , "link_photo"                           , "numOfPhotos" , "ask"             , "reduxPct"          , "link_detail_2" , "sa"      , "csz"  , "nhood_1"      , "nhood_2" , "beds"    , "baths"   , "useCode" , "sqft"    , "psf"     , "lot"     , "yrBuilt" , "ageInDays" , "foo"                              , "comments_1" , "comments_2" ]
     ,   QUE = [ , "name="        , "value="  , "<div "           , "href="         , "PhotoUtil.setAndResizeImageOverflow(" , "strong"      , "font-list-price" , "pricereduced_icon" , "href="         , "<strong" , "<div" , "Neighborhood" , " "       , "<strong" , "<strong" , "<strong" , "<strong" , "<strong" , "<strong" , "<strong" , "<strong"   , "toggle_div__parent--height-trans" , "<div "      , "<div "      ]
     ,   BEG = [ , "\""           , "\""      , "photobox--180__" , "\""            , "'"                                    , ">"           , "<strong>"        , "Price reduced by"  , "\""            , ">"       , ">"    , ":"            , ">"       , ">"       , ">"       , ">"       , ">"       , ">"       , ">"       , ">"       , ">"         , " "                                , ">"          , ">"          ]
@@ -423,20 +423,20 @@ function zipRealty_appendRecord(ob){var db=ScriptDb.getMyDb();ob.latestHit=new D
     if(!db.query({link_detail_1:ob.link_detail_1/*mlsName:ob.mlsName,mlsNumber_2:ob.mlsNumber_2*/}).getSize()){r=db.load(db.save(ob).getId());r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));db.save(r)}}
 function scrape_zipRealty_ss2details(sheetName,linkName){var r,db=ScriptDb.getMyDb(),sheetIn=SpreadsheetApp./*getActiveSpreadsheet()*/openByUrl("https://docs.google.com/spreadsheet/ccc?key=0AlLVOoV_2dFtdGhYUWRRNFB0Z1JMeENETk1McnFJWHc#gid=0").getSheetByName(sheetName);
     do{var rangeIn=sheetIn.getRange(1,1,2,sheetIn.getLastColumn()),datarr=rangeIn.getValues(),datob=LibraryjsUtil.aa2ao(datarr)[0];if(datob.link_detail_redirect_1.slice(0,4)=="http"){/*if(!db.query(q).getSize()){}*/datob.detail=zipRealty_scrapeDetail(datob[linkName]);/*Logger.log(datob);*/zipRealty_appendRecord(datob);}sheetIn.deleteRow(2);}while(!rangeIn.isBlank())return} // if(/*scrape_serverPost(datob,scraped,"36sgd2m257w2j0sn5isa") // var x=UrlFetchApp.fetch("https://script.google.com/macros/s/AKfycbwT66_MExluhggRGS48QQikDxTzElT7F1WWRImBHoKDqEjFdIs/exec",{method:"post"});Logger.log(x.getResponseCode());Logger.log(x.getContentText());}
-// Imported and adapted from Google Backup — Scrape — Note Inventory Sources.04.js — fciEx section (due to similar data structure, i.e. copy/paste html doc source code)
+// Imported and adapted from Google Backup ï¿½ Scrape ï¿½ Note Inventory Sources.04.js ï¿½ fciEx section (due to similar data structure, i.e. copy/paste html doc source code)
 // The data collection procedure includes the following three modes. When we do a search all, we can sort the results by ID which is numerically chronological.
 // We need to scrape the list pages to get the detail page URLs. So when scraping the initial batch, we load all the list results into a spreadsheet, then scrape each SS row individually for details.
 // The second mode is ongoing maintenance whereby we set a 15 minute trigger to test for by searching the existence of the next ID in sequence. If the search returns a hit, we scrape the list page then immediately scrape for details.
-// The final mode checks for the existence of a given product ID upon receipt of a bid or indicative offer by the client’s server. This is to see if the asset has been sold between the scrape and the bid.
-// Step 1 of 3 // Manually copy HTML source code from zipRealty auto search/query; Paste source code into SS page named “Source”; Use top row only, start at first column and paste each page on a separate cell moving from left to right across the page in row one
-function scrape_zipRealty_ss        (){ // Step 2 of 3 // 1. Fetch manually posted raw data from SS page named “Source” | 2. Scrape on list page at source | 3. Post to SS page named “Scraped”
+// The final mode checks for the existence of a given product ID upon receipt of a bid or indicative offer by the clientï¿½s server. This is to see if the asset has been sold between the scrape and the bid.
+// Step 1 of 3 // Manually copy HTML source code from zipRealty auto search/query; Paste source code into SS page named ï¿½Sourceï¿½; Use top row only, start at first column and paste each page on a separate cell moving from left to right across the page in row one
+function scrape_zipRealty_ss        (){ // Step 2 of 3 // 1. Fetch manually posted raw data from SS page named ï¿½Sourceï¿½ | 2. Scrape on list page at source | 3. Post to SS page named ï¿½Scrapedï¿½
     var ACT="https://docs.google.com/spreadsheet/ccc?key=0AlLVOoV_2dFtdGhYUWRRNFB0Z1JMeENETk1McnFJWHc#gid=0",ss=SpreadsheetApp./*getActiveSpreadsheet()*/openByUrl(ACT),sheetIn=ss.getSheetByName("Source"),rangeIn=sheetIn.getRange(1,1,1,sheetIn.getLastColumn()),datarr=rangeIn.getValues()[0];//Logger.log(* /print_test(JSON.stringify(datarr));
     var out=[],i=datarr.length;while(i--){out[i]=zipRealty_scrapeList(datarr[i])}LibraryjsUtil.write2ss(true,out,"Scraped",ACT);return}//Logger.log(out);
-function scrape_zipRealty_getMode1(){scrape_zipRealty_ss2details("Scraped"     ,"link_detail_1")} // Step 3 of 3 // 1. Fetch details from SS (individually, one at-a-time) | 2. Write to server // Manually populate by batch // Step 1 of 3 // 1. Identify latest scraped ID | 2. Find unscraped IDs at source | 3. Manually copy from the source and paste to the SS page named “Source” // Step 2 of 3: Execute scrape_fciEx_ss() (If updating, set rangeIn columns to 1) // Step 3 of 3: Execute scrape_fciEx_ss2details() via executing this function
+function scrape_zipRealty_getMode1(){scrape_zipRealty_ss2details("Scraped"     ,"link_detail_1")} // Step 3 of 3 // 1. Fetch details from SS (individually, one at-a-time) | 2. Write to server // Manually populate by batch // Step 1 of 3 // 1. Identify latest scraped ID | 2. Find unscraped IDs at source | 3. Manually copy from the source and paste to the SS page named ï¿½Sourceï¿½ // Step 2 of 3: Execute scrape_fciEx_ss() (If updating, set rangeIn columns to 1) // Step 3 of 3: Execute scrape_fciEx_ss2details() via executing this function
 function scrape_zipRealty_getMode2(){ // 1 TRIGGER/day (with specified hour time frame or 1/hr planning 22 or 23 failures to achieve update within the hour of new data receipt)
                                       // var i,m=marketData(),hh=new Date().getHours()/*%12*/;// On a schedule and automatic trigger: 1. scrape emails and RSS feeds and place results into spreadsheets acting as temporary holding queues. 2. Scrape details from holding queues and save to database subject to non-duplication / update parameters
                                          zipRealty_fetchEmail();
-								      // zipRealty_fetchRSS  (); 
+								      // zipRealty_fetchRSS  ();
                                          scrape_zipRealty_ss2details("ScrapedEmail","link_detail_1" );
 								      // scrape_zipRealty_ss2details("ScrapedRSS"  ,"link"          );
 							          // if(hh==7)
@@ -563,7 +563,7 @@ function getEmailAttachments(src){src=src||"gentryaz.com";
   i=msgs.length;while(i--){j=msgs[i].length;while(j--){m=msgs[i][j];//var k,a=m.getAttachments();k=a.length;while(k--){Logger.log('Message "%s" contains the attachment "%s" (%s bytes)',m.getSubject(),a[k].getName(),a[k].getSize());}
     return m.getBody();
     }}}
-    
+
 function convertXlsx2GoogleSheet(url) { // Email source http://us8.campaign-archive1.com/?u=cae766a676ce8580d3f4d2a6a&id=1ad6b3d729&e=9a2c2d50cd
   var A=["https://gallery.mailchimp.com/cae766a676ce8580d3f4d2a6a/files/11_19_15_Bulk.xlsx"
         ,"https://gallery.mailchimp.com/cae766a676ce8580d3f4d2a6a/files/11_19_15_Picks.xlsx"
@@ -603,7 +603,7 @@ function update_importOb(){var uc,map=docList2map_useCode(),ar=LibraryjsUtil.dbP
     LibraryjsUtil.dbParse({verb:"put",project:"dealDigger",className:"situs",ob:{importOb:ar[i]["importOb"],useCode:uc},obid:ar[i]["objectId"]})}}
 function docList2map_useCode(){var out={},ao,j,r,ob=docOb(),keys=Object.keys(ob),i=keys.length;while(i--){r=LibraryjsUtil.xmlDoc2json(ob[keys[i]],"array");ao=LibraryjsUtil.aa2ao(r);
     j=ao.length;while(j--){out[ao[j]["PIN"]]=keys[i]}}return out}//Logger.log(JSON.stringify(out))}//@return{object} Keys: PIN (aka APN), Values: useCode per ob keys, per source doc id (eg.{"20-29-418-019-0000":"MUL"}) // For ob definition, also see DealDigger v02 getXmlData()
-// ============================== IMPORTED and ADAPTED FROM DEALDIGGER™ ==============================
+// ============================== IMPORTED and ADAPTED FROM DEALDIGGERï¿½ ==============================
 // ----------------------- Code.gs -----------------------
 //function doPost(e){return x.y();}
 //function doGet(){return ContentService.createTextOutput("Hello World").setMimeType(ContentService.MimeType.TEXT)}
@@ -614,24 +614,24 @@ function doGet(e){ // References: https://developers.google.com/apps-script/guid
          // case   /* test                   */ "uy8mi25thrp8t2l0zt7y" : return ContentService.createTextOutput("Hello World"                                                                            ).setMimeType(ContentService.MimeType.  TEXT /*JSON*/           );break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
 		 // case   /* buyer  register        */ "fruif01iaqqdgmqq1glu" : return ContentService.createTextOutput(e.parameter.jsoncallback+"({'result':'<div style=\"overflow:hidden\"><iframe scrolling=\"no\"   style=\"xmargin-top:-200px;width:100%;height:1200px;\" src=\"https://sites.google.com/site/dealdiggeronline/parties/buyer/register-buyer#sites-canvas-main-content\"    ></iframe></div>'})").setMimeType(ContentService.MimeType./*TEXT */JSON             );break;
          // case   /* buyer  serve Realtor   */ "9l4y95xhwwi8q2hbkslp" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_a         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; // Use .setMimeType(ContentService.MimeType.JAVASCRIPT) to fix error: Refused to execute script from <URL> because its MIME type ('application/json'||'text/plain') is not executable, and strict MIME type checking is enabled.
-         // case   /* buyer  serve ZipRealty */ "5rmywv9gdz0e5mlnoeye" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_b         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-         // case   /* buyer  serve Auction   */ "2qh4ftl3dpzqg6wovlam" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_c         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-            case   /* buyer  serve   Apex    */ "8a89179v6fzj7mnayhyp" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_d         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-            case   /* buyer  serve   PropMgt */ "rm7w29et11msql621p22" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(servePropMgt          ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-            case   /* buyer  receive Apex    */ "2kpco3hg68eo6alklck6" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveBuyer          (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-            case   /* buyer  receive PropMgt */ "8vr1s20f2s8jpgq3z8oh" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receivePropMgt        (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-         // case   /* agent  serve Realtor   */ "q82jtqjv098lh1y1n1f4" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_a         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-         // case   /* agent  serve ZipRealty */ "s312dywjhqj8flzzg350" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_b         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-         // case   /* agent  serve Auction   */ "asfquyaqffplleoyfk1e" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_c         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-         // case   /* agent  receive         */ "nmpk3kkow3dgri7zwu30" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveAgent          (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-         // case   /* lender serve ZipRealty */ "kdwjyokydw92t4wbn1y5" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveLenders_b        ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break; 
-         // case   /* lender receive         */ "udys49wmxq10akjr533q" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveLender         (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break; 
-         // case   /* offer  serve feedback  */ "46bawio3def1vhprh9uq" : return ContentService.createTextOutput(                               JSON.stringify(ScriptDb.getMyDb().query({item:m}).next()) ).setMimeType(ContentService.MimeType.  TEXT /*JSON*/           );break; 
+         // case   /* buyer  serve ZipRealty */ "5rmywv9gdz0e5mlnoeye" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_b         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+         // case   /* buyer  serve Auction   */ "2qh4ftl3dpzqg6wovlam" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_c         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+            case   /* buyer  serve   Apex    */ "8a89179v6fzj7mnayhyp" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveBuyers_d         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+            case   /* buyer  serve   PropMgt */ "rm7w29et11msql621p22" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(servePropMgt          ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+            case   /* buyer  receive Apex    */ "2kpco3hg68eo6alklck6" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveBuyer          (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+            case   /* buyer  receive PropMgt */ "8vr1s20f2s8jpgq3z8oh" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receivePropMgt        (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+         // case   /* agent  serve Realtor   */ "q82jtqjv098lh1y1n1f4" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_a         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+         // case   /* agent  serve ZipRealty */ "s312dywjhqj8flzzg350" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_b         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+         // case   /* agent  serve Auction   */ "asfquyaqffplleoyfk1e" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveAgents_c         ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+         // case   /* agent  receive         */ "nmpk3kkow3dgri7zwu30" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveAgent          (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+         // case   /* lender serve ZipRealty */ "kdwjyokydw92t4wbn1y5" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(serveLenders_b        ( )) + ")"           ).setMimeType(ContentService.MimeType./*TEXT* /JSON*/JAVASCRIPT );break;
+         // case   /* lender receive         */ "udys49wmxq10akjr533q" : return ContentService.createTextOutput(e.parameter.    callback+"(" + JSON.stringify(receiveLender         (p)) + ")"           ).setMimeType(ContentService.MimeType./*TEXT /*JSON*/JAVASCRIPT );break;
+         // case   /* offer  serve feedback  */ "46bawio3def1vhprh9uq" : return ContentService.createTextOutput(                               JSON.stringify(ScriptDb.getMyDb().query({item:m}).next()) ).setMimeType(ContentService.MimeType.  TEXT /*JSON*/           );break;
          // case   /* agent  create ss       */ "fpno5a5ibld1jlw4jjcu" : var  h=HtmlService   .createTemplateFromFile("ssExport")/*;h.m=m Parameter*/;return h.evaluate()           ;break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON*/);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
-         // case   /* DOESN'T WORK           */ "6e4x5dzqrsx1a418nbgo" : return HtmlService   .createHtmlOutputFromFile("propMgtHdr.html" ).setSandboxMode(HtmlService.SandboxMode.NATIVE );break; 
+         // case   /* DOESN'T WORK           */ "6e4x5dzqrsx1a418nbgo" : return HtmlService   .createHtmlOutputFromFile("propMgtHdr.html" ).setSandboxMode(HtmlService.SandboxMode.NATIVE );break;
          default                                                       : break;}}
     if(SitesApp.getActiveSite()){var siteName = SitesApp.getActiveSite().getName();switch(siteName){
-            case   "ddpmgt"                        : 
+            case   "ddpmgt"                        :
 					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
 							case   "home"          : return HtmlService.createTemplateFromFile  ("accountPropMgt.html" ).evaluate() /* "home.html" */                       ;break;
 							case   "account"       : return HtmlService.createTemplateFromFile  ("account.html" ).evaluate()                                                ;break;
@@ -644,7 +644,7 @@ function doGet(e){ // References: https://developers.google.com/apps-script/guid
 						 // case   "agent"         : return HtmlService.createHtmlOutputFromFile("report.html"  ).setSandboxMode(HtmlService.SandboxMode.NATIVE )           ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
 						 // case   "export"        : var ss=SpreadsheetApp.create("ss"+new Date().getTime());LibraryjsUtil.write2ss(true,serveAgents_b().records,"Sheet1",ss.getId());return HtmlService.createHtmlOutput("<div align='center'><a href='"+ss.getUrl()+"'>Click</a></div>");break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON*/);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
 						 default                   : break;}}break;
-            case   "dealdiggeronline2"             : 
+            case   "dealdiggeronline2"             :
 					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
 							case   "home"          : return HtmlService.createTemplateFromFile  ("home.html"    ).evaluate()                                                ;break;
 							case   "account"       : return HtmlService.createTemplateFromFile  ("account.html" ).evaluate()                                                ;break;
@@ -657,7 +657,7 @@ function doGet(e){ // References: https://developers.google.com/apps-script/guid
 						 // case   "agent"         : return HtmlService.createHtmlOutputFromFile("report.html"  ).setSandboxMode(HtmlService.SandboxMode.NATIVE )           ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
 						 // case   "export"        : var ss=SpreadsheetApp.create("ss"+new Date().getTime());LibraryjsUtil.write2ss(true,serveAgents_b().records,"Sheet1",ss.getId());return HtmlService.createHtmlOutput("<div align='center'><a href='"+ss.getUrl()+"'>Click</a></div>");break; // Debug: {var t=HtmlService.createTemplateFromFile("researcher").evaluate();Logger.log(t.getCodeWithComments);return t;}).setMimeType(ContentService.MimeType.TEXT/*JSON*/);break; // References // http://www.dimpost.com/2012/12/iframe-how-to-display-specific-part-of.html // http://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page/14004622#14004622
 						 default                   : break;}}break;
-            case   "dealdiggeronline1"             : 
+            case   "dealdiggeronline1"             :
 					if(SitesApp.getActivePage()){var pageName = SitesApp.getActivePage().getName();switch(pageName){
 							case   "authorize"     : return authorize                           (               ).setSandboxMode(HtmlService.SandboxMode.NATIVE )           ;break;
 						 // case   "buyer"         : return HtmlService.createTemplateFromFile  ("reports.html" ).evaluate()                                                ;break; // Reference: https://developers.google.com/apps-script/guides/html-service-caja#setsandboxmode
@@ -689,7 +689,7 @@ function emailOffer_auto    (){/*<strike>1 TRIGGER/day</strike>upon agent user e
 			if(!r.status.isEmailed.records){r.status.isEmailed.records=[]} // Logger.log("%s,%s",r.status.isEmailed,r.status.isEmailed.records);
 				r.status.isEmailed.records.unshift({timestamp:t,agentEmail:r.status.isAppended.records[0].agentEmail})}db.save(r)}return}
 function emailOffer(r/*docId,emailTo,itemNo*/){r=r||db.query({item:itemNo}).next();var itemNo=/*itemNo||*/r.item/*||"MHInLUs"/*"MHwxp00"*/,db=ScriptDb.getMyDb(),/*,la=db.query({table:"agent",licNum:r.detail.listingAgent.licNum}).next()||r.detail.listingAgent,*/docId=/*docId*/r.bids[0].docId||/*"1pDaWLWqnODwU-WQLpuwjH_FJ88dgANz2_wloziQp85k"*/"1ShkqxfCvKEKCp8c_oo8ovznRT5oi70-8c_kTT3tF0nA",m=LibraryjsUtil.ddGetMarketData(r.marketState,r.marketCity),emailTo="bruce.p.nolan@gmail.com"/*r.mlsListing.agent_email /*"atlaslive@gmail.com"/*r.statusArray[0]* /r.listingAgent.email* /la.email.auto[0]||la.email.manual[0]/** /*/,t=new Date().getTime(),doc=DriveApp.getFileById(docId),docName=doc.getName(),arr=docName.split("|"),sa=arr[0].split(",")[0].trim() // Reference: http://ctrlq.org/code/19117-save-gmail-as-pdf // doc=DocsList.createFile("body.html","This is content as a string","text/html") // Actual size: 8.11MB // Gmail 25MB per http://email.about.com/od/gmailtips/qt/Message_and_Attachment_Size_Limits_in_Gmail.htm // 2GB limit per GDrive manual DL notice // 10MB limit per https://support.google.com/drive/answer/37603?hl=en // Debugging Note: In response to the error message: "We're sorry, a server error occurred. Please wait a bit and try again. (line 20, file "Test2")" we tracked down and deleted a carriage return/line feed immediately following the .png image at the bottom of RPA4 (page 6/14) which seemed to fix the problem
-    ,urlWeb=m.agent.WebUrl/*"http://alticorerealty.com/AgentRoster?op=agent&act=webprofile&agent_id=1857592119"*/,urlPhoto=m.agent.PhotoUrl/*"https://lh5.googleusercontent.com/-gFvSJU9ks8I/U04wrA5GglI/AAAAAAAAK_g/R-j54csSR58/s144/KenGreen.jpg"*/,urlLogo=m.agent.MastheadUrl/*"https://lh3.googleusercontent.com/-S6PeqOjlYe0/U1R7Hjh0iDI/AAAAAAAALGc/YgIjFUfIEng/s800/masthead-alticore.png"/*Registers outgoing email only ,urlWebBeacon="https://script.google.com/macros/s/AKfycbwvVW94y9Cbm82c2LfCr3umxSVw-RPuRqVN1paCX1N0CGfUSAuU/exec?k=73gtzu48hxf3nv2e8n4h&m="+itemNo/*"MH7rUG3"* /,webBeaconBlob=UrlFetchApp.fetch(urlWebBeacon)*/,photoBlob=UrlFetchApp.fetch(urlPhoto).getBlob().setName("Photo"),logoBlob=UrlFetchApp.fetch(urlLogo).getBlob().setName("Company Logo"),str="Please accept<span  title=\"Our client is a professional investor who purchases a prodigious volume of local distressed properties at a discount. They always close quickly, with cash. They seek to make a deal today at the fair price for investors in this business.\"> our <img src=\"https://lh5.googleusercontent.com/-7tzncf2rnG4/U0uHa9qCtcI/AAAAAAAAK-E/1FtM0mKhmvw/s144/Information_Sign.jpg\" height=\"14\"> client&rsquo;s </span>attached offer to purchase "+sa/*123 Main St*/+" for "+arr[2]/*$90,000*/.trim()+" cash. Please click &#9758;"    
+    ,urlWeb=m.agent.WebUrl/*"http://alticorerealty.com/AgentRoster?op=agent&act=webprofile&agent_id=1857592119"*/,urlPhoto=m.agent.PhotoUrl/*"https://lh5.googleusercontent.com/-gFvSJU9ks8I/U04wrA5GglI/AAAAAAAAK_g/R-j54csSR58/s144/KenGreen.jpg"*/,urlLogo=m.agent.MastheadUrl/*"https://lh3.googleusercontent.com/-S6PeqOjlYe0/U1R7Hjh0iDI/AAAAAAAALGc/YgIjFUfIEng/s800/masthead-alticore.png"/*Registers outgoing email only ,urlWebBeacon="https://script.google.com/macros/s/AKfycbwvVW94y9Cbm82c2LfCr3umxSVw-RPuRqVN1paCX1N0CGfUSAuU/exec?k=73gtzu48hxf3nv2e8n4h&m="+itemNo/*"MH7rUG3"* /,webBeaconBlob=UrlFetchApp.fetch(urlWebBeacon)*/,photoBlob=UrlFetchApp.fetch(urlPhoto).getBlob().setName("Photo"),logoBlob=UrlFetchApp.fetch(urlLogo).getBlob().setName("Company Logo"),str="Please accept<span  title=\"Our client is a professional investor who purchases a prodigious volume of local distressed properties at a discount. They always close quickly, with cash. They seek to make a deal today at the fair price for investors in this business.\"> our <img src=\"https://lh5.googleusercontent.com/-7tzncf2rnG4/U0uHa9qCtcI/AAAAAAAAK-E/1FtM0mKhmvw/s144/Information_Sign.jpg\" height=\"14\"> client&rsquo;s </span>attached offer to purchase "+sa/*123 Main St*/+" for "+arr[2]/*$90,000*/.trim()+" cash. Please click &#9758;"
     +" <a href=\"https://script.google.com/macros/s/AKfycbwvVW94y9Cbm82c2LfCr3umxSVw-RPuRqVN1paCX1N0CGfUSAuU/exec?k=w5c079zl5n3unb2xrcts&m="+itemNo/*4z90ftmvunnjbo2xc8ib\"*/+"\" title=\"Click here if you want to ACCEPT the offer\" ><button type=\"button\" onclick=\"window.location.href=''\"><span style=\"color:#00D800;font-weight:bold\"  >&#10004;</span> Accept</button ></a>"
     +" <a href=\"https://script.google.com/macros/s/AKfycbwvVW94y9Cbm82c2LfCr3umxSVw-RPuRqVN1paCX1N0CGfUSAuU/exec?k=7rj390d9aoyun6ys7244&m="+itemNo/*4z90ftmvunnjbo2xc8ib\"*/+"\" title=\"Click here if you want to REJECT the offer\" ><button type=\"button\" onclick=\"window.location.href=''\"><span style=\"color:red    ;font-weight:normal\">&#10006;</span> Reject</button ></a>" // Round button corners // Reference: http://stackoverflow.com/questions/9777546/portable-round-corners-on-html-button // style=\"-moz-border-radius: 5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;border-width:1px;border-color:black;\"
     +" <a href=\"https://script.google.com/macros/s/AKfycbwvVW94y9Cbm82c2LfCr3umxSVw-RPuRqVN1paCX1N0CGfUSAuU/exec?k=7rj390d9aoyun6ys7244&m="+itemNo/*4z90ftmvunnjbo2xc8ib\"*/+"\" title=\"Click here if you want to COUNTER the offer\"><button type=\"button\" onclick=\"window.location.href=''\"><span style=\"color:blue   ;font-weight:normal\">&#10226;</span> Counter</button></a>"
@@ -717,7 +717,7 @@ function appendAgent(s/*situs*/){var i=0,ar=[],t=new Date().getTime(),db=ScriptD
 	    if(s.status==undefined){s.status={}}if(!s.status.isAppended){s.status.isAppended={records:[]}}s.status.isAppended.value=true;s.status.isAppended.method="auto";if(s.status.isAppended.records==null){s.status.isAppended.records=[]}s.status.isAppended.records.unshift({timestamp:t,agentEmail:/*s.mlsListing*/r.agent_email})
 	    s.mlsListing=r;db.save(s)}}db.removeByIdBatch(ar,false);return LibraryjsUtil.isEmail(s.mlsListing.agent_email)?true:false} // Ignores multiple listings/data and deletes them
 /*function appendAgent2(){ // Future development. This function will automatically search the "agent" table for agent license number and update email fields upon receiving new bids (receiveBuyer()) and possibly new records (scrape())
-    try{var la=db.query({table:"agent",licNum:r.detail.listingAgent.licNum}).next();return r.mlsListing.agent_email||(la.email.auto[0]||la.email.manual[0])}catch(e){Logger.log(e.message);return "";}}() // 
+    try{var la=db.query({table:"agent",licNum:r.detail.listingAgent.licNum}).next();return r.mlsListing.agent_email||(la.email.auto[0]||la.email.manual[0])}catch(e){Logger.log(e.message);return "";}}() //
 */
 function update_ss2status(){ // 1. Fetch status details from SS (individually, one at-a-time) | 2. Write to server // Adapted from scrape_fciEx_ss2details()
     var sheetName=["Clicked"/*,"Opened"*/],db=ScriptDb.getMyDb(),sheetIn=SpreadsheetApp/*.getActiveSpreadsheet()*/.openById("1ASaJ_W0ha248DgFl2R9XWQ5M1kaAnb2RpqUlMjpB2hc").getSheetByName(sheetName[0]);do{
@@ -745,7 +745,7 @@ function update_ss2status(){ // 1. Fetch status details from SS (individually, o
 			    if (offerId){
 					    r.status.isOffer.value=true;
 				    if(!r.status.isOffer.records){r.status.isOffer.records=[]} // Logger.log("%s,%s",r.status.isOffer,r.status.isOffer.records);
-			            r.status.isOffer.records.unshift({timestamp:t,docId:offerId})}db.save(r); 
+			            r.status.isOffer.records.unshift({timestamp:t,docId:offerId})}db.save(r);
             try{var emailSuccess =                   emailOffer(r)}catch(e){Logger.log(e.message)}
                 if (emailSuccess){ // Email offer + report same
                         r.status.isEmailed.value=true;
@@ -781,7 +781,7 @@ function serveBuyers_a(){/*r.com*/var ob=[],arr=[],i,j,k,r,t=[],zil=[],user=/*Se
 			,	"link_yahoo"             : function(){try{return  /*OK*/    r.link.yahoo	   					                    }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zillow"            : function(){try{return  /*OK*/    r.link.zillow                                           }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zillowdetails"     : function(){try{return  /*OK*/    zil[i].links.homedetails.Text                           }catch(e){Logger.log(e.message);return "";}}() //
-			,	"link_zipRealty"         : function(){try{return            ""                                                      }catch(e){Logger.log(e.message);return "";}}() //            
+			,	"link_zipRealty"         : function(){try{return            ""                                                      }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zipSkinny"         : function(){try{return  /*ok*/    r.link.zipSkinny                                        }catch(e){Logger.log(e.message);return "";}}() //
 										   }
 	} // db_id MyBid // arv rep cof com city state zip sa useCode beds baths sf sf_round lot lot_round yearBuilt taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet // link_googleMap link_yahoo link_zillow link_zillowdetails link_eppraisal link_realtor link_realEstate link_homeGain link_trulia link_propertyShark link_neighborhoodScout link_zipSkinny link_chase link_boa link_homesCom
@@ -794,7 +794,7 @@ function serveBuyers_b(){return;/*zip*/var ob=[],arr=[],bid=[],i,j,k,r,t=[],zil=
 				"age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 				                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
                                                          ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-														 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays 
+														 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays
 			, 	"ask"                    : function(){try{return            r.ask                  || r.starting_bid                }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 			, 	"ask_high"               : function(){try{return            r.ask_high                                              }catch(e){Logger.log(e.message);return "";}}() //
 			,	"ask_round"              : function(){try{return Math.round(r.ask                  /  1000 )                        }catch(e){Logger.log(e.message);return "";}}() //
@@ -805,7 +805,7 @@ function serveBuyers_b(){return;/*zip*/var ob=[],arr=[],bid=[],i,j,k,r,t=[],zil=
 			,	"city"                   : function(){try{return            r.property_city        || r.detail.city                 }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"csz"                    : function(){try{return            r.csz                                                   }catch(e){Logger.log(e.message);return "";}}() //
 		// 	,	"cof"                    : function(){try{return            r.counter                     .value                    }catch(e){Logger.log(e.message);return "";}}() // "cof" Strict input // Counter
-			,	"com"                    : function(){try{return            r.comments_1                                            }catch(e){Logger.log(e.message);return "";}}() // "com" Strict input // Comments 
+			,	"com"                    : function(){try{return            r.comments_1                                            }catch(e){Logger.log(e.message);return "";}}() // "com" Strict input // Comments
 			,	"deltaPrice"             : function(){try{return            r.ask - bid[i].amount                                   }catch(e){Logger.log(e.message);return "";}}() //
 			,	"deltaTime"/*status*/    : function(){try{return Math.floor((t-Math.max(r.status.auto.current.timestamp,r.status.manual.current.timestamp))/(1000*60*60*24))  }catch(e){Logger.log(e.message);return  0;}}() //
 		//	,	"full"                   : function(){try{return            r.address.full                                          }catch(e){Logger.log(e.message);return "";}}() //
@@ -826,8 +826,8 @@ function serveBuyers_b(){return;/*zip*/var ob=[],arr=[],bid=[],i,j,k,r,t=[],zil=
 			,	"sf"                     : function(){try{return            r.sqft                                                  }catch(e){Logger.log(e.message);return "";}}() //
 			,	"sf_round"               : function(){try{return Math.round(r.sqft                 /   100 )                        }catch(e){Logger.log(e.message);return "";}}() //
 			,	"state"                  : function(){try{return            r.property_state       || r.detail.state                }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
-			,	"statusAuto"             : function(){try{return            r.status.auto  .current.status || r.status.auto  .array[0].status }catch(e){Logger.log(e.message);return "New" ;}}() // 
-			,	"statusManual"           : function(){try{return            r.status.manual.current.status || r.status.manual.array[0].status }catch(e){Logger.log(e.message);return ""    ;}}() // 
+			,	"statusAuto"             : function(){try{return            r.status.auto  .current.status || r.status.auto  .array[0].status }catch(e){Logger.log(e.message);return "New" ;}}() //
+			,	"statusManual"           : function(){try{return            r.status.manual.current.status || r.status.manual.array[0].status }catch(e){Logger.log(e.message);return ""    ;}}() //
             ,	"useCode"                : function(){try{return            r.useCode                                               }catch(e){Logger.log(e.message);return "";}}() //
             ,	"yearBuilt"              : function(){try{return            r.yrBuilt                                               }catch(e){Logger.log(e.message);return "";}}() //
 			,	"zip"                    : function(){try{return            r.property_zip||(r.detail.zip||r.csz.split(" ").pop())  }catch(e){Logger.log(e.message);return "";}}() // Reversing order of conditional || results in no zip data for auctions // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
@@ -853,7 +853,7 @@ function serveBuyers_c(){/*auc*/var ob=[],arr=[],bid=[],i,j,k,r,t=[],zil=[],d=ne
 		//	,	"age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 		//		                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
         //                                               ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays 
+		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays
 		//	,	"city"                   : function(){try{return            r.property_city        || r.detail.city                 }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"costRepairs"            : function(){try{return            r.costRepairs                                           }catch(e){Logger.log(e.message);return "";}}() //
 		//	,	"costTitle"              : function(){try{return            r.costTitleClear /*1st pos,tax liens,hoa*/              }catch(e){Logger.log(e.message);return "";}}() //
@@ -898,7 +898,7 @@ function serveBuyers_d(){/*manual pdf tax liens FNA*/var ob=[],arr=[],bid=[],b=[
         //  ,   "age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 		//		                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
         //                                               ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log("Error Zqto9: "+e.message);return "";}}() // r.ageInDays 
+		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log("Error Zqto9: "+e.message);return "";}}() // r.ageInDays
 		//	,	"city"                   : function(){try{return            r.property_city        || r.detail.city                 }catch(e){Logger.log("Error nEZ8Q: "+e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"costRepairs"            : function(){try{return            r.costRepairs                                           }catch(e){Logger.log("Error 8Jm4a: "+e.message);return "";}}() //
 		//	,	"costTitle"              : function(){try{return            r.costTitleClear /*1st pos,tax liens,hoa*/              }catch(e){Logger.log("Error RWBhi: "+e.message);return "";}}() //
@@ -926,7 +926,7 @@ function serveBuyers_d(){/*manual pdf tax liens FNA*/var ob=[],arr=[],bid=[],b=[
 		//	,	"link_yahoo"             : function(){try{return  /*OK*/    r.avmReport.link_yahoo	   					            }catch(e){Logger.log("Error jKGFY: "+e.message);return "";}}() //
 			,	"link_zillow"            : function(){try{return  /*OK*/    r.avmReport.link_zillow                                 }catch(e){Logger.log("Error 9Z5Gn: "+e.message);return "";}}() //
 			,	"link_zillowdetails"     : function(){try{return  /*OK*/    r.avmReport.link_zillowdetails                          }catch(e){Logger.log("Error dBjEz: "+e.message);return "";}}() //
-		//	,	"link_zipRealty"         : function(){try{return            r.avmReport.link_zipRealty                              }catch(e){Logger.log("Error Gx2c1: "+e.message);return "";}}() //    
+		//	,	"link_zipRealty"         : function(){try{return            r.avmReport.link_zipRealty                              }catch(e){Logger.log("Error Gx2c1: "+e.message);return "";}}() //
 		//	,	"link_zipSkinny"         : function(){try{return  /*ok*/    r.avmReport.link_zipSkinny                              }catch(e){Logger.log("Error r7Zro: "+e.message);return "";}}() //
 										   }
 	}
@@ -962,7 +962,7 @@ function servePropMgt(){var i,j,k,r,bv,ob=[],arr=[],bid=[],zil=[],out={"totalRes
         //  ,   "age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 		//		                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
         //                                               ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log("Error Zqto9: "+e.message);return "";}}() // r.ageInDays 
+		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log("Error Zqto9: "+e.message);return "";}}() // r.ageInDays
 		//	,	"city"                   : function(){try{return            r.property_city        || r.detail.city                 }catch(e){Logger.log("Error nEZ8Q: "+e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"costRepairs"            : function(){try{return            r.costRepairs                                           }catch(e){Logger.log("Error 8Jm4a: "+e.message);return "";}}() //
 		//	,	"costTitle"              : function(){try{return            r.costTitleClear /*1st pos,tax liens,hoa*/              }catch(e){Logger.log("Error RWBhi: "+e.message);return "";}}() //
@@ -990,7 +990,7 @@ function servePropMgt(){var i,j,k,r,bv,ob=[],arr=[],bid=[],zil=[],out={"totalRes
 		//	,	"link_yahoo"             : function(){try{return  /*OK*/    r.avmReport.link_yahoo	   					            }catch(e){Logger.log("Error jKGFY: "+e.message);return "";}}() //
 		//	,	"link_zillow"            : function(){try{return  /*OK*/    r.avmReport.link_zillow                                 }catch(e){Logger.log("Error 9Z5Gn: "+e.message);return "";}}() //
 		//	,	"link_zillowdetails"     : function(){try{return  /*OK*/    r.avmReport.link_zillowdetails                          }catch(e){Logger.log("Error dBjEz: "+e.message);return "";}}() //
-		//	,	"link_zipRealty"         : function(){try{return            r.avmReport.link_zipRealty                              }catch(e){Logger.log("Error Gx2c1: "+e.message);return "";}}() //    
+		//	,	"link_zipRealty"         : function(){try{return            r.avmReport.link_zipRealty                              }catch(e){Logger.log("Error Gx2c1: "+e.message);return "";}}() //
 		//	,	"link_zipSkinny"         : function(){try{return  /*ok*/    r.avmReport.link_zipSkinny                              }catch(e){Logger.log("Error r7Zro: "+e.message);return "";}}() //
 										   }
 	}
@@ -1038,7 +1038,7 @@ function serveAgents_a(/*r.com*/){var ob=[],arr=[],i,j,k,r,t=[],zil=[],user=/*Se
 			,	"broker"                 : function(){try{return            r.source.data.brokeredBy                                }catch(e){Logger.log(e.message);return "";}}() //
 			,	"city"                   : function(){try{return            r.address.city                                          }catch(e){Logger.log(e.message);return "";}}() //
 			,	"cof"                    : function(){try{return            r.counter                     .value                    }catch(e){Logger.log(e.message);return "";}}() // "cof" Strict input // Counter
-			,	"com"                    : function(){try{return            r.LST_Attributes[21].attribute_value                    }catch(e){Logger.log(e.message);return "";}}() // "com" Strict input // Comments 
+			,	"com"                    : function(){try{return            r.LST_Attributes[21].attribute_value                    }catch(e){Logger.log(e.message);return "";}}() // "com" Strict input // Comments
 			,	"full"                   : function(){try{return            r.address.full                                          }catch(e){Logger.log(e.message);return "";}}() //
 		//	,	"grm"                    : function(){try{return Math.round(r.ask/(12*Number(zil[i].rentzestimate.amount.Text)))    }catch(e){Logger.log(e.message);return "";}}() // "grm" Compute gross rent margin
 		//	,	"ia"                     : function(){try{return            r.incomeApproach                                        }catch(e){Logger.log(e.message);return "";}}() // "ia"  Compute price per income approach
@@ -1083,7 +1083,7 @@ function serveAgents_a(/*r.com*/){var ob=[],arr=[],i,j,k,r,t=[],zil=[],user=/*Se
 			,	"link_yahoo"             : function(){try{return  /*OK*/    r.link.yahoo	   					                    }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zillow"            : function(){try{return  /*OK*/    r.link.zillow                                           }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zillowdetails"     : function(){try{return  /*OK*/    zil[i].links.homedetails.Text                           }catch(e){Logger.log(e.message);return "";}}() //
-			,	"link_zipRealty"         : function(){try{return            ""                                                      }catch(e){Logger.log(e.message);return "";}}() //            
+			,	"link_zipRealty"         : function(){try{return            ""                                                      }catch(e){Logger.log(e.message);return "";}}() //
 			,	"link_zipSkinny"         : function(){try{return  /*ok*/    r.link.zipSkinny                                        }catch(e){Logger.log(e.message);return "";}}() //
 										   }
 	} // db_id MyBid // arv rep cof com city state zip sa useCode beds baths sf sf_round lot lot_round yearBuilt taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet // link_googleMap link_yahoo link_zillow link_zillowdetails link_eppraisal link_realtor link_realEstate link_homeGain link_trulia link_propertyShark link_neighborhoodScout link_zipSkinny link_chase link_boa link_homesCom
@@ -1096,7 +1096,7 @@ function serveAgents_b(/*zip*/){var ob=[],arr=[],i,j,k,r,t=[],bid=[],d=new Date(
 				"age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 				                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
                                                          ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-														 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))          }catch(e){Logger.log(e.message);return ""    ;}}() // r.ageInDays 
+														 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))          }catch(e){Logger.log(e.message);return ""    ;}}() // r.ageInDays
 			,	"ask"                    : function(){try{return            r.ask                                                         }catch(e){Logger.log(e.message);return ""    ;}}() //
 		//	,	"ask_round"              : function(){try{return Math.round(r.ask                                 / 1000 )                }catch(e){Logger.log(e.message);return ""    ;}}() //
 		//	,	"autoEst"                : function(){try{return            r.detail.avm.estimate                                         }catch(e){Logger.log(e.message);return ""    ;}}() //
@@ -1107,18 +1107,18 @@ function serveAgents_b(/*zip*/){var ob=[],arr=[],i,j,k,r,t=[],bid=[],d=new Date(
 		//	,	"csz"                    : function(){try{return            r.csz                                                         }catch(e){Logger.log(e.message);return ""    ;}}() //
 			,	"deltaPrice"             : function(){try{return            r.ask - bid[i].amount                                         }catch(e){Logger.log(e.message);return ""    ;}}() //
 			,	"deltaTime"/*status*/    : function(){try{return Math.floor((t-Math.max(r.status.auto.current.timestamp,r.status.manual.current.timestamp))/(1000*60*60*24))     }catch(e){Logger.log(e.message);return  0;}}() //
-			,	"email"                  : function(){try{return            r.status.isAppended.records[0].agentEmail                     }catch(e){Logger.log(e.message);return ""    ;}}() // 
+			,	"email"                  : function(){try{return            r.status.isAppended.records[0].agentEmail                     }catch(e){Logger.log(e.message);return ""    ;}}() //
 		//	,	"isActive"               : function(){try{return            r.isActive                                                    }catch(e){Logger.log(e.message);return ""    ;}}() //
             ,   "item"                   : function(){try{return            r.item                                                        }catch(e){Logger.log(e.message);return ""    ;}}() //
             ,   "mlsName"                : function(){try{return            r.detail.mlsSource_2/*mlsName*/                               }catch(e){Logger.log(e.message);return ""    ;}}() //
-            ,   "mlsNumber"              : function(){try{return            r.detail.mlsNumber_1                                          }catch(e){Logger.log(e.message);return ""    ;}}() // 
+            ,   "mlsNumber"              : function(){try{return            r.detail.mlsNumber_1                                          }catch(e){Logger.log(e.message);return ""    ;}}() //
 			,	"offerDownload"          : function(){try{return (bid[i].docId)?"<a href='"+LibraryjsUtil.id2url(bid[i].docId,"DOC","DL")+"'>&#9660;</a>":""}catch(e){Logger.log(e.message);return ""    ;}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"offerLink"              : function(){try{return "<a href='"+bid[i].docDl   +"' target='_blank'>&#9654;</a>"              }catch(e){Logger.log(e.message);return ""    ;}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 			,	"ratio"                  : function(){try{return Math.round(100*(1-(bid[i].amount/r.ask)))                                }catch(e){Logger.log(e.message);return ""    ;}}() // r.ratio // "rent"
 			,	"sa"                     : function(){try{return            r.sa  ||  r.detail.sa                                         }catch(e){Logger.log(e.message);return ""    ;}}() //
 			,	"state"                  : function(){try{return            r.detail.state                                                }catch(e){Logger.log(e.message);return ""    ;}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
-			,	"statusAuto"             : function(){try{return            r.status.auto  .current.status || r.status.auto  .array[0].status }catch(e){Logger.log(e.message);return "New" ;}}() // 
-			,	"statusManual"           : function(){try{return            r.status.manual.current.status || r.status.manual.array[0].status }catch(e){Logger.log(e.message);return ""    ;}}() // 
+			,	"statusAuto"             : function(){try{return            r.status.auto  .current.status || r.status.auto  .array[0].status }catch(e){Logger.log(e.message);return "New" ;}}() //
+			,	"statusManual"           : function(){try{return            r.status.manual.current.status || r.status.manual.array[0].status }catch(e){Logger.log(e.message);return ""    ;}}() //
             ,	"useCode"                : function(){try{return            r.useCode                                                     }catch(e){Logger.log(e.message);return ""    ;}}() //
 			,	"zip"                    : function(){try{return            r.detail.zip || r.csz.split(" ").pop()                        }catch(e){Logger.log(e.message);return ""    ;}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 			                               }
@@ -1143,7 +1143,7 @@ function serveAgents_c(){/*auc*/var ob=[],arr=[],bid=[],i,j,k,r,t=[],zil=[],d=ne
 		//		"age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 		//		                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
         //                                               ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays 
+		//												 ; d.setFullYear(yyyy,mm-1,dd-1);return Math.ceil((t-d)/(1000*60*60*24))    }catch(e){Logger.log(e.message);return "";}}() // r.ageInDays
 		//	,	"city"                   : function(){try{return            r.property_city        || r.detail.city                 }catch(e){Logger.log(e.message);return "";}}() // r.detail.city || foo throws error if no r.detail; instead, use foo || r.detail;
 		//	,	"costRepairs"            : function(){try{return            r.costRepairs                                           }catch(e){Logger.log(e.message);return "";}}() //
 		//	,	"costTitle"              : function(){try{return            r.costTitleClear /*1st pos,tax liens,hoa*/              }catch(e){Logger.log(e.message);return "";}}() //
@@ -1165,7 +1165,7 @@ function serveLenders_b(){var ob=[],arr=[],i,j,k,m,r,t=[],zil=[],user=/*Session.
 		//		"age"                    : function(){try{var yyyy = function(){try{return r.strikeDate[0]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[0]}}()
 		//		                                         ,      mm = function(){try{return r.strikeDate[1]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[1]}}()
         //                                               ,      dd = function(){try{return r.strikeDate[2]}catch(e){/*Logger.log(e);*/return r.detail.strikeDate[2]}}()
-		//												 ;var    d = new Date();d.setFullYear(yyyy,mm-1,dd-1) //r.ageInDays 
+		//												 ;var    d = new Date();d.setFullYear(yyyy,mm-1,dd-1) //r.ageInDays
 		//	                                             ;return Math.ceil((new Date().getTime()-d)/ (1000*60*60*24) )              }catch(e){Logger.log(e.message);return "";}}() //
 				"ask"                    : function(){try{return            r.ask                                                   }catch(e){Logger.log(e.message);return "";}}() //
 			,	"ask_round"              : function(){try{return Math.round(r.ask                                 / 1000 )          }catch(e){Logger.log(e.message);return "";}}() //
@@ -1179,9 +1179,9 @@ function serveLenders_b(){var ob=[],arr=[],i,j,k,m,r,t=[],zil=[],user=/*Session.
         //  ,   "mlsNumber"              : function(){try{return            r.detail.mlsNumber_1                                    }catch(e){Logger.log(e.message);return "";}}() //
 		//	,	"ratio"                  : function(){try{return            r.ratio                                                 }catch(e){Logger.log(e.message);return "";}}() // "rent"
 			,	"sa"                     : function(){try{return            r.sa  ||  r.detail.sa /* "Affiliate with us" */         }catch(e){Logger.log(e.message);return "";}}() //
-			,	"state"                  : function(){try{return            r.detail.state                                          }catch(e){Logger.log(e.message);return "";}}() // 
+			,	"state"                  : function(){try{return            r.detail.state                                          }catch(e){Logger.log(e.message);return "";}}() //
             ,	"useCode"                : function(){try{return            r.useCode                                               }catch(e){Logger.log(e.message);return "";}}() //
-			,	"zip"                    : function(){try{return            r.detail.zip                                            }catch(e){Logger.log(e.message);return "";}}() // 
+			,	"zip"                    : function(){try{return            r.detail.zip                                            }catch(e){Logger.log(e.message);return "";}}() //
 			                               }
 	,	"link"		                     : {}
 	} // db_id MyBid // arv rep cof com city state zip sa useCode beds baths sf sf_round lot lot_round yearBuilt taxVal taxVal_round lastSoldPrice lastSoldPrice_round lastSoldYear taxAmt taxAmt_round ask ask_round autoEst autoEst_round sdPct popCount rent rent_round ratio grm ia ia_round psf avmStatSet // link_googleMap link_yahoo link_zillow link_zillowdetails link_eppraisal link_realtor link_realEstate link_homeGain link_trulia link_propertyShark link_neighborhoodScout link_zipSkinny link_chase link_boa link_homesCom

@@ -4,9 +4,9 @@
 // Note: to accept doPost() from affiliate, (design decision:) must set: Publish > Deploy as web app > Execute the app as: me, Who has access to the app: Anyone, even anonymous // Otherwise, script will not run at server (though, client will receive responseCode=200); client response (200) is Google accounts sign-in page/form  // Decision Benefits: 1. script runs 2. script authorization bypass (i.e., not needed at UI) // Decision Costs: 1. Looser script security; mitigated by a. Site level access restrictions/permissions b. key method (e.g., switch/case k:foo)
 function auth    (){}
 function timer   (){Logger.log(new Date().getTime())}//1388228703613
-function backup  (){var desc="jsAvm Backup — timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
-function print   (str){var desc="jsAvm Print — timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
-function print_test(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"Argenta Print — timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
+function backup  (){var desc="jsAvm Backup ï¿½ timestamp:"+new Date().getTime(),id,out=[],db=ScriptDb.getMyDb(),results=db.query({});while(results.hasNext()){out.unshift(results.next())}id=DriveApp.createFile(desc,JSON.stringify(out),MimeType.HTML).setDescription(desc);Logger.log(id);}
+function print   (str){var desc="jsAvm Print ï¿½ timestamp:"+new Date().getTime(),id=DriveApp.createFile(desc,str,MimeType.HTML).setDescription(desc);Logger.log("Printed doc ID: "+id);}
+function print_test(str,desc){str=str||JSON.stringify(ScriptDb.getMyDb().load("S337185323966"));desc=desc||"Argenta Print ï¿½ timestamp:"+new Date().getTime();DriveApp.createFile(desc,str,MimeType.HTML);}
 function size    (){var db=ScriptDb.getMyDb();Logger.log(/*ScriptDb.getMyDb()*/db.query({}).getSize());}
 function showById(){Logger.log(JSON.stringify(ScriptDb.getMyDb().load("S96280679164")))} // Show one record by ID
 function showOne (){Logger.log(/*Utilities.jsonStringify*/JSON.stringify(ScriptDb.getMyDb().query({item:"eXjKqn1"/*/table:"note"/* /"user",user:"atlaslive@gmail.com",seller:true/*,city:"test"*/}).next()));} // Show all records in database // Reference: https://developers.google.com/apps-script/scriptdb#saving_data
@@ -15,7 +15,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 //function del     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({xtable:"note"/*,/*source:"fciEx_foo",* /table:db.not("report"),* /timestamp_posted:db.greaterThan(1388548425377),k:"8u0hjrtbd68s3hi1w9kl",/*"36sgd2m257w2j0sn5isa",* /"report"/* /"bid"/*"user"* /,xcity:"test"/*xseller:true,xuser* /,bidder:"atlaslive@gmail.com"*/});while(results.hasNext()){arr.push(results.next().getId());}db.removeByIdBatch(arr,false);} // Replaced: while(results.hasNext()){r=results.next();db.remove(r);}}
 //function mod     (){var xdb=ScriptDb.getMyDb(),arr=[],r,results=db.query({/*item* /city:true,/*db.not(db.anyValue())/*/xtable:"note"/*,pctLtv:db.between(0,1.1),lienPos:db.not(1)/*,/*use* /lienPos:db.anyOf(["1st"/*false,db.not(db.anyValue())/*"Hospitality"/*"Commercial"/*"Apt","Multifamily"* /])/*"Oth"/* /"bid"*/});while(results.hasNext()){r=results.next();try{r.pctLtv=Math.round(100*r.balCur/r.estValue)}catch(e){r.pctLtv="";Logger.log("Error : "+e.message)}/*r.lienPos=1;/*LibraryjsUtil.stateConvert(r.state,"abbr");/*.use="X";/*"CRE";/*"MUL";/*r.city=LibraryjsUtil.toCaseTitle(r.city);/*r.item=LibraryjsUtil.toBase62(Number(r.getId().slice(1)));/*if(r.askPrice==""){r.askPrice=0}/* /r.remove=false;r.accepted=false;/*r.askRate=r.buyRate;r.askPrice=r.buyPts;* /r.bids=[];/*r.table="note";r.datePosted=new Date().getTime();* /var i=r.bids.length;while(i--){/*r.bids[i].timestamp=r.bids[i].time;* /r.bids[i].accepted=false;/*r.bids[i].target_id=r.getId();* /r.bids[i].time=""/* /if(r.bids[i].bidder=="atlaslive@gmail.com"){r.bids.splice(i,1)}* /db.save(r);*/arr.push(r);}db.saveBatch(arr,false)}
 // Add to dataset: Homesnap : http://www.homesnap.com/WA/Seattle/1919-Bigelow-Avenue-N
-// Using Object.prototype.functionName = function(){...} (FOR OBJECT ONLY) appears to cause the ScriptDb.getMyDb().query({}) method to return null result in GAS. So we must use the function name(){} method instead — UPDATE: Question: Note this problem is not caused when using the Object.prototype.clone function on the jsUtil.js file?
+// Using Object.prototype.functionName = function(){...} (FOR OBJECT ONLY) appears to cause the ScriptDb.getMyDb().query({}) method to return null result in GAS. So we must use the function name(){} method instead ï¿½ UPDATE: Question: Note this problem is not caused when using the Object.prototype.clone function on the jsUtil.js file?
 // Test Functions
 //function test(){Logger.log(JSON.stringify(avmReport("6840 S Langley Ave #1, chicago, IL",1)))} // Major alert is triggered by this. Error 8slEi
 //function test(){Logger.log("RESULT: "+JSON.stringify(avmJson({source:{data:/*"17013 114 ave se, Renton, Wa"* /"5008 corson ave s, seattle, wa",name:"manual"}})))}
@@ -29,18 +29,18 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 //    ,i=addy.length;while(i--){out=JSON.stringify(avmJson({"source":{"name":"manual","data":addy[i]}}));Logger.log(out)}}//;print(out)}}//
 //function test(){var out=[],addy=["5008 coron ave s, seattle, wa","2865 S Meridian St, INDIANAPOLIS, IN","661 glendale ave., danville va","16184 Manor, Detroit, MI 48221","16741 Ashton Ave., Detroit, MI  48228","1124 8th Ave, New Brighton, PA 15066","732 franklin st, westbury, ny 11590"]
 //    ,i=addy.length;while(i--){out.push(JSON.stringify(avmJson({"source":{"name":"manual","data":addy[i]}})))}print(out)}//;Logger.log(out)}}//
-/* Data model — function avmDataModel(){ // Data record array as argument and returns output array prepped to write out to database
+/* Data model ï¿½ function avmDataModel(){ // Data record array as argument and returns output array prepped to write out to database
 	var DB = new Array(); // Database field names
 	var  T = new Array(); // Type of data: 0 = nullify/delete; 1 = number; 2 = string; 9 = ignore / do not process;
-	{ // Variables — Auction.com
+	{ // Variables ï¿½ Auction.com
 	var UL = "list-property";
 	var DEL=["\""]; // DELETE this (get replaced)
 	var INS=[ "" ]; // INSERT this (replace with)
 	}
 	{ // Arrays
-	//        0    1     2        3       4     5              6                 7        8                                                              9        10               11             12           13               14            15       16              17          18             19      20            21             22                     23             24           25             26                     27           28         29           
-	//        0    1     2        3       4     5              6                 7                                                                                                                                                                                                                                                                                                                                              0            1          2            
-	//       0 (added) Address Array                                                      1                                                              2        3                4              5            6                7             8        9               10          11             12      13            14             15                     16             17           18             19                    20 (added) date                       Here: Add/push() AVM array — SEE DATA MODEL in jsAvm.js file function/method: .avmData()
+	//        0    1     2        3       4     5              6                 7        8                                                              9        10               11             12           13               14            15       16              17          18             19      20            21             22                     23             24           25             26                     27           28         29
+	//        0    1     2        3       4     5              6                 7                                                                                                                                                                                                                                                                                                                                              0            1          2
+	//       0 (added) Address Array                                                      1                                                              2        3                4              5            6                7             8        9               10          11             12      13            14             15                     16             17           18             19                    20 (added) date                       Here: Add/push() AVM array ï¿½ SEE DATA MODEL in jsAvm.js file function/method: .avmData()
 	var T  =[ 9   ,9    ,9       ,9      ,9    ,9             ,9                ,9        ,9                                                             ,9       ,1               ,9             ,9           ,9               ,9            ,9       ,9              ,9          ,9             ,9      ,0            ,0             ,0                     ,0             ,0           ,9             ,9                    ,9            ,9         ,9           ];
 	var DB =[["sa","csz","Number","State","Zip","Full_address","Partial_address","County"],"Address"                                                     ,"imgSrc","NOS_amt"       ,"PP_to"       ,"Type"      ,"TSNo"          ,"PropIDno"   ,"ItemNo","Sale_location","Sale_hour","Sale_minutes","am_pm","Open_bid"   ,"Start_bid"   ,"PreVal"              ,"Auction_date","Start_date","AucType"     ,"tsHidID"            ,["Sale_month","Sale_day","Sale_year"]];
 	var QUE=[                                                                             ,""                                                            ,""      ,"Notice of Sale","Postponed To","Asset type","Trustee Number","Property ID","Item"  ,"Sale Location","Time"     ,""            ,""     ,"Opening Bid","Starting Bid","Previously Valued at","Auction Date","Start Date","Auction Type","id="                ];
@@ -51,14 +51,14 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 								  var L = DB.length;                    // Use a variable to automatically handle changes in array length
 	DB[L]                               = new Array();                  // Append/push() data
 	{ DB[L][0]                          = new Array();                  // AVM statistics
-		T[i++]=0; //DB[L][0][0]         = "isOk";                //  30 // ISOK      — Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
-		T[i++]=9;   DB[L][0][1]         = "PopCount";            //  31 // COUNT     — Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations // Size count of the population of AVM estimates
-	//	T[i++]=9;   DB[L][0][2]         = "Opening_bid";         //  32 // BID       — Get max; consolidate multiple(two) bid values into one
-		T[i++]=9;   DB[L][0][3]         = "Auto_estimate";       //  33 // ARV       — MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
-		T[i++]=9;   DB[L][0][4]         = "First_margin";        //  34 // MARGIN    — calculate margin
-		T[i++]=9;   DB[L][0][5]         = "First_key_ratio";     //  35 // RATIO     — calculate ratio
-		T[i++]=9;   DB[L][0][6]         = "StdDevPop";           //  36 // StdDevPop — Population stardard deviation
-		T[i++]=9;   DB[L][0][7]         = "StdDevPct";           //  37 // StdDevPct — Pop std dev as pct% of estimated ARV
+		T[i++]=0; //DB[L][0][0]         = "isOk";                //  30 // ISOK      ï¿½ Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
+		T[i++]=9;   DB[L][0][1]         = "PopCount";            //  31 // COUNT     ï¿½ Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations // Size count of the population of AVM estimates
+	//	T[i++]=9;   DB[L][0][2]         = "Opening_bid";         //  32 // BID       ï¿½ Get max; consolidate multiple(two) bid values into one
+		T[i++]=9;   DB[L][0][3]         = "Auto_estimate";       //  33 // ARV       ï¿½ MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
+		T[i++]=9;   DB[L][0][4]         = "First_margin";        //  34 // MARGIN    ï¿½ calculate margin
+		T[i++]=9;   DB[L][0][5]         = "First_key_ratio";     //  35 // RATIO     ï¿½ calculate ratio
+		T[i++]=9;   DB[L][0][6]         = "StdDevPop";           //  36 // StdDevPop ï¿½ Population stardard deviation
+		T[i++]=9;   DB[L][0][7]         = "StdDevPct";           //  37 // StdDevPct ï¿½ Pop std dev as pct% of estimated ARV
 	}
 	{ DB[L][1]                          = new Array();                  // AVM labels // Note: DB[L][1] = DB.avmData();
 		T[i++]=0; //DB[L][1][0]         = "Combined";            //  38
@@ -68,7 +68,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		T[i++]=0; //DB[L][1][4]         = "RealEstate";          //  42
 		T[i++]=0;	DB[L][1][5]         = "HomeGain";            //  43
 	}
-	{ DB[L][2]                          = new Array();                  // AVM — Combined (property data)
+	{ DB[L][2]                          = new Array();                  // AVM ï¿½ Combined (property data)
 		T[i++]=0; //DB[L][2][0]         = null                   //  44 // URL of scraped object
 		T[i++]=9;   DB[L][2][1]         = "Beds"                 //  45 // Beds
 		T[i++]=9;   DB[L][2][2]         = "Baths";               //  46 // Baths
@@ -81,7 +81,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 	}
 	{ DB[L][3]                          = new Array();                  // AVM DATASETS
 		T[i++]=0; //DB[L][3][0]         = null                   //  53
-		{			DB[L][3][1]         = new Array();                  // AVM — Zillow
+		{			DB[L][3][1]         = new Array();                  // AVM ï¿½ Zillow
 		T[i++]=9; 		DB[L][3][1][0]  = "Zillow_link";         //  54 // URL of scraped object
 		T[i++]=0;     //DB[L][3][1][1]  = "Z_pointer";           //  55 // Points to element number of ARV estimate
 		T[i++]=9; 		DB[L][3][1][2]  = "zpid";                //  56
@@ -96,9 +96,9 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		T[i++]=0;     //DB[L][3][1][11] = "State";               //  65 // "state";
 		T[i++]=0;     //DB[L][3][1][12] = "latitude";            //  66
 		T[i++]=0;     //DB[L][3][1][13] = "longitude";           //  67
-		T[i++]=0;     //DB[L][3][1][14] = "FIPScounty";          //  68 // Ex: "6065" — Number code only, not word string such as, say, "Riverside"
+		T[i++]=0;     //DB[L][3][1][14] = "FIPScounty";          //  68 // Ex: "6065" ï¿½ Number code only, not word string such as, say, "Riverside"
 		T[i++]=0;     //DB[L][3][1][15] = "useCode";             //  69
-		T[i++]=0;     //DB[L][3][1][16] = "taxAssessmentYear";   //  70 
+		T[i++]=0;     //DB[L][3][1][16] = "taxAssessmentYear";   //  70
 		T[i++]=0;     //DB[L][3][1][17] = "taxAssessment";       //  71 // Original single source of data, therefore not pulled here (omitted) but pulled from above combined source
 		T[i++]=9;  		DB[L][3][1][18] = "Z_Year_built";        //  72 // "yearBuilt";
 		T[i++]=9; 		DB[L][3][1][19] = "Z_Lot";               //  73 // "lotSizeSqFt";
@@ -127,19 +127,19 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		T[i++]=0;     //DB[L][3][1][42] = "forSaleByOwner";      //  96
 		T[i++]=0;     	DB[L][3][1][43] = "forSale";             //  97
 		}
-		{			DB[L][3][2]         = new Array();                  // AVM — Eppraisal
+		{			DB[L][3][2]         = new Array();                  // AVM ï¿½ Eppraisal
 		T[i++]=9; 		DB[L][3][2][0]  = "Eppraisal_link";      //  98 // URL of scraped object
 		T[i++]=0;     //DB[L][3][2][1]  = "E_pointer";           //  99 // Points to element number of ARV estimate
 		T[i++]=9; 		DB[L][3][2][2]  = "Eppraisal";           // 100 // "Value Estimate";
 		T[i++]=0;     //DB[L][3][2][3]  = "Low Estimate";        // 101
 		T[i++]=0;     //DB[L][3][2][4]  = "High Estimate";       // 102
-		T[i++]=0;     //DB[L][3][2][5]  = "Void";                // 103 // “Dummy” variable in this AVM (created for scraping purposes)
+		T[i++]=0;     //DB[L][3][2][5]  = "Void";                // 103 // ï¿½Dummyï¿½ variable in this AVM (created for scraping purposes)
 		T[i++]=9; 		DB[L][3][2][6]  = "E_Beds";              // 104
 		T[i++]=9; 		DB[L][3][2][7]  = "E_Baths";             // 105
 		T[i++]=9; 		DB[L][3][2][8]  = "E_Sqft";              // 106
 		T[i++]=9; 		DB[L][3][2][9]  = "E_Lot";               // 107
 		}
-		{			DB[L][3][3]         = new Array();                  // AVM — Realtor
+		{			DB[L][3][3]         = new Array();                  // AVM ï¿½ Realtor
 		T[i++]=9; 		DB[L][3][3][0]  = "Realtor_link";        // 108 // URL of scraped object
 		T[i++]=0;     //DB[L][3][3][1]  = "R_pointer";           // 109 // Points to element number of ARV estimate
 		T[i++]=0;     //DB[L][3][3][2]  = "R_Status";            // 110
@@ -155,7 +155,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		T[i++]=0;     //DB[L][3][3][12] = "R_Style";             // 120
 		T[i++]=0;     	DB[L][3][3][13] = "R_Stories";           // 121
 		}
-		{			DB[L][3][4]         = new Array();                  // AVM — RealEstate
+		{			DB[L][3][4]         = new Array();                  // AVM ï¿½ RealEstate
 		T[i++]=9; 		DB[L][3][4][0]  = "RealEstate_link";     // 122 // URL of scraped object
 		T[i++]=0;     //DB[L][3][4][1]  = "A_pointer";           // 123 // Points to element number of ARV estimate
 		T[i++]=9; 		DB[L][3][4][2]  = "RealEstate";          // 124 // "Estimated Value";
@@ -166,7 +166,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		T[i++]=0;     //DB[L][3][4][7]  = "A_Stories";           // 129
 		T[i++]=9; 		DB[L][3][4][8]  = "A_Lot";               // 130
 		}
-		{			DB[L][3][5]         = new Array();                  // AVM — HomeGain
+		{			DB[L][3][5]         = new Array();                  // AVM ï¿½ HomeGain
 		T[i++]=9; 		DB[L][3][5][0]  = "HomeGain_link";       // 131 // URL of scraped object
 		T[i++]=0;     //DB[L][3][5][1]  = "H_pointer";           // 132 // Points to element number of ARV estimate
 		T[i++]=9; 	    DB[L][3][5][2]  = "HomeGain";            // 133 // Median/avg low/high estimates
@@ -177,7 +177,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 		//  0  1 2  3   4   5   6   7
 	return [DB,T,UL,DEL,INS,QUE,BEG,END]                         // Returns array of arrays
 }*/
-/* Data model — array
+/* Data model ï¿½ array
     arr[0]    = stats
     arr[1]    = avmList
     arr[2]    = empty
@@ -187,21 +187,21 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
     arr[3][4] = realestate
     arr[3][5] = homegain
 */
-/* Data model — object — added properties
+/* Data model ï¿½ object ï¿½ added properties
 	var situs =	{
 				//  "mlsNumber" :	120062061          	// Added via realtorDataGate()
 				//	"timestamp"	:	1356678000000      	// Added via realtorDataGate()
 				//	"recentDateParse":1356678000000    	// Added via realtorDataGate()
-				//	"tags"		:	["demo","agents"]  	// array  — Might coincide with individual pages/views // DEPRECATED — replaced with .is_x as follows... // Note: Because JavaScript does not support easily finding array items // Reference: http://stackoverflow.com/questions/143847/best-way-to-find-an-item-in-a-javascript-array
-				//	"is_demo"	:	true // Means this record will appear on the page labeled "demo"       // DEPRECATED — replaced with is.x:true, is.y:true, etc.
-				//	"is_agents"	:	true // Means this record will appear on the page labeled "agents"     // DEPRECATED — replaced with is.x:true, is.y:true, etc.
-				//	"is_inventory":	true // Means this record will appear on the page labeled "inventory"  // DEPRECATED — replaced with is.x:true, is.y:true, etc.
-				,	"tag"		:	{                                                                      // Resolved deprecation: use nested query syntax — example: see below // DEPRECATED — replaced with above schema; query is.x is not supported
+				//	"tags"		:	["demo","agents"]  	// array  ï¿½ Might coincide with individual pages/views // DEPRECATED ï¿½ replaced with .is_x as follows... // Note: Because JavaScript does not support easily finding array items // Reference: http://stackoverflow.com/questions/143847/best-way-to-find-an-item-in-a-javascript-array
+				//	"is_demo"	:	true // Means this record will appear on the page labeled "demo"       // DEPRECATED ï¿½ replaced with is.x:true, is.y:true, etc.
+				//	"is_agents"	:	true // Means this record will appear on the page labeled "agents"     // DEPRECATED ï¿½ replaced with is.x:true, is.y:true, etc.
+				//	"is_inventory":	true // Means this record will appear on the page labeled "inventory"  // DEPRECATED ï¿½ replaced with is.x:true, is.y:true, etc.
+				,	"tag"		:	{                                                                      // Resolved deprecation: use nested query syntax ï¿½ example: see below // DEPRECATED ï¿½ replaced with above schema; query is.x is not supported
 										"demo"			:	true                                           // var result = db.query({address: {city: "Cleveland", state: db.not("TX")}});
-									,	"agents"		:	true                                           // DEPRECATED — demo page will use live deals, not one from an “off” market (e.g., Sacramento, when target market is, say, San Diego, for example)
-									,	"inventory"		:	true										   // DEPRECATED — see above
+									,	"agents"		:	true                                           // DEPRECATED ï¿½ demo page will use live deals, not one from an ï¿½offï¿½ market (e.g., Sacramento, when target market is, say, San Diego, for example)
+									,	"inventory"		:	true										   // DEPRECATED ï¿½ see above
 									}
-				,	"table"		:	"situs" or "agent"	// string — Indicates which data/type of record; This data model is for table:"inventory"
+				,	"table"		:	"situs" or "agent"	// string ï¿½ Indicates which data/type of record; This data model is for table:"inventory"
 				,	"source"  	:	{																	   // DEPRECATED 12/31/2012 in realtorDataGate()
 										"sourceName"	:	"Realtor"
 									,	"mlsNumber"		:	120048198
@@ -291,16 +291,16 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 									, 	"county"    	: 	""
 									}
 				, 	"avm"     	: 	{
-										"stat"      	: 	{						
-																"isOk"            	:	"" 				// ISOK      — Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
-															, 	"popCount"        	:	"" 				// COUNT     — Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations // Size count of the population of AVM estimates
-															, 	"openBid"         	:	"" 				// BID       — Get max; consolidate multiple(two) bid values into one
-															, 	"autoEst"         	: 	"" 				// ARV       — MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
-															, 	"margin"         	: 	"" 				// MARGIN    — calculate margin
-															, 	"ratio"   	        : 	"" 				// RATIO     — calculate ratio
-															, 	"sdPop"           	: 	"" 				// sdPop     — Population stardard deviation
-															, 	"sdPct"           	: 	"" 				// sdPct     — Pop std dev as pct% of estimated ARV
-															,	"set"				:	"" 				// set		— The set of avm estimates sorted in numerically ascending order
+										"stat"      	: 	{
+																"isOk"            	:	"" 				// ISOK      ï¿½ Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
+															, 	"popCount"        	:	"" 				// COUNT     ï¿½ Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations // Size count of the population of AVM estimates
+															, 	"openBid"         	:	"" 				// BID       ï¿½ Get max; consolidate multiple(two) bid values into one
+															, 	"autoEst"         	: 	"" 				// ARV       ï¿½ MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
+															, 	"margin"         	: 	"" 				// MARGIN    ï¿½ calculate margin
+															, 	"ratio"   	        : 	"" 				// RATIO     ï¿½ calculate ratio
+															, 	"sdPop"           	: 	"" 				// sdPop     ï¿½ Population stardard deviation
+															, 	"sdPct"           	: 	"" 				// sdPct     ï¿½ Pop std dev as pct% of estimated ARV
+															,	"set"				:	"" 				// set		ï¿½ The set of avm estimates sorted in numerically ascending order
 															}
 									,	"combo"     	: 	{
 																"beds"            	: 	3 				// Beds
@@ -309,7 +309,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 															, 	"lot"             	: 	2955         	// Lot
 															, 	"yrBuilt"         	: 	1953         	// Year built
 															, 	"taxVal"          	: 	175980       	// Tax assessed value
-															, 	"lastSoldDate"    	: 	"07/15/2004"      
+															, 	"lastSoldDate"    	: 	"07/15/2004"
 															, 	"lastSoldPrice"   	: 	237000
 															, 	"lastSoldYear"   	: 	2004
 															}
@@ -329,9 +329,9 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 																						, 	"state"             	: 	""
 																						, 	"latitude"          	: 	""
 																						, 	"longitude"         	: 	""
-																						, 	"FIPScounty"        	: 	"" // Ex: "6065" — Number code only, not word string such as, say, "Riverside"
+																						, 	"FIPScounty"        	: 	"" // Ex: "6065" ï¿½ Number code only, not word string such as, say, "Riverside"
 																						, 	"useCode"           	: 	""
-																						, 	"taxAssessmentYear" 	: 	"" 
+																						, 	"taxAssessmentYear" 	: 	""
 																						, 	"taxAssessment"     	: 	""
 																						, 	"yearBuilt"         	: 	""
 																						, 	"lotSizeSqFt"      	 	:	""
@@ -382,7 +382,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 																						, 	"estimate"          	: 	"" // "Value Estimate";
 																						, 	"estimateLow"       	: 	""
 																						, 	"estimateHigh"      	: 	""
-																						, 	"void"              	: 	"" // “Dummy” variable in this AVM (created for scraping purposes)
+																						, 	"void"              	: 	"" // ï¿½Dummyï¿½ variable in this AVM (created for scraping purposes)
 																						, 	"beds"              	: 	""
 																						, 	"baths"             	: 	""
 																						, 	"sqft"              	: 	""
@@ -414,7 +414,7 @@ function print2ss(){LibraryjsUtil.write2ss(true,showAll(),"Sheet1","1azZ5rq1Sgy2
 									}
 				}
 */
-/* Data model — object — scraped from source i.e. Realtor.com
+/* Data model ï¿½ object ï¿½ scraped from source i.e. Realtor.com
 {
 "DetailPageURL":null,
 "ListDate":"/Date(1356678000000)/",
@@ -731,14 +731,14 @@ function avmJson        (propIn         ){ // MAIN AVM CALL! // When adding new 
 												 j=keyset[keysetKeys[i]].length;while(j--){try{prop.avm.dataset[keysetKeys[i]][keyset[keysetKeys[i]][j]]=arr[3][i+1][j];}catch(e){}}} // Add AVM datasets * /
 	*/
 	/* Parameters  // Notation/JSDoc reference: https://developers.google.com/closure/compiler/docs/js-for-compiler https://developers.google.com/apps-script/guide_libraries?hl=en
-		@return {object} prop   — data-populated object model of subject property ("situs") under consideration for purchase; Example: {"avm":{"dataset":{"zillow":{"searchresults":{"request":{"citystatezip":{"Text":"75229"},"address":{"Text":"3255 Whitehall Drive"}},"schemalocation":"http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/3ab58af/static/xsd/SearchResults.xsd","response":{"results":{"result":{"lastSoldDate":{"Text":"05/17/2004"},"yearBuilt":{"Text":"1965"},"bathrooms":{"Text":"4.0"},"localRealEstate":{"region":{"type":"neighborhood","id":"275090","name":"Preston Hollow","links":{"forSaleByOwner":{"Text":"http://www.zillow.com/preston-hollow-dallas-tx/fsbo/"},"forSale":{"Text":"http://www.zillow.com/preston-hollow-dallas-tx/"},"overview":{"Text":"http://www.zillow.com/local-info/TX-Dallas/Preston-Hollow/r_275090/"}}}},"bedrooms":{"Text":"6"},"finishedSqFt":{"Text":"3297"},"taxAssessment":{"Text":"274660.0"},"lotSizeSqFt":{"Text":"12066"},"useCode":{"Text":"SingleFamily"},"taxAssessmentYear":{"Text":"2014"},"FIPScounty":{"Text":"48113"},"zpid":{"Text":"26809363"},"zestimate":{"percentile":{"Text":"0"},"amount":{"currency":"USD","Text":"328467"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"-985","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"279197"},"high":{"currency":"USD","Text":"371168"}},"last_updated":{"Text":"01/13/2015"}},"rentzestimate":{"amount":{"currency":"USD","Text":"2348"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"145","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"1644"},"high":{"currency":"USD","Text":"2700"}},"last_updated":{"Text":"01/12/2015"}},"links":{"comparables":{"Text":"http://www.zillow.com/homes/comps/26809363_zpid/"},"homedetails":{"Text":"http://www.zillow.com/homedetails/3255-Whitehall-Dr-Dallas-TX-75229/26809363_zpid/"},"mapthishome":{"Text":"http://www.zillow.com/homes/26809363_zpid/"},"graphsanddata":{"Text":"http://www.zillow.com/homedetails/3255-Whitehall-Dr-Dallas-TX-75229/26809363_zpid/#charts-and-data"}},"address":{"street":{"Text":"3255 Whitehall Dr"},"city":{"Text":"Dallas"},"longitude":{"Text":"-96.866545"},"latitude":{"Text":"32.901069"},"state":{"Text":"TX"},"zipcode":{"Text":"75229"}}}}},"message":{"text":{"Text":"Request successfully processed"},"code":{"Text":"0"}},"xsi":"urn:x-prefix:xsi"},"link":"http://www.zillow.com/webservice/GetDeepSearchResults.htm?rentzestimate=true&zws-id=X1-ZWz1dy7ynmuayz_4aijl&address=3255 Whitehall Drive&citystatezip=75229","estimate":"328467"},"trulia":{"beds":"6","baths":"4","sqft":"3297","lot":"n/a","yrBuilt":"1965","estimate":false,"dataSet":{"id":"3166021937","feedId":1004,"hash":"163f96267fcf4fa666ec4224ea2767e","neighborhood":"Preston Hollow","neighborhoodId":"6186","zipCode":"75229","city":"Dallas","county":"Dallas","countyFIPS":"48113","stateCode":"TX","stateName":"Texas","latitude":32.90107,"longitude":-96.86655,"addressForDisplay":"3255 Whitehall Drive, Dallas TX","addressForUrl":"3255-Whitehall-Dr-Dallas-TX-75229","streetNumber":"3255","street":"Whitehall Dr","apartmentNumber":null,"urlType":null,"status":"For Sale","listingId":"3166021937","locationId":"71155","type":"SINGLE-FAMILY HOME","typeDisplay":"Single-Family Home","numBedrooms":6,"numBathrooms":4,"numPartialBathrooms":0,"numFullBathrooms":4,"siteId":"10342744","siteUrl":"www.cbdfw.com","listingType":0,"dmaId":190,"claimed":null,"numBeds":6,"indexSource":"For Sale","isForeclosure":false,"foreclosureStatus":"","isSrpFeatured":true,"price":237500,"sqft":3297,"isRental":false,"isRentalCommunity":false,"hasStreetView":"-1","showStreetView":"1","blockStreetView":false,"walkScore":48,"photos":["ps.69/f/0/5/4/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg:15","ps.69/e/1/1/1/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg:15","ps.69/8/a/5/1/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg:15","ps.69/2/e/c/6/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg:15","ps.69/8/7/9/c/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg:15","ps.69/9/7/6/f/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg:15","ps.69/5/0/b/a/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg:15","ps.69/9/a/1/a/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg:15"],"adCampaign":null,"hasPhotos":true,"userHidden":null,"userLiked":null,"isAddressNotDisclosed":false,"_isDefault":true,"intersectionName":null,"agentClaimable":true,"pdpURL":"/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229","thumbnail":"http://thumbs.trulia-cdn.com/pictures/thumbs/ps.69/f/0/5/4/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg","formattedPrice":"$237,500","shortDescription":"3255 Whitehall Dr","formattedBedAndBath":"6bd, 4 full ba","formattedSqft":"3,297 sqft","dataPhotos":"{\"photos\":[{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315-3255-Whitehall-Dr-Dallas-TX-75229.jpg\",\"raw_path\":\"ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"raw_path\":\"ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"raw_path\":\"ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"raw_path\":\"ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"raw_path\":\"ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"raw_path\":\"ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"raw_path\":\"ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"raw_path\":\"ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"thumbsBitmap\":null}],\"static_map_path\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/staticmap?client=gme-truliainc&zoom=18&size=640x480&maptype=satellite&sensor=false&center=32.90107%2C-96.86655&signature=UhjsP8QlII4piLOvOwez6tgIBIM=\"}","isBuilder":false,"isBuilderCommunity":false,"isPlan":false,"isSpec":false,"isPromotedCommunity":false,"builderName":null,"builderCommunityId":null,"userClaimed":false},"locationData":{"neighborhood":{"locationId":"86307","name":"Preston Hollow","locationType":"neighborhood","altId":"6186"},"state":{"locationId":"44","name":"Texas","locationType":"state","altId":"TX"},"county":{"locationId":"58","name":"Dallas County","locationType":"county","altId":"48113"},"city":{"locationId":"11249","name":"Dallas","locationType":"city","altId":"68627"},"propertyId":"3166021937","addressHash":"163f96267fcf4fa666ec4224ea2767e","address":"3255 Whitehall Dr","zipCode":{"locationId":"71155","name":"75229","locationType":"zipCode","altName":"75229","altId":"75229"},"geohash":"9vg55trytgc","latitude":32.90107,"longitude":-96.86655,"unknown":true,"isCountySupportsValuation":false},"comps":"{\"for sale\":[{\"t\":\"for_sale\",\"y\":32.900047,\"x\":-96.866585,\"a\":\"KENILWORTH ESTATES\",\"s\":\"TX\",\"c\":\"Dallas\",\"z\":\"75229\",\"p\":\"252,500\",\"ph\":\"62e99c7da7b985e9c865bb4cd78843a9\",\"n\":\"\",\"pt\":\"Single-Family Home\",\"i\":\"thumbs\\/ps.65\\/7\\/9\\/8\\/5\\/picture-uh=9ff2c116e52a1e14b7f6c515df7d823-ps=79859d103ff599b68ccc62d82ea6462.jpg\",\"ib\":\"thumbs_big\\/ps.65\\/7\\/9\\/8\\/5\\/picture-uh=9ff2c116e52a1e14b7f6c515df7d823-ps=79859d103ff599b68ccc62d82ea6462.jpg\",\"sd\":\"\",\"br\":\"4\",\"ba\":\"3\",\"sf\":\"2,000\",\"pps\":\"126\",\"cs\":\"\",\"id\":\"1074311844\",\"u\":\"\\/property\\/1074311844-KENILWORTH-ESTATES-3243-Jubilee-Trl-Dallas-TX-75229\",\"lt\":\"for_sale\",\"fc\":false,\"v\":null,\"vd\":null,\"uh\":null,\"sa\":\"\",\"sid\":11116357,\"ls\":\"For Sale\",\"streetviewImage\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/streetview?client=gme-truliainc&size=70x50&sensor=false&location=32.900047%2C-96.866585&signature=7eKKIym-Te840dAS7YOpl-l3Rag=\",\"satelliteImage\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/staticmap?client=gme-truliainc&zoom=18&size=70x50&maptype=satellite&sensor=false&center=32.900047%2C-96.866585&signature=FOKQzoa9nFdCYRJRrOORsZBsUew=\",\"fl\":\"0\"},{\"t\":\"for_sale\",\"y\":32.899433,\"x\":-96.867584,\"a\":\"3218 Jubilee Trl\",\"s\":\"TX\",\"c\":\"Dallas\",\"z\":\"75229\",\"p\":\"299,000\",\"ph\":\"c14c70b5d73915c4054fd22441e967\",\"n\":\"\",\"pt\":\"Single-Family Home\",\"i\":\"thumbs\\/ps.69\\/1\\/c\\/3\\/4\\/picture-uh=c9645ee489d0a7c01440293a11e8293a-ps=1c348c6f7d3ee0d421ab35eb3d3687.jpg\",\"ib\":\"thumbs_big\\/ps.69\\/1\\/c\\/3\\/4\\/picture-uh=c9645ee489d0a7c01440293a11e8293a-ps=1c348c6f7d3ee0d421ab35eb3d3687.jpg\",\"sd\":\"\",\"br\":\"3\",\"ba\":\"2&frac12","detail":{"photo":"no","long":"no","ad":"no","error":true,"html":"Error: Property data not found.","success":true,"errors":[]},"link":"http://www.trulia.com/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229"},"homeSnap":{"low":false,"estimate":false,"high":false,"foo":false,"beds":false,"heating":false,"pmtEst":false,"bathsFull":false,"basement":false,"rentEst":false,"bathsHalf":false,"stories":"1","taxEst":false,"sqft":false,"addressStories":false,"homeScore":false,"lot":false,"fireplaces":false,"investorScore":false,"lastSaleDate":false,"lastSalePrice":false,"yearBuilt":false,"link":"http://www.homesnap.com/TX/Dallas/3255-Whitehall-Drive"},"realtor":{"status":"Active","beds":false,"baths":"4","sqft":false,"lot":"0.28 Acres","built":"1965","link":"http://www.realtor.com/propertyrecord-search/Dallas_Texas/75229/3255-Whitehall-Drive"},"dataQuick":{},"smartZip":{},"eppraisal":{},"realEstate":{"estimate":false,"beds":"Buy","baths":"Homes for Sale","sqft":"Open Houses","built":false,"stories":"Foreclosures","lot":"New Homes","link":"http://www.realestate.com/homevalues/3255-Whitehall-Drive,Dallas,Texas/"}},"combi":{"useCode":"SFR","beds":"6","baths":"4.0","sqft":"3297","lot":"12066","built":"1965","taxVal":"274660.0","lastSoldDate":"05/17/2004","lastSoldYear":"2004"},"stat":{"ob":{"zillow":"328467"},"set":["328467"],"isOk":true,"popCount":1,"autoEst":328467,"margin":null,"ratio":null,"sdPop":0,"sdPct":0}},"address":{"sa":"3255 Whitehall Drive","city":"Dallas","state":"Texas","zip":"75229","county":"Dallas County","csz":"Dallas, Texas 75229","full":"3255 Whitehall Drive, Dallas, Texas 75229","part":"Whitehall Drive, Dallas, Texas 75229","number":"3255"},"isRaw":false,"table":"situs","source":{"name":"manual","data":"3255 Whitehall Dr, Dallas, TX 75229"},"link":{"gmap":"https://maps.google.com/maps?q=3255+Whitehall+Drive,+Dallas,+Texas+75229","zillow":"http://www.zillow.com/homes/3255-Whitehall-Drive,-75229_rb/","propertyShark":"http://www.propertyshark.com/","neighborhoodScout":"http://www.neighborhoodscout.com/","zipSkinny":"http://zipskinny.com/index.php?zip=75229","chase":"https://www.chase.com/mortgage/mortgage-resources/home-value-estimator","boa":"http://realestatecenter.bankofamerica.com/tools/marketvalue.aspx","homesCom":"http://www.homes.com/Home-Prices/","homeSnap":"http://www.homesnap.com/TX/Dallas/3255-Whitehall-Drive","trulia":"http://www.trulia.com/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229","realEstate":"http://www.realestate.com/homevalues/3255-Whitehall-Drive,Dallas,Texas/","realtor":"http://www.realtor.com/propertyrecord-search/Dallas_Texas/75229/3255-Whitehall-Drive","photo":false},"offer":{"beforeRepairs":{"auto":null,"manual":{}},"afterRepairs":{"manual":{}}},"incomeApproach":null,"arv":{},"repairs":{},"counter":{},"analysis":{},"contract":{},"assignment":{}}
-		@param  {object} propIn — {"source":{"name":"Realtor","data":{foo}},"market":{"city":"Pheonix","state":"AZ"}} — "data": original string or object representing subject as obtained from source; could be scraped web page string, spreadsheet cells, etc. (e.g., {...data:scraped[i]...})
-		@param  {string} source — label, naming source of data | Value range: "manual" (single line text field from web form) , "ZipRealty" (email feeder) , "ChuckWillman" (email + ss attachment to Gdoc) , "Realtor" (scraping Realtor.com) , "KennethGreen" (hand entered spreadsheet)
+		@return {object} prop   ï¿½ data-populated object model of subject property ("situs") under consideration for purchase; Example: {"avm":{"dataset":{"zillow":{"searchresults":{"request":{"citystatezip":{"Text":"75229"},"address":{"Text":"3255 Whitehall Drive"}},"schemalocation":"http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/3ab58af/static/xsd/SearchResults.xsd","response":{"results":{"result":{"lastSoldDate":{"Text":"05/17/2004"},"yearBuilt":{"Text":"1965"},"bathrooms":{"Text":"4.0"},"localRealEstate":{"region":{"type":"neighborhood","id":"275090","name":"Preston Hollow","links":{"forSaleByOwner":{"Text":"http://www.zillow.com/preston-hollow-dallas-tx/fsbo/"},"forSale":{"Text":"http://www.zillow.com/preston-hollow-dallas-tx/"},"overview":{"Text":"http://www.zillow.com/local-info/TX-Dallas/Preston-Hollow/r_275090/"}}}},"bedrooms":{"Text":"6"},"finishedSqFt":{"Text":"3297"},"taxAssessment":{"Text":"274660.0"},"lotSizeSqFt":{"Text":"12066"},"useCode":{"Text":"SingleFamily"},"taxAssessmentYear":{"Text":"2014"},"FIPScounty":{"Text":"48113"},"zpid":{"Text":"26809363"},"zestimate":{"percentile":{"Text":"0"},"amount":{"currency":"USD","Text":"328467"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"-985","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"279197"},"high":{"currency":"USD","Text":"371168"}},"last_updated":{"Text":"01/13/2015"}},"rentzestimate":{"amount":{"currency":"USD","Text":"2348"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"145","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"1644"},"high":{"currency":"USD","Text":"2700"}},"last_updated":{"Text":"01/12/2015"}},"links":{"comparables":{"Text":"http://www.zillow.com/homes/comps/26809363_zpid/"},"homedetails":{"Text":"http://www.zillow.com/homedetails/3255-Whitehall-Dr-Dallas-TX-75229/26809363_zpid/"},"mapthishome":{"Text":"http://www.zillow.com/homes/26809363_zpid/"},"graphsanddata":{"Text":"http://www.zillow.com/homedetails/3255-Whitehall-Dr-Dallas-TX-75229/26809363_zpid/#charts-and-data"}},"address":{"street":{"Text":"3255 Whitehall Dr"},"city":{"Text":"Dallas"},"longitude":{"Text":"-96.866545"},"latitude":{"Text":"32.901069"},"state":{"Text":"TX"},"zipcode":{"Text":"75229"}}}}},"message":{"text":{"Text":"Request successfully processed"},"code":{"Text":"0"}},"xsi":"urn:x-prefix:xsi"},"link":"http://www.zillow.com/webservice/GetDeepSearchResults.htm?rentzestimate=true&zws-id=X1-ZWz1dy7ynmuayz_4aijl&address=3255 Whitehall Drive&citystatezip=75229","estimate":"328467"},"trulia":{"beds":"6","baths":"4","sqft":"3297","lot":"n/a","yrBuilt":"1965","estimate":false,"dataSet":{"id":"3166021937","feedId":1004,"hash":"163f96267fcf4fa666ec4224ea2767e","neighborhood":"Preston Hollow","neighborhoodId":"6186","zipCode":"75229","city":"Dallas","county":"Dallas","countyFIPS":"48113","stateCode":"TX","stateName":"Texas","latitude":32.90107,"longitude":-96.86655,"addressForDisplay":"3255 Whitehall Drive, Dallas TX","addressForUrl":"3255-Whitehall-Dr-Dallas-TX-75229","streetNumber":"3255","street":"Whitehall Dr","apartmentNumber":null,"urlType":null,"status":"For Sale","listingId":"3166021937","locationId":"71155","type":"SINGLE-FAMILY HOME","typeDisplay":"Single-Family Home","numBedrooms":6,"numBathrooms":4,"numPartialBathrooms":0,"numFullBathrooms":4,"siteId":"10342744","siteUrl":"www.cbdfw.com","listingType":0,"dmaId":190,"claimed":null,"numBeds":6,"indexSource":"For Sale","isForeclosure":false,"foreclosureStatus":"","isSrpFeatured":true,"price":237500,"sqft":3297,"isRental":false,"isRentalCommunity":false,"hasStreetView":"-1","showStreetView":"1","blockStreetView":false,"walkScore":48,"photos":["ps.69/f/0/5/4/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg:15","ps.69/e/1/1/1/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg:15","ps.69/8/a/5/1/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg:15","ps.69/2/e/c/6/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg:15","ps.69/8/7/9/c/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg:15","ps.69/9/7/6/f/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg:15","ps.69/5/0/b/a/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg:15","ps.69/9/a/1/a/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg:15"],"adCampaign":null,"hasPhotos":true,"userHidden":null,"userLiked":null,"isAddressNotDisclosed":false,"_isDefault":true,"intersectionName":null,"agentClaimable":true,"pdpURL":"/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229","thumbnail":"http://thumbs.trulia-cdn.com/pictures/thumbs/ps.69/f/0/5/4/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg","formattedPrice":"$237,500","shortDescription":"3255 Whitehall Dr","formattedBedAndBath":"6bd, 4 full ba","formattedSqft":"3,297 sqft","dataPhotos":"{\"photos\":[{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315-3255-Whitehall-Dr-Dallas-TX-75229.jpg\",\"raw_path\":\"ps.69\\/f\\/0\\/5\\/4\\/picture-uh=181bd69747f317c4f07bc77890a02-ps=f054ba626ccd3d48152cf618d7df8315.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"raw_path\":\"ps.69\\/e\\/1\\/1\\/1\\/picture-uh=fe73332d7f30252c702233ebb09561-ps=e1111d762e45d9b9464c8345896625.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"raw_path\":\"ps.69\\/8\\/a\\/5\\/1\\/picture-uh=65b4637c2c0ebfb1e242f15bfd8a036-ps=8a5174fcf5f54f4dfcd2a02b7311d1ce.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"raw_path\":\"ps.69\\/2\\/e\\/c\\/6\\/picture-uh=b9d7aeb51f2314db6c5367a4bcd8e5-ps=2ec63992561fb56b2a1f1142f372685.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"raw_path\":\"ps.69\\/8\\/7\\/9\\/c\\/picture-uh=a177ddb3dcfff1458c89dfcfd9c47b-ps=879c469467c656fe808bd2f19b37e7ae.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"raw_path\":\"ps.69\\/9\\/7\\/6\\/f\\/picture-uh=12c6cd459d7b80b79c8526263cc596b8-ps=976ff6ee7acdd735adbbe65e625e80.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"raw_path\":\"ps.69\\/5\\/0\\/b\\/a\\/picture-uh=5fe7a7b5bf7322253d13c604772cada-ps=50bafe911da7a1febd9765cd785c05c.jpg\",\"thumbsBitmap\":null},{\"thumbnail_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs\\/ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"standard_url\":\"http:\\/\\/thumbs.trulia-cdn.com\\/pictures\\/thumbs_4\\/ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"raw_path\":\"ps.69\\/9\\/a\\/1\\/a\\/picture-uh=5de9bfe11b5a6cdb49ce6509eff93a5-ps=9a1aae4472dba9ae4afd4a91ca235e7.jpg\",\"thumbsBitmap\":null}],\"static_map_path\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/staticmap?client=gme-truliainc&zoom=18&size=640x480&maptype=satellite&sensor=false&center=32.90107%2C-96.86655&signature=UhjsP8QlII4piLOvOwez6tgIBIM=\"}","isBuilder":false,"isBuilderCommunity":false,"isPlan":false,"isSpec":false,"isPromotedCommunity":false,"builderName":null,"builderCommunityId":null,"userClaimed":false},"locationData":{"neighborhood":{"locationId":"86307","name":"Preston Hollow","locationType":"neighborhood","altId":"6186"},"state":{"locationId":"44","name":"Texas","locationType":"state","altId":"TX"},"county":{"locationId":"58","name":"Dallas County","locationType":"county","altId":"48113"},"city":{"locationId":"11249","name":"Dallas","locationType":"city","altId":"68627"},"propertyId":"3166021937","addressHash":"163f96267fcf4fa666ec4224ea2767e","address":"3255 Whitehall Dr","zipCode":{"locationId":"71155","name":"75229","locationType":"zipCode","altName":"75229","altId":"75229"},"geohash":"9vg55trytgc","latitude":32.90107,"longitude":-96.86655,"unknown":true,"isCountySupportsValuation":false},"comps":"{\"for sale\":[{\"t\":\"for_sale\",\"y\":32.900047,\"x\":-96.866585,\"a\":\"KENILWORTH ESTATES\",\"s\":\"TX\",\"c\":\"Dallas\",\"z\":\"75229\",\"p\":\"252,500\",\"ph\":\"62e99c7da7b985e9c865bb4cd78843a9\",\"n\":\"\",\"pt\":\"Single-Family Home\",\"i\":\"thumbs\\/ps.65\\/7\\/9\\/8\\/5\\/picture-uh=9ff2c116e52a1e14b7f6c515df7d823-ps=79859d103ff599b68ccc62d82ea6462.jpg\",\"ib\":\"thumbs_big\\/ps.65\\/7\\/9\\/8\\/5\\/picture-uh=9ff2c116e52a1e14b7f6c515df7d823-ps=79859d103ff599b68ccc62d82ea6462.jpg\",\"sd\":\"\",\"br\":\"4\",\"ba\":\"3\",\"sf\":\"2,000\",\"pps\":\"126\",\"cs\":\"\",\"id\":\"1074311844\",\"u\":\"\\/property\\/1074311844-KENILWORTH-ESTATES-3243-Jubilee-Trl-Dallas-TX-75229\",\"lt\":\"for_sale\",\"fc\":false,\"v\":null,\"vd\":null,\"uh\":null,\"sa\":\"\",\"sid\":11116357,\"ls\":\"For Sale\",\"streetviewImage\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/streetview?client=gme-truliainc&size=70x50&sensor=false&location=32.900047%2C-96.866585&signature=7eKKIym-Te840dAS7YOpl-l3Rag=\",\"satelliteImage\":\"http:\\/\\/maps.googleapis.com\\/maps\\/api\\/staticmap?client=gme-truliainc&zoom=18&size=70x50&maptype=satellite&sensor=false&center=32.900047%2C-96.866585&signature=FOKQzoa9nFdCYRJRrOORsZBsUew=\",\"fl\":\"0\"},{\"t\":\"for_sale\",\"y\":32.899433,\"x\":-96.867584,\"a\":\"3218 Jubilee Trl\",\"s\":\"TX\",\"c\":\"Dallas\",\"z\":\"75229\",\"p\":\"299,000\",\"ph\":\"c14c70b5d73915c4054fd22441e967\",\"n\":\"\",\"pt\":\"Single-Family Home\",\"i\":\"thumbs\\/ps.69\\/1\\/c\\/3\\/4\\/picture-uh=c9645ee489d0a7c01440293a11e8293a-ps=1c348c6f7d3ee0d421ab35eb3d3687.jpg\",\"ib\":\"thumbs_big\\/ps.69\\/1\\/c\\/3\\/4\\/picture-uh=c9645ee489d0a7c01440293a11e8293a-ps=1c348c6f7d3ee0d421ab35eb3d3687.jpg\",\"sd\":\"\",\"br\":\"3\",\"ba\":\"2&frac12","detail":{"photo":"no","long":"no","ad":"no","error":true,"html":"Error: Property data not found.","success":true,"errors":[]},"link":"http://www.trulia.com/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229"},"homeSnap":{"low":false,"estimate":false,"high":false,"foo":false,"beds":false,"heating":false,"pmtEst":false,"bathsFull":false,"basement":false,"rentEst":false,"bathsHalf":false,"stories":"1","taxEst":false,"sqft":false,"addressStories":false,"homeScore":false,"lot":false,"fireplaces":false,"investorScore":false,"lastSaleDate":false,"lastSalePrice":false,"yearBuilt":false,"link":"http://www.homesnap.com/TX/Dallas/3255-Whitehall-Drive"},"realtor":{"status":"Active","beds":false,"baths":"4","sqft":false,"lot":"0.28 Acres","built":"1965","link":"http://www.realtor.com/propertyrecord-search/Dallas_Texas/75229/3255-Whitehall-Drive"},"dataQuick":{},"smartZip":{},"eppraisal":{},"realEstate":{"estimate":false,"beds":"Buy","baths":"Homes for Sale","sqft":"Open Houses","built":false,"stories":"Foreclosures","lot":"New Homes","link":"http://www.realestate.com/homevalues/3255-Whitehall-Drive,Dallas,Texas/"}},"combi":{"useCode":"SFR","beds":"6","baths":"4.0","sqft":"3297","lot":"12066","built":"1965","taxVal":"274660.0","lastSoldDate":"05/17/2004","lastSoldYear":"2004"},"stat":{"ob":{"zillow":"328467"},"set":["328467"],"isOk":true,"popCount":1,"autoEst":328467,"margin":null,"ratio":null,"sdPop":0,"sdPct":0}},"address":{"sa":"3255 Whitehall Drive","city":"Dallas","state":"Texas","zip":"75229","county":"Dallas County","csz":"Dallas, Texas 75229","full":"3255 Whitehall Drive, Dallas, Texas 75229","part":"Whitehall Drive, Dallas, Texas 75229","number":"3255"},"isRaw":false,"table":"situs","source":{"name":"manual","data":"3255 Whitehall Dr, Dallas, TX 75229"},"link":{"gmap":"https://maps.google.com/maps?q=3255+Whitehall+Drive,+Dallas,+Texas+75229","zillow":"http://www.zillow.com/homes/3255-Whitehall-Drive,-75229_rb/","propertyShark":"http://www.propertyshark.com/","neighborhoodScout":"http://www.neighborhoodscout.com/","zipSkinny":"http://zipskinny.com/index.php?zip=75229","chase":"https://www.chase.com/mortgage/mortgage-resources/home-value-estimator","boa":"http://realestatecenter.bankofamerica.com/tools/marketvalue.aspx","homesCom":"http://www.homes.com/Home-Prices/","homeSnap":"http://www.homesnap.com/TX/Dallas/3255-Whitehall-Drive","trulia":"http://www.trulia.com/property/3166021937-3255-Whitehall-Dr-Dallas-TX-75229","realEstate":"http://www.realestate.com/homevalues/3255-Whitehall-Drive,Dallas,Texas/","realtor":"http://www.realtor.com/propertyrecord-search/Dallas_Texas/75229/3255-Whitehall-Drive","photo":false},"offer":{"beforeRepairs":{"auto":null,"manual":{}},"afterRepairs":{"manual":{}}},"incomeApproach":null,"arv":{},"repairs":{},"counter":{},"analysis":{},"contract":{},"assignment":{}}
+		@param  {object} propIn ï¿½ {"source":{"name":"Realtor","data":{foo}},"market":{"city":"Pheonix","state":"AZ"}} ï¿½ "data": original string or object representing subject as obtained from source; could be scraped web page string, spreadsheet cells, etc. (e.g., {...data:scraped[i]...})
+		@param  {string} source ï¿½ label, naming source of data | Value range: "manual" (single line text field from web form) , "ZipRealty" (email feeder) , "ChuckWillman" (email + ss attachment to Gdoc) , "Realtor" (scraping Realtor.com) , "KennethGreen" (hand entered spreadsheet)
 	*/
 	/* Sample Calls
 	    function realtorScrape(inState,inCity){...out[i]={isRaw:true,source:{name:"Realtor",data:scraped[i]},market:{city:"San-Diego",state:"CA"}};}return out}
 		function realtorScrape_call(city,state){db=ScriptDb.getMyDb(),arr=realtorScrape("San-Diego","CA");db.saveBatch(arr,false);return}
-		function realtorAddAvm(){var db=ScriptDb.getMyDb(),r,q,results=db.query({isRaw:true});while(results.hasNext()){r=results.next();q=LibraryjsAvm.avmJson(r);db.save(q);db.remove(r);}}	
+		function realtorAddAvm(){var db=ScriptDb.getMyDb(),r,q,results=db.query({isRaw:true});while(results.hasNext()){r=results.next();q=LibraryjsAvm.avmJson(r);db.save(q);db.remove(r);}}
 	*/
 	/* Test
 	    function test(){var addy="5008 corson ave s, seattle, wa",out=JSON.stringify(avmJson({"source":{"name":"manual","data":addy/*,"market":{"city":"Pheonix","state":"AZ"}* /}}));Logger.log(out);print(out)}
@@ -780,6 +780,7 @@ function avmJson        (propIn         ){ // MAIN AVM CALL! // When adding new 
 		"https://www.chase.com/mortgage/mortgage-resources/home-value-estimator"
 		"http://realestatecenter.bankofamerica.com/tools/marketvalue.aspx"
 		"http://www.homes.com/Home-Prices/"
+		"https://homeowners.geico.com/SalesHISS/PropertyDetails" // Run Geico home insurance quote, estimate appears on step 3 (property details)
 	*/
 	{//Code
 	var		prep				            = avmPrep(propIn.source.data   ,propIn.source.name);if(prep.avmZillowAPI/*geoSource=="avmZillowAPI"*/){prep.ask=prep.avmZillowAPI;delete prep.avmZillowAPI}
@@ -792,25 +793,25 @@ function avmJson        (propIn         ){ // MAIN AVM CALL! // When adding new 
 	try{	prop.link.gmap          		= linkGoogleMaps(prop.address)                                            }catch(e){Logger.log("Error 2K4Kz: "+e.message)}
  // try{	prop.link.yahoo                 = linkYahoo     (prop.address)                                            }catch(e){Logger.log("Error SiVia: "+e.message)}
 	try{	prop.link.zillow                = linkZillow    (prop.address)                                            }catch(e){Logger.log("Error NmMC8: "+e.message)}
-	try{	prop.link.propertyShark         = "http://www.propertyshark.com/"                                         }catch(e){Logger.log("Error hA7GR: "+e.message)}		
-	try{	prop.link.neighborhoodScout     = "http://www.neighborhoodscout.com/"                                     }catch(e){Logger.log("Error GDhMT: "+e.message)}		
-	try{	prop.link.cityData              = "http://www.city-data.com/"                                             }catch(e){Logger.log("Error FTDGo: "+e.message)}		
-	try{	prop.link.esriZip               = "http://www.esri.com/data/esri_data/ziptapestry"                        }catch(e){Logger.log("Error FTDGo: "+e.message)}		
-	try{	prop.link.zipRealty             = "http://www.ziprealty.com/"                                             }catch(e){Logger.log("Error FTDGo: "+e.message)}		
- //         prop.link.zipSkinny             = "http://zipskinny.com/index.php?zip="		
- //;try{    prop.link.zipSkinny            += prop.address.zip                                                        }catch(e){Logger.log("Error G6WdW: "+e.message)}		
-	try{	prop.link.chase                 = "https://www.chase.com/mortgage/mortgage-resources/home-value-estimator"}catch(e){Logger.log("Error eBhKX: "+e.message)}		
-	try{	prop.link.boa                   = "http://realestatecenter.bankofamerica.com/tools/marketvalue.aspx"      }catch(e){Logger.log("Error ChLup: "+e.message)}		
-	try{	prop.link.homesCom              = "http://www.homes.com/Home-Prices/"                                     }catch(e){Logger.log("Error hnNhw: "+e.message)}		
-	try{	prop.link.movotoRe              = "http://www.movoto.com/"                                                }catch(e){Logger.log("Error hnNhw: "+e.message)}		
-            prop.link.movotoDemo            = "http://www.movoto.com/"		
-   ;try{    prop.link.movotoDemo           += prop.address.city.replace(/( |,)/gi,"-")+"-"+prop.address.state+"/"+prop.address.zip+"/demographics/"}catch(e){Logger.log("Error G6WdW: "+e.message);prop.link.movotoDemo+="demographics/"}		
-	try{	prop.link.homeSnap              = prop.avm.dataset.homeSnap  .link                                        }catch(e){Logger.log("Error JLC1v: "+e.message)}		
- // try{    prop.link.coreLogic             = prop.avm.dataset.coreLogic .link                                        }catch(e){Logger.log("Error      : "+e.message)}		
-	try{	prop.link.trulia                = prop.avm.dataset.trulia    .link                                        }catch(e){Logger.log("Error 3phKn: "+e.message)}		
-	try{	prop.link.realEstate            = prop.avm.dataset.realEstate.link                                        }catch(e){Logger.log("Error lsqvM: "+e.message)}		
+	try{	prop.link.propertyShark         = "http://www.propertyshark.com/"                                         }catch(e){Logger.log("Error hA7GR: "+e.message)}
+	try{	prop.link.neighborhoodScout     = "http://www.neighborhoodscout.com/"                                     }catch(e){Logger.log("Error GDhMT: "+e.message)}
+	try{	prop.link.cityData              = "http://www.city-data.com/"                                             }catch(e){Logger.log("Error FTDGo: "+e.message)}
+	try{	prop.link.esriZip               = "http://www.esri.com/data/esri_data/ziptapestry"                        }catch(e){Logger.log("Error FTDGo: "+e.message)}
+	try{	prop.link.zipRealty             = "http://www.ziprealty.com/"                                             }catch(e){Logger.log("Error FTDGo: "+e.message)}
+ //         prop.link.zipSkinny             = "http://zipskinny.com/index.php?zip="
+ //;try{    prop.link.zipSkinny            += prop.address.zip                                                        }catch(e){Logger.log("Error G6WdW: "+e.message)}
+	try{	prop.link.chase                 = "https://www.chase.com/mortgage/mortgage-resources/home-value-estimator"}catch(e){Logger.log("Error eBhKX: "+e.message)}
+	try{	prop.link.boa                   = "http://realestatecenter.bankofamerica.com/tools/marketvalue.aspx"      }catch(e){Logger.log("Error ChLup: "+e.message)}
+	try{	prop.link.homesCom              = "http://www.homes.com/Home-Prices/"                                     }catch(e){Logger.log("Error hnNhw: "+e.message)}
+	try{	prop.link.movotoRe              = "http://www.movoto.com/"                                                }catch(e){Logger.log("Error hnNhw: "+e.message)}
+            prop.link.movotoDemo            = "http://www.movoto.com/"
+   ;try{    prop.link.movotoDemo           += prop.address.city.replace(/( |,)/gi,"-")+"-"+prop.address.state+"/"+prop.address.zip+"/demographics/"}catch(e){Logger.log("Error G6WdW: "+e.message);prop.link.movotoDemo+="demographics/"}
+	try{	prop.link.homeSnap              = prop.avm.dataset.homeSnap  .link                                        }catch(e){Logger.log("Error JLC1v: "+e.message)}
+ // try{    prop.link.coreLogic             = prop.avm.dataset.coreLogic .link                                        }catch(e){Logger.log("Error      : "+e.message)}
+	try{	prop.link.trulia                = prop.avm.dataset.trulia    .link                                        }catch(e){Logger.log("Error 3phKn: "+e.message)}
+	try{	prop.link.realEstate            = prop.avm.dataset.realEstate.link                                        }catch(e){Logger.log("Error lsqvM: "+e.message)}
 	try{	prop.link.realtor               =(propIn.source.name == "Realtor") ? prop.source.data.link_detail
-	                                                                           : prop.avm.dataset.realtor.link        }catch(e){Logger.log("Error ZIWXC: "+e.message)}		
+	                                                                           : prop.avm.dataset.realtor.link        }catch(e){Logger.log("Error ZIWXC: "+e.message)}
 	try{	prop.link.photo                 =(propIn.source.name == "Realtor") ? prop.source.data.link_photo : false  }catch(e){Logger.log("Error h83fm: "+e.message)}
 			prop.offer			            = {};
 			prop.offer.beforeRepairs        = {};
@@ -827,16 +828,16 @@ function avmJson        (propIn         ){ // MAIN AVM CALL! // When adding new 
 			prop.assignment					= {};
 	return  prop;}}
 function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT: "+JSON.stringify(avmPrep("17013 114 ave se, Renton, Wa"/*"5008 corson ave s, seattle, wa"*/,"manual")))}
-    var out={};out.address={};             // @return{object} subject address; @param{string} source — "Realtor"||/*"RealtyTrac"*/"ChuckWillman"||"ZipRealty"; @param{object} scraped from source // Purpose: Standardize/normalize address keys of scraped property (situs) objects
+    var out={};out.address={};             // @return{object} subject address; @param{string} source ï¿½ "Realtor"||/*"RealtyTrac"*/"ChuckWillman"||"ZipRealty"; @param{object} scraped from source // Purpose: Standardize/normalize address keys of scraped property (situs) objects
     switch(source){ // Note: scraped is source.data (i.e., as scraped from source / unprocessed)
         case "manual"                            : try{scraped=/*LibraryjsUtil.*/str2addy(scraped)}catch(e){scraped={geoSource:false};Logger.log("Error T5daq: "+e.message)}
 		                                           if(!scraped){return false}switch(scraped.geoSource){
 		    case "avmZillowAPI"                  : var r=scraped.searchresults.response.results.result/*[0]*/.address  ;//Logger.log("geoSource: "+scraped.geoSource);
-                //  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error RjTI0: "+e.message)}                              // Deprecated 12/31/2012 
-                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error ZTBX9: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
+                //  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error RjTI0: "+e.message)}                              // Deprecated 12/31/2012
+                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error ZTBX9: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
                     try{out["latitude"         ] = scraped["latitude"                ]                                 ;}catch(e){Logger.log("Error CwP1J: "+e.message)}
                     try{out["longitude"        ] = scraped["longitude"               ]                                 ;}catch(e){Logger.log("Error WElpm: "+e.message)}
-                    try{out["address"]["sa"    ] = r.street .Text                                                      ;}catch(e){Logger.log("Error BQqVi: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                    try{out["address"]["sa"    ] = r.street .Text                                                      ;}catch(e){Logger.log("Error BQqVi: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                     try{out["address"]["city"  ] = r.city   .Text                                                      ;}catch(e){Logger.log("Error pVTOk: "+e.message)}
                     try{out["address"]["state" ] = r.state  .Text                                                      ;}catch(e){Logger.log("Error kNNhD: "+e.message)}
                     try{out["address"]["zip"   ] = r.zipcode.Text                                                      ;}catch(e){Logger.log("Error i34IS: "+e.message)}
@@ -850,11 +851,11 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
 			        break;
 			case "geoGoogle"                     :                                                                      //Logger.log("geoSource: "+scraped.geoSource);
 			    //  try{                  var r  = LibraryjsUtil.geoGoogleGetAddyComponents(scraped)                    }catch(e){Logger.log("Error QhdQo: "+e.message)} // r variable and function necessary because geoGoogle returns address compents embedded in nested array
-                //  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error RoEG5: "+e.message)}                              // Deprecated 12/31/2012 
-                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error ydEZJ: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
+                //  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error RoEG5: "+e.message)}                              // Deprecated 12/31/2012
+                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error ydEZJ: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
                     try{out["latitude"         ] = scraped["latitude"                ]                                 ;}catch(e){Logger.log("Error 52Woj: "+e.message)}
                     try{out["longitude"        ] = scraped["longitude"               ]                                 ;}catch(e){Logger.log("Error b2eMH: "+e.message)}
-                    try{out["address"]["sa"    ] = /*r*/scraped.number + " " + /*r*/scraped.street                     ;}catch(e){Logger.log("Error aPG7o: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                    try{out["address"]["sa"    ] = /*r*/scraped.number + " " + /*r*/scraped.street                     ;}catch(e){Logger.log("Error aPG7o: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                     try{out["address"]["city"  ] = /*r*/scraped.city                                                   ;}catch(e){Logger.log("Error zLSD6: "+e.message)}
                     try{out["address"]["state" ] = /*r*/scraped.state                                                  ;}catch(e){Logger.log("Error A10at: "+e.message)}
                     try{out["address"]["zip"   ] = /*r*/scraped.zip                                                    ;}catch(e){Logger.log("Error T9bkX: "+e.message)}
@@ -866,12 +867,12 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
                 //  try{out["address"]["number"] = out.address.full.getPrefix(" ").trim()                              ;}catch(e){Logger.log("Error XUO6k: "+e.message)}
                     break;
 			case "geoMapQuestCsz"                :                                                                      //Logger.log("geoSource: "+scraped.geoSource);
-                    try{out                      = scraped                                                             ;}catch(e){Logger.log("Error R0g2Q: "+e.message)}                              // Deprecated 12/31/2012 
-				//  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error PCz6j: "+e.message)}                              // Deprecated 12/31/2012 
-                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error NL8bN: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
+                    try{out                      = scraped                                                             ;}catch(e){Logger.log("Error R0g2Q: "+e.message)}                              // Deprecated 12/31/2012
+				//  try{out["apn"    ]			 = scraped["address"]["apn"          ]                                 ;}catch(e){Logger.log("Error PCz6j: "+e.message)}                              // Deprecated 12/31/2012
+                //  try{out["ask"    ] 			 = scraped["address"]["price"        ]                                 ;}catch(e){Logger.log("Error NL8bN: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
                 //  try{out["latitude"         ] = scraped["latitude"                ]                                 ;}catch(e){Logger.log("Error O3LzC: "+e.message)}
                 //  try{out["longitude"        ] = scraped["longitude"               ]                                 ;}catch(e){Logger.log("Error r4vUW: "+e.message)}
-                //  try{out["address"]["sa"    ] = scraped .address.house_number + " " + scraped.address.road          ;}catch(e){Logger.log("Error lmjdo: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                //  try{out["address"]["sa"    ] = scraped .address.house_number + " " + scraped.address.road          ;}catch(e){Logger.log("Error lmjdo: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                 //  try{out["address"]["city"  ] = scraped["address"]["city"         ]                                 ;}catch(e){Logger.log("Error c21RV: "+e.message)}
                 //  try{out["address"]["state" ] = scraped["address"]["state"        ] /*Not standard e.g., "penna"*/  ;}catch(e){Logger.log("Error 4q0nf: "+e.message)}
                 //  try{out["address"]["zip"   ] = scraped["address"]["postcode"     ]                                 ;}catch(e){Logger.log("Error 9Z4i1: "+e.message)}
@@ -886,9 +887,9 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
 	    	default                              : return false}
 			break;
 		case "ZipRealty"                         :
-                //  try{out["apn"    ]			 = scraped["apn"          ]                                            ;}catch(e){Logger.log("Error 5t4lO: "+e.message)}                              // Deprecated 12/31/2012 
-                    try{out["ask"    ] 			 = scraped["price"        ]                                            ;}catch(e){Logger.log("Error 9epW2: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
-                    try{out["address"]["sa"    ] = scraped["street"       ]                                            ;}catch(e){Logger.log("Error CNgLy: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                //  try{out["apn"    ]			 = scraped["apn"          ]                                            ;}catch(e){Logger.log("Error 5t4lO: "+e.message)}                              // Deprecated 12/31/2012
+                    try{out["ask"    ] 			 = scraped["price"        ]                                            ;}catch(e){Logger.log("Error 9epW2: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
+                    try{out["address"]["sa"    ] = scraped["street"       ]                                            ;}catch(e){Logger.log("Error CNgLy: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                 //  try{out["address"]["city"  ] = scraped["city"         ]                                            ;}catch(e){Logger.log("Error p1JZ8: "+e.message)}
                 //  try{out["address"]["state" ] = scraped["state"        ]                                            ;}catch(e){Logger.log("Error HtxRG: "+e.message)}
                 //  try{out["address"]["zip"   ] = scraped["zip"		  ]                                            ;}catch(e){Logger.log("Error 9tZLH: "+e.message)}
@@ -900,9 +901,9 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
                     try{out["address"]["number"] = out.address.full.getPrefix(" ").trim()                              ;}catch(e){Logger.log("Error TSDY8: "+e.message)}
                     break;
 		case "Realtor"                           :
-                //  try{out["apn"    ]			 = scraped["apn"          ]                                            ;}catch(e){Logger.log("Error ufYZe: "+e.message)}                              // Deprecated 12/31/2012 
-                    try{out["ask"    ] 			 = scraped["listingPrice" ]                                            ;}catch(e){Logger.log("Error bm0lD: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
-                    try{out["address"]["sa"    ] = scraped["sa"           ]                                            ;}catch(e){Logger.log("Error hE4wv: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                //  try{out["apn"    ]			 = scraped["apn"          ]                                            ;}catch(e){Logger.log("Error ufYZe: "+e.message)}                              // Deprecated 12/31/2012
+                    try{out["ask"    ] 			 = scraped["listingPrice" ]                                            ;}catch(e){Logger.log("Error bm0lD: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
+                    try{out["address"]["sa"    ] = scraped["sa"           ]                                            ;}catch(e){Logger.log("Error hE4wv: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                     try{out["address"]["city"  ] = scraped["city"         ]                                            ;}catch(e){Logger.log("Error tH7c5: "+e.message)}
                     try{out["address"]["state" ] = scraped["state"        ]                                            ;}catch(e){Logger.log("Error mL7cn: "+e.message)}
                     try{out["address"]["zip"   ] = scraped["zip"		  ]                                            ;}catch(e){Logger.log("Error gtKvf: "+e.message)}
@@ -914,9 +915,9 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
                     break;
     //  case "RealtyTrac"                        :
 		case "ChuckWillman"                      : // Appears to have downloaded spreadsheet from RealtyTrac
-                    try{out["apn"    ]			 = scraped["Apn"          ]                                            ;}catch(e){Logger.log("Error vIEip: "+e.message)}                              // Deprecated 12/31/2012 
-                    try{out["ask"    ] 			 = scraped["OpenBid"      ] + scraped["TaxOwed"]                       ;}catch(e){Logger.log("Error 3nCgm: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012 
-                    try{out["address"]["sa"    ] = scraped["Address"      ]                                            ;}catch(e){Logger.log("Error xYcIA: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012 
+                    try{out["apn"    ]			 = scraped["Apn"          ]                                            ;}catch(e){Logger.log("Error vIEip: "+e.message)}                              // Deprecated 12/31/2012
+                    try{out["ask"    ] 			 = scraped["OpenBid"      ] + scraped["TaxOwed"]                       ;}catch(e){Logger.log("Error 3nCgm: "+e.message)} // scraped["PropertyPrice"]; // Deprecated 12/31/2012
+                    try{out["address"]["sa"    ] = scraped["Address"      ]                                            ;}catch(e){Logger.log("Error xYcIA: "+e.message)} // scraped["address"      ]; // Deprecated 12/31/2012
                     try{out["address"]["city"  ] = scraped["City"         ]                                            ;}catch(e){Logger.log("Error ljMPj: "+e.message)}
                     try{out["address"]["state" ] = /*scraped["State"      ]*/ "AZ"                                     ;}catch(e){Logger.log("Error xgie8: "+e.message)}
                     try{out["address"]["zip"   ] = scraped["Zip"		  ]                                            ;}catch(e){Logger.log("Error Tu4ed: "+e.message)}
@@ -929,34 +930,34 @@ function avmPrep        (scraped ,source){ // function test(){Logger.log("RESULT
         default:break;}try{if(!out.address.csz){var arr=out.address.csz.split(" ");out.address.zip=arr[arr.length-1]}}catch(e){Logger.log("Error DgSqy: "+e.message)}return out;}
 function avmData        (addy,ask,source){ // addy=addy||"12204 12th Ave NW, Seattle, WA 98177";//"29711 Byron Pl, Los Angeles, CA, 91384"*/"5115 Longfellow Street, Los Angeles, CA, 90042" // Calls 3 functions: 1: avmXyz()(AVM dataset sources), 2: avmStat()(dataset statistics), 3: avmComb() (combines property facts) // Array.prototype.avmData=function(bid,jso)
 	/*	Parameters
-	//		@return {object}  out    — {"address":{foo},"avm":{"dataset":{foo},"stat":{foo},"combo":{foo}}} // array of 3 arrays: stat, headers, datasets
-	//		@param  {object}  addy   — address (see avmZillowAPI() for details)
-	//		@param  {array }  ask    — "opening bid" or "list price" from seller
-	//		@param  {string}  source — "Realtor" || ("RealtyTrac") "ChuckWillman" || "ZipRealty"
+	//		@return {object}  out    ï¿½ {"address":{foo},"avm":{"dataset":{foo},"stat":{foo},"combo":{foo}}} // array of 3 arrays: stat, headers, datasets
+	//		@param  {object}  addy   ï¿½ address (see avmZillowAPI() for details)
+	//		@param  {array }  ask    ï¿½ "opening bid" or "list price" from seller
+	//		@param  {string}  source ï¿½ "Realtor" || ("RealtyTrac") "ChuckWillman" || "ZipRealty"
 	*/
 	/*	Archive
 	6/10/2013
 		Parameters
 			@return {array}   returns array of 3 arrays: stat, headers, datasets
-			@param  {array}   this  — address (see avmZillowAPI() for details)
-			@param  {array}   bid   — two bids; "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
-			@param  {boolean} jso   — true if return is complete arrary to construct JavaSript object result
+			@param  {array}   this  ï¿½ address (see avmZillowAPI() for details)
+			@param  {array}   bid   ï¿½ two bids; "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
+			@param  {boolean} jso   ï¿½ true if return is complete arrary to construct JavaSript object result
 	{// Parameters
 	var out   =[],j,i=4;while(i--){out[i]=[]} // out[][]:[0][stats array = avmStat(bid)];[1][labels];[2][estimate arrays][];[3][combined property data] // Initialize two-dimensional array: out[][] // out[1]: Array of column labels for AVM models/functions; Note: Match label names with parameters in func prepA();
-	var avm   =[];i=1; // Define an array of AVM (automatic valuation models) to call to generate an estimate of the ARV (After Repair Value) of the subject.                        
-		avm[i]=function(x){return x.avmZillowAPI (     )};out[1][i++]="Zillow"       ; /* i= 1 — Z ZILLOW * / out[3][1]=avm[1](this); // Run immediately to fetch geocoded address
-	//	avm[i]=function(x){return x.avmEppraisal (1,jso)};out[1][i++]="Eppraisal"    ; // i= 2 — E EPPRAISAL // jso=false will return hex encoded URL link
-		avm[i]=function(x){return x.avmTrulia    (     )};out[1][i++]="Trulia"       ; // i= 2 — T TRULIA
-		avm[i]=function(x){return x.avmRealtor   (     )};out[1][i++]="Realtor"      ; // i= 3 — R REALTOR
-		avm[i]=function(x){return x.avmRealEstate(     )};out[1][i++]="RealEstate"   ; // i= 4 — A REAL ESTATE
-		avm[i]=function(x){return x.avmHomeGain  (     )};out[1][i++]="HomeGain"     ; // i= 5 — H HOME GAIN
-		avm[i]=function(x){return x.propertyShark(     )};out[1][i++]="PropertyShark"; // i= 5 — P PROPERTY SHARK
+	var avm   =[];i=1; // Define an array of AVM (automatic valuation models) to call to generate an estimate of the ARV (After Repair Value) of the subject.
+		avm[i]=function(x){return x.avmZillowAPI (     )};out[1][i++]="Zillow"       ; /* i= 1 ï¿½ Z ZILLOW * / out[3][1]=avm[1](this); // Run immediately to fetch geocoded address
+	//	avm[i]=function(x){return x.avmEppraisal (1,jso)};out[1][i++]="Eppraisal"    ; // i= 2 ï¿½ E EPPRAISAL // jso=false will return hex encoded URL link
+		avm[i]=function(x){return x.avmTrulia    (     )};out[1][i++]="Trulia"       ; // i= 2 ï¿½ T TRULIA
+		avm[i]=function(x){return x.avmRealtor   (     )};out[1][i++]="Realtor"      ; // i= 3 ï¿½ R REALTOR
+		avm[i]=function(x){return x.avmRealEstate(     )};out[1][i++]="RealEstate"   ; // i= 4 ï¿½ A REAL ESTATE
+		avm[i]=function(x){return x.avmHomeGain  (     )};out[1][i++]="HomeGain"     ; // i= 5 ï¿½ H HOME GAIN
+		avm[i]=function(x){return x.propertyShark(     )};out[1][i++]="PropertyShark"; // i= 5 ï¿½ P PROPERTY SHARK
 	}
 	{// Code
 	if(this.length==0){return out[1]}else{                         // Returns function labels only; used to set column headers in the main
-		i=avm.length;while(i---2){out[3][i] = avm[i](this)}        // Set out[3] — AVM datasets
-		                          out[0]    = out[3].avmStat(bid); // Set out[0] — statistics
-									// i  0 1 Bed        2 Bath       3 Sqft       4 Lot        5 Year       6 Tax     7 Sold on 8 Sold for  // Combine AVM property data				  
+		i=avm.length;while(i---2){out[3][i] = avm[i](this)}        // Set out[3] ï¿½ AVM datasets
+		                          out[0]    = out[3].avmStat(bid); // Set out[0] ï¿½ statistics
+									// i  0 1 Bed        2 Bath       3 Sqft       4 Lot        5 Year       6 Tax     7 Sold on 8 Sold for  // Combine AVM property data
 									// j	 0 1 2 3 4 5  0 1 2 3 4 5  0 1 2 3 4 5  0 1 2 3 4 5	 0 1 2 3 45   0 1 2345  0 1 2345  0 1 2345
 									//         Z E R A H	Z E R A H    Z E R A H    Z E R A H    Z E R AH     Z ERAH    Z ERAH    Z ERAH
 									var y,X=[,[,22,6,4,3,],[,21,7,5,4,],[,20,8,6,5,],[,19,9,7,8,],[,18,,10,6,],[,17,,,,],[,23,,,,],[,24,,,,]]; // Define AVM locations of property data
@@ -974,12 +975,12 @@ function avmData        (addy,ask,source){ // addy=addy||"12204 12th Ave NW, Sea
                                                   ,  "12204 12th Ave NW, Seattle, WA 98177"
                                                   ],out=[],i=ARR.length;while(i--){out.push(testFunction(ARR[i]))}Logger.log(JSON.stringify(out))}* /
 			}();//Logger.log("addy2: %s",JSON.stringify(addy));//return;}*/
-	{// Code							   // Key Metrics update (1/7/2014) added HomeSnap — whose AVM est might be from SmartZip — more to follow... // Key Metrics: 4 URL calls = 6 AVM estimates (previously 5 and 7 but HomeGain stopped providing estimates) + 1 annual taxes (per Trulia®) // This is the most efficient yield of alternative combinations/sequencing
+	{// Code							   // Key Metrics update (1/7/2014) added HomeSnap ï¿½ whose AVM est might be from SmartZip ï¿½ more to follow... // Key Metrics: 4 URL calls = 6 AVM estimates (previously 5 and 7 but HomeGain stopped providing estimates) + 1 annual taxes (per Truliaï¿½) // This is the most efficient yield of alternative combinations/sequencing
 		if(typeof addy=="string"){addy=str2addy(addy)}
 		var           out                    = {};
 			          out.avm                = {};
 			          out.avm.dataset	     = {};
-	  	              out.avm.dataset.zillow = function(){try{return ask.avmZillowAPI}catch(e){Logger.log("Error HDdIH: "+e.message);return avmZillowAPI(addy)}}() //Logger.log("addy: %s \n out: %s",JSON.stringify(addy),JSON.stringify(out));return; // Zillow® API
+	  	              out.avm.dataset.zillow = function(){try{return ask.avmZillowAPI}catch(e){Logger.log("Error HDdIH: "+e.message);return avmZillowAPI(addy)}}() //Logger.log("addy: %s \n out: %s",JSON.stringify(addy),JSON.stringify(out));return; // Zillowï¿½ API
 		try { var r = out.avm.dataset.zillow.searchresults.response.results.result/*[0]*/.address;if(/*(!verifyAddy(addy)) && */verifyAddy({sa:r.street.Text,city:r.city.Text,state:r.state.Text,zip:r.zipcode.Text})){ // Backfill address if necessary and available // Note: Eliminated if(!verifyAddy(addy)) because, for example, geoMapQuestCsz returns state="penna" for addy="1124 8th Ave New Brighton, PA 15066"; need to substitute standardizd ZillowApi value for state in this case
 			                                           out.address		     = {};
 								                       out.address.sa        = r.street   .Text                                                    || addy.sa        ;
@@ -993,24 +994,24 @@ function avmData        (addy,ask,source){ // addy=addy||"12204 12th Ave NW, Sea
 													   out.address.part      = out.address.full.getSuffix(" ").trim()                              || addy.part      ;
 													   out.address.number    = out.address.full.getPrefix(" ").trim()                              || addy.number    ;
 	                                             }else{out.address = addy } }catch(e){Logger.log("Error 9jacD: "+e.message)}
-        try{out.avm.dataset.trulia     = avmTrulia    (out.address		  );}catch(e){Logger.log("Error duR4E: "+e.message)} // Trulia®    // Will not provide estimate on listed properties  // Yields annual taxes — replaces PropertyShark® because it also yields an AVM estimate, thus saving an http fetch / URL call
-        try{out.avm.dataset.homeSnap   = avmHomeSnap  (out.address		  );}catch(e){Logger.log("Error zHu8A: "+e.message)} // HomeSnap®  // Scores appreciation and cash flow potential // Only works for UNLISTED properties (currently). Listings reorder the data fields and throw off the scrape.
+        try{out.avm.dataset.trulia     = avmTrulia    (out.address		  );}catch(e){Logger.log("Error duR4E: "+e.message)} // Truliaï¿½    // Will not provide estimate on listed properties  // Yields annual taxes ï¿½ replaces PropertySharkï¿½ because it also yields an AVM estimate, thus saving an http fetch / URL call
+        try{out.avm.dataset.homeSnap   = avmHomeSnap  (out.address		  );}catch(e){Logger.log("Error zHu8A: "+e.message)} // HomeSnapï¿½  // Scores appreciation and cash flow potential // Only works for UNLISTED properties (currently). Listings reorder the data fields and throw off the scrape.
     if(source=="Realtor"){
-        try{out.avm.dataset.eppraisal  = avmEppraisal (out.address		  );}catch(e){Logger.log("Error RjqK2: "+e.message)} // Eppraisal® // Replaced by Realtor® (when Realtor® is not the source)
+        try{out.avm.dataset.eppraisal  = avmEppraisal (out.address		  );}catch(e){Logger.log("Error RjqK2: "+e.message)} // Eppraisalï¿½ // Replaced by Realtorï¿½ (when Realtorï¿½ is not the source)
    }else{
-		try{out.avm.dataset.realtor    = avmRealtor   (out.address		  );}catch(e){Logger.log("Error xNb9B: "+e.message)} // Realtor®   // Yields 3 estimates: 1. DataQuick®, 2. SmartZip®, 3. Eppraisal®
-	    try{out.avm.dataset.dataQuick  = {estimate:out.avm.dataset.realtor.dataQuick_est,high:out.avm.dataset.realtor.dataQuick_high,low:out.avm.dataset.realtor.dataQuick_low}}catch(e){Logger.log("Error sWIjZ: "+e.message)} // DataQuick®
-	    try{out.avm.dataset.smartZip   = {estimate:out.avm.dataset.realtor. smartZip_est,high:out.avm.dataset.realtor. smartZip_high,low:out.avm.dataset.realtor. smartZip_low}}catch(e){Logger.log("Error JoNxx: "+e.message)} // SmartZip®
-        try{out.avm.dataset.eppraisal  = {estimate:out.avm.dataset.realtor.eppraisal_est,high:out.avm.dataset.realtor.eppraisal_high,low:out.avm.dataset.realtor.eppraisal_low}}catch(e){Logger.log("Error QPbdY: "+e.message)} // Eppraisal®	
-      //try{out.avm.dataset.realEstate = avmRealEstate(out.address		  );}catch(e){Logger.log("Error rrZ91: "+e.message)} // RealEstate®
-      //try{out.avm.dataset.homeGain   = avmHomeGain  (out.address		  );}catch(e){Logger.log("Error sFt6t: "+e.message)} // HomeGain®  // Deprecated 11/11/2013 because HomeGain stopped providing estimates
+		try{out.avm.dataset.realtor    = avmRealtor   (out.address		  );}catch(e){Logger.log("Error xNb9B: "+e.message)} // Realtorï¿½   // Yields 3 estimates: 1. DataQuickï¿½, 2. SmartZipï¿½, 3. Eppraisalï¿½
+	    try{out.avm.dataset.dataQuick  = {estimate:out.avm.dataset.realtor.dataQuick_est,high:out.avm.dataset.realtor.dataQuick_high,low:out.avm.dataset.realtor.dataQuick_low}}catch(e){Logger.log("Error sWIjZ: "+e.message)} // DataQuickï¿½
+	    try{out.avm.dataset.smartZip   = {estimate:out.avm.dataset.realtor. smartZip_est,high:out.avm.dataset.realtor. smartZip_high,low:out.avm.dataset.realtor. smartZip_low}}catch(e){Logger.log("Error JoNxx: "+e.message)} // SmartZipï¿½
+        try{out.avm.dataset.eppraisal  = {estimate:out.avm.dataset.realtor.eppraisal_est,high:out.avm.dataset.realtor.eppraisal_high,low:out.avm.dataset.realtor.eppraisal_low}}catch(e){Logger.log("Error QPbdY: "+e.message)} // Eppraisalï¿½
+      //try{out.avm.dataset.realEstate = avmRealEstate(out.address		  );}catch(e){Logger.log("Error rrZ91: "+e.message)} // RealEstateï¿½
+      //try{out.avm.dataset.homeGain   = avmHomeGain  (out.address		  );}catch(e){Logger.log("Error sFt6t: "+e.message)} // HomeGainï¿½  // Deprecated 11/11/2013 because HomeGain stopped providing estimates
         try{out.avm.combi              = avmComb	  (out.avm.dataset    );}catch(e){Logger.log("Error biSpc: "+e.message)}
         try{out.avm.stat			   = avmStat      (out.avm.dataset,ask);}catch(e){Logger.log("Error vfypT: "+e.message)}
     /*Logger.log(JSON.stringify(out));*/return out}}}
 function avmComb		(avm		    ){ // Combines property facts from multiple sources into a single source
 	/*	Parameters
-			@return {object} out — {"beds":"2","baths":"3","sqft":"1275","lot":"2500"} — final set of properties from combined sources
-			@param  {object} avm — {...,"zillow":{..."beds":"2","baths":"3","sqft":"1275",...},"trulia":"{..."beds":"2","baths":"3","sqft":"1275",...},...}
+			@return {object} out ï¿½ {"beds":"2","baths":"3","sqft":"1275","lot":"2500"} ï¿½ final set of properties from combined sources
+			@param  {object} avm ï¿½ {...,"zillow":{..."beds":"2","baths":"3","sqft":"1275",...},"trulia":"{..."beds":"2","baths":"3","sqft":"1275",...},...}
 	*/
 	{// Code
 	var out={};try{r=avm.zillow.searchresults.response.results.result/*[0]*/                                   } catch(e){Logger.log("Error csqEt: "+e.message)}
@@ -1067,67 +1068,67 @@ function avmStat        (avm     ,ask   ){ // Array.prototype.avmStat       =fun
 	/*	Archive
 			6/15/2013
 				//	Parameters
-						@param  {array } bid — "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
+						@param  {array } bid ï¿½ "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
 				{// Code                                                     	    // this[][]: [array of AVM estimators; e.g., Zillow, etc.][AVM output array; 0 element ID $value est]
-					var avmStats,avmSet=[],out=[],i=this.length;while(i---1){if(this[i][1]){avmSet.push(this[i][this[i][1]])}} // out: output array; avmSet: array of AVM estimates to pass to median fxn; // Initialize elements — construct avmSet, array of AVM estimates only // Add value to array iff (iff = "if and only if") value exists.
-						out[2]=0;i=bid.length;while(i--){try{bid[i]=bid[i].replaceAll(",","");}catch(e){}if(bid[i]>out[2]){out[2]=bid[i]}} // BID    — Get max; consolidate multiple(two) bid values into one
+					var avmStats,avmSet=[],out=[],i=this.length;while(i---1){if(this[i][1]){avmSet.push(this[i][this[i][1]])}} // out: output array; avmSet: array of AVM estimates to pass to median fxn; // Initialize elements ï¿½ construct avmSet, array of AVM estimates only // Add value to array iff (iff = "if and only if") value exists.
+						out[2]=0;i=bid.length;while(i--){try{bid[i]=bid[i].replaceAll(",","");}catch(e){}if(bid[i]>out[2]){out[2]=bid[i]}} // BID    ï¿½ Get max; consolidate multiple(two) bid values into one
 						out[8]   = LibraryjsUtil.clone(avmSet).sort(function(a,b){return b-a});   // Return original bid set (before processing; i.e., removal of outliers)
 						avmStats = avmSet.descriptiveStatistics();                  // Process statistical results + format for output/return // Calculate descriptive statistics of the set of AVM estimates
-						out[0]   = avmStats.IsOk;                                   // ISOK   — Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
-						out[1]   = avmStats.Count;                                  // COUNT  — Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations
-					//  out[2]   calculated outside loop for efficiency — see above // BID    — Calculated outside loop for efficiency — see above
-						out[3]   = Math.round(avmStats.Median);                     // ARV    — MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
-						out[4]   = out[3] - out[2];                                 // MARGIN — calculate margin
-						out[5]   = Math.ceil(100*(out[2]/out[3]));                  // RATIO  — calculate ratio // Convert to percent; round up
-						out[6]   = avmStats.StdDevPop;                              // StdDevPop — Population stardard deviation
-						out[7]   = Math.ceil(100*(out[6]/out[3]));                  // StdDevPct — Pop std dev as pct% of estimated ARV // Convert to percent; round up to register small values as “1” instead of “0”
-						out[6]   = Math.ceil(out[6]);                               // Round StdDevPop last to minimize rounding error in StdDevPct; round up to register small values as “1” instead of “0”
+						out[0]   = avmStats.IsOk;                                   // ISOK   ï¿½ Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
+						out[1]   = avmStats.Count;                                  // COUNT  ï¿½ Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations
+					//  out[2]   calculated outside loop for efficiency ï¿½ see above // BID    ï¿½ Calculated outside loop for efficiency ï¿½ see above
+						out[3]   = Math.round(avmStats.Median);                     // ARV    ï¿½ MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
+						out[4]   = out[3] - out[2];                                 // MARGIN ï¿½ calculate margin
+						out[5]   = Math.ceil(100*(out[2]/out[3]));                  // RATIO  ï¿½ calculate ratio // Convert to percent; round up
+						out[6]   = avmStats.StdDevPop;                              // StdDevPop ï¿½ Population stardard deviation
+						out[7]   = Math.ceil(100*(out[6]/out[3]));                  // StdDevPct ï¿½ Pop std dev as pct% of estimated ARV // Convert to percent; round up to register small values as ï¿½1ï¿½ instead of ï¿½0ï¿½
+						out[6]   = Math.ceil(out[6]);                               // Round StdDevPop last to minimize rounding error in StdDevPct; round up to register small values as ï¿½1ï¿½ instead of ï¿½0ï¿½
 				return  out}}
 			Prior to 6/15/2013
 				Note: This function replaced the following inline code
 				avmSet = avmSet.splice(0,avmSet.length);                                                    // Reset
 				for(i=1;i<avm.length;i++){if(avm[i][0]){avmSet.push(avm[i][avm[i][0]])}}                    // Add value to array iff (iff = "if and only if") value exists.
-				valCalc[1] = 0;for(i=1;i<colBid.length;i++){if(valBid[i]>valCalc[1]){valCalc[1]=valBid[i]}} // BID     — Get max; consolidate multiple(two) bid values into one
-				valCalc[2] = avmSet.median();                                                               // ARV     — calculate median value  //valCalc[2] = avm[1][colZillow];
-				valCalc[3] = valCalc[2] - valCalc[1];                                                       // MARGIN  — calculate margin
-				valCalc[4] = valCalc[1] / valCalc[2];                                                       // RATIO   — calculate ratio
+				valCalc[1] = 0;for(i=1;i<colBid.length;i++){if(valBid[i]>valCalc[1]){valCalc[1]=valBid[i]}} // BID     ï¿½ Get max; consolidate multiple(two) bid values into one
+				valCalc[2] = avmSet.median();                                                               // ARV     ï¿½ calculate median value  //valCalc[2] = avm[1][colZillow];
+				valCalc[3] = valCalc[2] - valCalc[1];                                                       // MARGIN  ï¿½ calculate margin
+				valCalc[4] = valCalc[1] / valCalc[2];                                                       // RATIO   ï¿½ calculate ratio
 				valCalc[4] = Math.ceil(100*valCalc[4]);                                                     // Convert to percent; round up
-				// Parameters                                         			// array this — AVM estimates array, must extract integer estimates, arr[arr[1]]; array bid — bids dollar value;
+				// Parameters                                         			// array this ï¿½ AVM estimates array, must extract integer estimates, arr[arr[1]]; array bid ï¿½ bids dollar value;
 					var MAX_SPREAD = 16;                                        // Empirically determined maximum StdDevPct above which we will delete primary outlier
 					var MIN_COUNT  = 2;                                         // Minimum population size of AVM estimates
-				do{ if( out[7]>MAX_SPREAD){avmSet=avmSet.deleteOutlier(out[3])} // Deprecated outlier deletion scheme // It did not produce the desired results // Delete primary outlier (value farthest from the median/“target”) when StdDevPct “spread” exceeds limit
-				}while((out[7]>MAX_SPREAD) && (out[1]>MIN_COUNT))	            // Repeat if “spread” is too large and we have enough estimates
+				do{ if( out[7]>MAX_SPREAD){avmSet=avmSet.deleteOutlier(out[3])} // Deprecated outlier deletion scheme // It did not produce the desired results // Delete primary outlier (value farthest from the median/ï¿½targetï¿½) when StdDevPct ï¿½spreadï¿½ exceeds limit
+				}while((out[7]>MAX_SPREAD) && (out[1]>MIN_COUNT))	            // Repeat if ï¿½spreadï¿½ is too large and we have enough estimates
 	*/
 	/*	Parameters
-		@return {object} out — {"isOk":true,"popCount":"foo","autoEst":"foo","margin":"foo","ratio":"foo","sdPop":"foo","sdPct":"foo","set":"foo"}
-		@param  {object} avm — {...,"zillow":{..."estimate":"125000",...},"trulia":"{..."estimate":"128000",...},...}
-		@param  {array } ask — "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
+		@return {object} out ï¿½ {"isOk":true,"popCount":"foo","autoEst":"foo","margin":"foo","ratio":"foo","sdPop":"foo","sdPct":"foo","set":"foo"}
+		@param  {object} avm ï¿½ {...,"zillow":{..."estimate":"125000",...},"trulia":"{..."estimate":"128000",...},...}
+		@param  {array } ask ï¿½ "opening bid" or "list price" from seller; formatted as array to allow for mutliple "bids" in competitive bidding scenario
 	*/
 	/*  Sources
-		    realtor    — 3 estimates (when not also the source)
+		    realtor    ï¿½ 3 estimates (when not also the source)
 						   DataQuick = average([low,high])
 						   SmartZip  = average([low,high])
 						   Eppraisal = average([low,high])
-			homeSnap   — 1 estimate (possibly provided by SmartZip or DataQuick) // Only works for UNLISTED properties (currently). Listings reorder the data fields and throw off the scrape.
-			realEstate — 1 estimate
-			zillow     — 1 estimate
-			trulia     — 1 estimate   = bestOf([list,sales])
-			homeGain   — 0 estimate   = average([low,high]) — Formerly 1 estimate but decided to stop providing estimates. We will temporarily discontinue using them, monitor their status and possibly resume if they re-enter the space
+			homeSnap   ï¿½ 1 estimate (possibly provided by SmartZip or DataQuick) // Only works for UNLISTED properties (currently). Listings reorder the data fields and throw off the scrape.
+			realEstate ï¿½ 1 estimate
+			zillow     ï¿½ 1 estimate
+			trulia     ï¿½ 1 estimate   = bestOf([list,sales])
+			homeGain   ï¿½ 0 estimate   = average([low,high]) ï¿½ Formerly 1 estimate but decided to stop providing estimates. We will temporarily discontinue using them, monitor their status and possibly resume if they re-enter the space
 	*/
 	{// Code
 		var out={},avmSet=[],x=Object.keys(avm),i=x.length;out.ob={};while(i--){try{if(avm[x[i]].estimate){avmSet.push(avm[x[i]].estimate);out.ob[x[i]]=avm[x[i]].estimate}}catch(e){Logger.log("Error lJoTH: "+e.message)}} // array of AVM estimates to pass to descriptiveStatistics()
 			out.set      = LibraryjsUtil.clone(avmSet).sort(function(a,b){return b-a}); // Return original bid set (before processing; i.e., removal of outliers)
 		var	avmStats     = LibraryjsUtil._descriptiveStatistics(avmSet); // Process statistical results + format for output/return // Calculate descriptive statistics of the set of AVM estimates
-			out.isOk     = avmStats.IsOk;                          // ISOK   — Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
-			out.popCount = avmStats.Count;                         // COUNT  — Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations
-			out.autoEst  = Math.round(avmStats.Median);            // ARV    — MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
-			out.margin   = out.autoEst - ask;                      // MARGIN — calculate margin
-			out.ratio    = Math.ceil(100*(ask/out.autoEst));       // RATIO  — calculate ratio // Convert to percent; round up
-			out.sdPop    = avmStats.StdDevPop;                     // StdDevPop — Population stardard deviation
-			out.sdPct    = Math.ceil(100*(out.sdPop/out.autoEst)); // StdDevPct — Pop std dev as pct% of estimated ARV // Convert to percent; round up to register small values as “1” instead of “0”
-			out.sdPop    = Math.ceil(out.sdPop);                   // Round StdDevPop last to minimize rounding error in StdDevPct; round up to register small values as “1” instead of “0”
+			out.isOk     = avmStats.IsOk;                          // ISOK   ï¿½ Boolean; evaluates to TRUE if all inputs reduce to numeric and are included in stat calculations
+			out.popCount = avmStats.Count;                         // COUNT  ï¿½ Returns the count of the population of inputs that reduced to a numeric to be included in the stat calculations
+			out.autoEst  = Math.round(avmStats.Median);            // ARV    ï¿½ MEDIAN of all estimates  //valCalc[2] = avm[1][colZillow];
+			out.margin   = out.autoEst - ask;                      // MARGIN ï¿½ calculate margin
+			out.ratio    = Math.ceil(100*(ask/out.autoEst));       // RATIO  ï¿½ calculate ratio // Convert to percent; round up
+			out.sdPop    = avmStats.StdDevPop;                     // StdDevPop ï¿½ Population stardard deviation
+			out.sdPct    = Math.ceil(100*(out.sdPop/out.autoEst)); // StdDevPct ï¿½ Pop std dev as pct% of estimated ARV // Convert to percent; round up to register small values as ï¿½1ï¿½ instead of ï¿½0ï¿½
+			out.sdPop    = Math.ceil(out.sdPop);                   // Round StdDevPop last to minimize rounding error in StdDevPct; round up to register small values as ï¿½1ï¿½ instead of ï¿½0ï¿½
 	return 	out}}
-function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =function(tMax    ){ // Fetch data from Zillow API. 
+function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =function(tMax    ){ // Fetch data from Zillow API.
     // Need to add new version of avmZillowAPI() that first queries mapQuest() to find addy params for avmZillowAPI() call. This will reduce the number of double calls to separate the addy params.
 	/* References
 		// Corelogic....... http://express.realquest.com/search.aspx?location=5008%20corson%20ave%20s,%20seattle,%20wa
@@ -1138,17 +1139,17 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
 		// Sample API call. http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id=<ZWSID>&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA
 	*/
 	/* Archive
-		Notes: 
+		Notes:
 			// The method for acquiring most of the property data is to use the Yahoo Real Estate web site because Zillow requires a property ID
 			// first in order to access the property data. Yahoo provides this property ID and a subset of property details also supplied to Yahoo from Zillow.
 			// Therefore, this method of using Yahoo is the quickest, most efficient method to acquire the property data.
 			// The above paragraph is no longer true as Yahoo and Zillow have implemented anti-scraping measures.
-		6/10/2013 — converted output from array to object
+		6/10/2013 ï¿½ converted output from array to object
 			0. Initialize test arguments.
 		// var sa      = "2114 Bigelow Ave";
 		// var csz     = "Seattle, Wa";
 		var out        = new Array();
-			out[0]     = 24; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function. // Deprecated // Note: The [0] element “points” to the element in the returned array containing the AVM “single figure” estimate of value.
+			out[0]     = 24; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function. // Deprecated // Note: The [0] element ï¿½pointsï¿½ to the element in the returned array containing the AVM ï¿½single figureï¿½ estimate of value.
 		Arguments
 				tMax   = tMax||1; // Max unsuccessful attempts
 			var sa     = this[0]; // "sa" .............. Example: 32445 Stonewood Way (f/k/a "Number_and_street")
@@ -1158,7 +1159,7 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
 			var zip    = this[4]; // "Zip" ............. Example: 92530
 			var full   = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 			var part   = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
-		6/10/2013 — parsing variables replaced by .xmlToJson(); now returns object instead of array
+		6/10/2013 ï¿½ parsing variables replaced by .xmlToJson(); now returns object instead of array
 			var KEY = new Array();
 			var QUE = new Array();
 			var BEG = new Array();
@@ -1350,12 +1351,12 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
 			SAMPLE CALLS / Test
 			  http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz1czg9fsh6vf_26nu3&address=2114 Bigelow Ave&citystatezip=Seattle, Wa
 			  function test(){Logger.log(JSON.stringify(Xml.parse(UrlFetchApp.fetch("http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz1czg9fsh6vf_26nu3&address=2114 Bigelow Ave&citystatezip=Seattle, Wa").getContentText(),true)))}
-			SAMPLE RESPONSE — JSON | Visualize @http://chris.photobooks.com/json/ | Google search: json visualization chris
+			SAMPLE RESPONSE ï¿½ JSON | Visualize @http://chris.photobooks.com/json/ | Google search: json visualization chris
 			   {"searchresults":{"request":{"citystatezip":{"Text":"Seattle, Wa"},"address":{"Text":"2114 Bigelow Ave"}},"schemalocation":"http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/6ec2563/static/xsd/SearchResults.xsd","response":{"results":{"result":{"localRealEstate":{"region":{"type":"neighborhood","zindexValue":{"Text":"653,000"},"id":"271856","name":"East Queen Anne","links":{"forSaleByOwner":{"Text":"http://www.zillow.com/east-queen-anne-seattle-wa/fsbo/"},"forSale":{"Text":"http://www.zillow.com/east-queen-anne-seattle-wa/"},"overview":{"Text":"http://www.zillow.com/local-info/WA-Seattle/East-Queen-Anne/r_271856/"}}}},"zpid":{"Text":"48749425"},"zestimate":{"percentile":{"Text":"0"},"amount":{"currency":"USD","Text":"1386729"},"oneWeekChange":{"deprecated":"true"},"valueChange":{"currency":"USD","Text":"35142","duration":"30"},"valuationRange":{"low":{"currency":"USD","Text":"1289658"},"high":{"currency":"USD","Text":"1525402"}},"last_updated":{"Text":"09/11/2014"}},"links":{"comparables":{"Text":"http://www.zillow.com/homes/comps/48749425_zpid/"},"homedetails":{"Text":"http://www.zillow.com/homedetails/2114-Bigelow-Ave-N-Seattle-WA-98109/48749425_zpid/"},"mapthishome":{"Text":"http://www.zillow.com/homes/48749425_zpid/"},"graphsanddata":{"Text":"http://www.zillow.com/homedetails/2114-Bigelow-Ave-N-Seattle-WA-98109/48749425_zpid/#charts-and-data"}},"address":{"street":{"Text":"2114 Bigelow Ave N"},"city":{"Text":"Seattle"},"longitude":{"Text":"-122.347938"},"latitude":{"Text":"47.637933"},"state":{"Text":"WA"},"zipcode":{"Text":"98109"}}}}},"message":{"text":{"Text":"Request successfully processed"},"code":{"Text":"0"}},"xsi":"urn:x-prefix:xsi"}}
-			SAMPLE RESPONSE — XML
+			SAMPLE RESPONSE ï¿½ XML
 			<?xml version="1.0" encoding="utf-8"?><SearchResults:searchresults
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-			xsi:schemaLocation="http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/11346f0ed65354ce3e550eff2713981a/static/xsd/SearchResults.xsd" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://www.zillow.com/static/xsd/SearchResults.xsd http://www.zillowstatic.com/vstatic/11346f0ed65354ce3e550eff2713981a/static/xsd/SearchResults.xsd"
 			xmlns:SearchResults="http://www.zillow.com/static/xsd/SearchResults.xsd">
 			<request>
 				<address>2114 Bigelow Ave</address>
@@ -1442,7 +1443,7 @@ function avmZillowAPI   (addy    ,tMax  ){ // Array.prototype.avmZillowAPI  =fun
 			addy.full  = "3224 E Desert Cove Avenue, Phoenix AZ 85028"; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 			addy.part  =      "E Desert Cove Avenue, Phoenix AZ 85028"; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
 	*/
-    var a,b,b1,c,c1,num,q,r,ob,re=/(^\d+ *- *\d+$)/gmi/*matches "1716-1718"*/,out=avmZillowAPI_fetchApi(addy);try{q=out.searchresults.response.results.result.length}catch(e){Logger.log("Error rr9W8: "+e.message);q=true}// /(^\d+ *- *\d+$)/gmi (Regex matches 7316-7318 — parsed from 7316-7318 S Dorchester Ave, Chicago IL)
+    var a,b,b1,c,c1,num,q,r,ob,re=/(^\d+ *- *\d+$)/gmi/*matches "1716-1718"*/,out=avmZillowAPI_fetchApi(addy);try{q=out.searchresults.response.results.result.length}catch(e){Logger.log("Error rr9W8: "+e.message);q=true}// /(^\d+ *- *\d+$)/gmi (Regex matches 7316-7318 ï¿½ parsed from 7316-7318 S Dorchester Ave, Chicago IL)
 	try{num=(typeof addy=="string")?addy.split(" ")[0]:addy.sa.split(" ")[0];b1=out.searchresults.response.results.result.address.street.Text.split(" ")[0];b=b1!=num;}catch(e){Logger.log("Error MCIls: "+e.message);b=true}if(b&&b1){
 	try{c1=Boolean(b1.match(re))?b1.match(re):b1;b1=b1.toString();num=Boolean(num.match(re))?num.match(re):num;num=num.toString();c=LibraryjsUtil.addyMultiMatch(num,c1)||LibraryjsUtil.addyMultiMatch(c1,num)}catch(e){Logger.log("Error kkIZo: "+e.message);c=false}}
 	try{if(parseInt(out.searchresults.message.code/*text*/.Text)||((q||b)&&!c)){a=addy.sa?(addy.sa+", "+addy.csz):(addy+function(){if(addy.sa==addy.csz){return ""}else{return (", "+addy.csz)}}());ob=LibraryjsUtil.geoGoogle(a); // Redo criteria include: 1. Result does not include a subject. 2. Result includes more than one subject. 3. Street number of subject does not match street number of input address (Due to imprecision of original addy parameter. i.e., addy.sa==addy.csz) 4. &&!c in the case where num="1717" (S Dorchester Ave, Chicago IL) and c="1716-1718" (S Dorchester Ave, Chicago IL) // Code the logic to use the ob=LibraryjsUtil.geoGoogle(a) method as a last resort only because it passes a string to the avmZillowAPI_fetchApi(addy) function instead of a parsed address object. Which in turn creates the funky and unreliable {sa:addy,csz:addy} object as parameter
@@ -1475,7 +1476,7 @@ function avmHomeSnap (addy    ,tMax  ){ //addy=addy||{city:"Highland Lakes",sa:"
     var data=UrlFetchApp.fetch(act/*,{muteHttpExceptions:true}*/).getContentText(),out=LibraryjsUtil._scrapeDataset(data,KEY,QUE,BEG,END,DEL,INS);out.link=act;
 	try{out.baths=(1*function(){return(out.bathsFull*1==out.bathsFull)?out.bathsFull:0}() + 0.5*function(){return(out.bathsHalf*1==out.bathsHalf)?out.bathsHalf:0}())||""}catch(e){Logger.log("Error 0SON7: "+e.message);out.baths=""}
 	/*Logger.log(JSON.stringify(out));*/return out} // function test(){addy={city:"Seattle",sa:"5008 Corson Ave S",state:"WA","zip":"98108","csz":"Seattle, WA 98108",full:"5008 Corson Ave S, Seattle, WA 98108"};Logger.log(JSON.stringify(avmHomeSnap(addy)))}
-function avmHomeSnap_list2url(addy){//@return{string} — Url of matching subject from a list 
+function avmHomeSnap_list2url(addy){//@return{string} ï¿½ Url of matching subject from a list
     var KEY = [ , "link" , "ad" ]
 	  , QUE = [ , "href" , "id" ]
 	  , BEG = [ , '"'    , ">"  ]
@@ -1487,12 +1488,12 @@ function avmHomeSnap_list2url(addy){//@return{string} — Url of matching subject 
       ;i=ar.reverse().length;while(i--){out[i]=LibraryjsUtil._scrapeDataset(ar[i],KEY,QUE,BEG,END,DEL,INS);
 	        adar=out[i]["ad"].split(" ");num=adar[0];zip=adar[adar.length-1]; // Interpret a matched address as a matched street number and a matched zip code. Considering the candidate made its way to this list in the first place, that might be sufficient?
             if(num==addy.number&&zip==addy.zip){return STEM+out[i]["link"]}}return} // function test(){Logger.log(avmHomeSnap_new({city:"Highland Lakes",sa:"27 Lakeshore Dr E",state:"NJ","zip":"07422","csz":"Highland Lakes, NJ 07422","full":"27 Lakeshore Dr E, Highland Lakes, NJ 07422","part":"Lakeshore Dr E, Highland Lakes, NJ 07422","number":"27"}))}
-function avmEppraisal   (addy    ,tMax  ){ // Array.prototype.avmEppraisal  =function(tMax,jso){ // Unsuspended 1/10/2014 when Realtor.com is source because Eppraisal estimate not provided when Realtor.com is source — SUSPENDED 6/10/2013 — // Realtor.com currently supplies this data scrape so we have deleted this function from the process flow for now
+function avmEppraisal   (addy    ,tMax  ){ // Array.prototype.avmEppraisal  =function(tMax,jso){ // Unsuspended 1/10/2014 when Realtor.com is source because Eppraisal estimate not provided when Realtor.com is source ï¿½ SUSPENDED 6/10/2013 ï¿½ // Realtor.com currently supplies this data scrape so we have deleted this function from the process flow for now
 	/* References
 		http://www.eppraisal.com/Search/Property.mvc?a=10389+Brookway+Pl&z=92505                  <-...start here
-		http://www.eppraisal.com/Home-Values-10389-brookway-pl-riverside-ca-92505-189228069.mvc   <—...forwards here, scrape codes & reformat GET
+		http://www.eppraisal.com/Home-Values-10389-brookway-pl-riverside-ca-92505-189228069.mvc   <ï¿½...forwards here, scrape codes & reformat GET
 	*/
-	/* Archive 
+	/* Archive
 		var GET_SUFFIX   = "http://www.eppraisal.com/home-values-"
 		  , GET_PREFIX   = ".mvc"
 		  , INCL_SUFFX   = true;
@@ -1506,8 +1507,8 @@ function avmEppraisal   (addy    ,tMax  ){ // Array.prototype.avmEppraisal  =fun
 			var zip   = this[4]; // "Zip" ............. Example: 92530
 			var full  = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 			var part  = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
-		Parameters	
-			// Note: The [0] element “points” to the element in the returned array containing the AVM “single figure” estimate of value.
+		Parameters
+			// Note: The [0] element ï¿½pointsï¿½ to the element in the returned array containing the AVM ï¿½single figureï¿½ estimate of value.
 			var out          = new Array();
 			out[0]           = 1; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function.
 	*/
@@ -1555,8 +1556,8 @@ function avmTrulia      (addy    ,tMax  ){ // Will not provide estimate on liste
 		// Result:        Trulia.com
 		// http://www.trulia.com/validate.php?tst=h&display=estimate&search=3224+E+Desert+Cove+Ave%2C+85028
 	*/
-	/* Archive	
-		6/11/2013 — Arrays
+	/* Archive
+		6/11/2013 ï¿½ Arrays
 		Arguments
 		    tMax  = tMax||1; // Max unsuccessful attempts
 		var sa    = this[0]; // "sa" .............. Example: 32445 Stonewood Way (f/k/a "Number_and_street")
@@ -1567,7 +1568,7 @@ function avmTrulia      (addy    ,tMax  ){ // Will not provide estimate on liste
 		var full  = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 		var part  = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
 		var out   = [1]; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function.
-		Note: The [0] element “points” to the element in the returned array containing the AVM “single figure” estimate of value.
+		Note: The [0] element ï¿½pointsï¿½ to the element in the returned array containing the AVM ï¿½single figureï¿½ estimate of value.
 	*/
 	/* Test variables
 			addy       = {}                                           ; // 3224 E Desert Cove Avenue, Phoenix AZ 85028
@@ -1608,7 +1609,7 @@ function avmTrulia      (addy    ,tMax  ){ // Will not provide estimate on liste
 		var THIS  = [,"-/","--",", ",","," ","=-","-/","/-"]
 		  , WITH  = [,"/" ,"-" ,"-" ,"-","-","=" ,"/" ,"-" ]
 		/*, THISA = [,"," ,"$" ," " ,"<"                   ]
-		  , WITHA = [,""  ,""  ,""  ,""                    ]             
+		  , WITHA = [,""  ,""  ,""  ,""                    ]
 		*/;      // 0 1                      2                    3                    4                 5                                6                            7
 	/*	var KEY   = [,"baths"               ,"sqft"              ,"useCode"           ,"estimate"       ,"desc"                          ,"taxAmt1"                   ,"taxAmt2"        ]
 Changes   , QUE   = [,"property_attribute\"","property_attribute","property_attribute","property_price" ,"Description provided by Trulia","property_taxes_info_module","class=\"bold\">"]
@@ -1622,7 +1623,7 @@ to        , DEL   = [,null                  ,[","," "]           ,null          
 		  , BEG   = [,"_val\">"             ,"_val\">"           ,"_val\">"           ,"_val\">"        ,"_val\">"                       ,"$"                         ,"("                       ,"="                      ,"="                       ]
 		  , END   = [,"<"                   ,"<"                 ,"<"                 ,"<"              ,"<"                             ,"<"                         ,");"                      ,";"                      ,";"                       ]
 		  , DEL   = [,null                  ,null                ,[","," "]           ,null             ,null                            ,[",","$"," ","<"]           ,null                      ,null                     ,null                      ]
-		  , INS   = [,null                  ,null                ,["" ,"" ]           ,null             ,null                            ,["" ,"" ,"" ,"" ]           ,null                      ,null                     ,null                      ]    
+		  , INS   = [,null                  ,null                ,["" ,"" ]           ,null             ,null                            ,["" ,"" ,"" ,"" ]           ,null                      ,null                     ,null                      ]
           ; //      0 1                                               2
 		var KEYA  = [,"est_list"                                     ,"est_sales"                                          ]
 		  , QUEA  = [,"average list price for similar homes for sale","average sales price for similar recently sold homes"]
@@ -1631,7 +1632,7 @@ to        , DEL   = [,null                  ,[","," "]           ,null          
 		  , DELA  = [,[",","$"," ","<"]                              ,[",","$"," ","<"]                                    ]
 		  , INSA  = [,["" ,"" ,"" ,"" ]                              ,["" ,"" ,"" ,"" ]                                    ];
 	}
-	{ // 2. URL, scrape, parse & return	
+	{ // 2. URL, scrape, parse & return
          // Logger.log(UrlFetchApp.fetch("transform.php?dappName=Trulia_test&transformer=HTML&applyToUrl=http%3A%2F%2Fwww.trulia.com%2Fhomes%2FArizona%2FPhoenix%2Fsold%2F20453881-3224-E-Desert-Cove-Ave-Phoenix-AZ-85028").getContentText());
 	     // Logger.log(UrlFetchApp.fetch("http://scrape4me.com/api?url=http%3A%2F%2Fwww.trulia.com%2Fhomes%2FArizona%2FPhoenix%2Fsold%2F20453881-3224-E-Desert-Cove-Ave-Phoenix-AZ-85028&elm=&ch=ch"                       ).getContentText());
             var out={},act=(STEM+addy.sa.replace(/ /gi,"+")+"%2C+"+addy.zip).trim(),t=0, // URL: "http://www.trulia.com/validate.php?tst=h&display=estimate&search=3224+E+Desert+Cove+Ave%2C+85028" forwards to "http://www.trulia.com/homes/Arizona/Phoenix/sold/20453881-3224-E-Desert-Cove-Ave-Phoenix-AZ-85028"
@@ -1644,14 +1645,14 @@ to        , DEL   = [,null                  ,[","," "]           ,null          
                try{      if(out.desc.est_sales === Number(out.desc.est_sales)){out.estimate=parseInt(out.desc.est_sales)}
                     else if(out.desc.est_list  === Number(out.desc.est_list )){out.estimate=parseInt(out.desc.est_list )}}catch(e){Logger.log("Error pREtx: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}
                try{         out.detail          =  avmTrulia_detail           (out.dataSet.stateCode,out.dataSet.id)     }catch(e){Logger.log("Error vMLk9: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}
-	           try{      if(out.estimate       !=  1 * out.estimate          ){out.estimate=false                       }}catch(e){Logger.log("Error tSOtD: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}	
-	           try{         out.estimate        =      out.estimate ||         out.detail.fields.VAL.replace(/,/gi,"")   }catch(e){Logger.log("Error fbOR7: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}	
-	     // This comment applies to following two lines: delete : Had to delete dataSet.dataPhotos and dataSet.photos because certain escaped and unescaped quotation marks (and other formatting issues) were causing error in the JSON notation at the LibraryjsUtil.null2str() operation. So we solved it by deleting the .photos and .dataPhotos since that object has only appeared on about 1% of the tested use cases so far. 
+	           try{      if(out.estimate       !=  1 * out.estimate          ){out.estimate=false                       }}catch(e){Logger.log("Error tSOtD: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}
+	           try{         out.estimate        =      out.estimate ||         out.detail.fields.VAL.replace(/,/gi,"")   }catch(e){Logger.log("Error fbOR7: "+e.message+"... Property address: "+addy.sa+", "+addy.csz)}
+	     // This comment applies to following two lines: delete : Had to delete dataSet.dataPhotos and dataSet.photos because certain escaped and unescaped quotation marks (and other formatting issues) were causing error in the JSON notation at the LibraryjsUtil.null2str() operation. So we solved it by deleting the .photos and .dataPhotos since that object has only appeared on about 1% of the tested use cases so far.
 		       // Future development: should try a more robust solution for the null2str operation to add back the deleted properties if/when there is a use for them. e.g., out.comps seems a likely useful candidate.
 			   delete out.dataSet.dataPhotos // Caused by "12420 SE 223rd Drive, Kent, WA 98031"
 	       // ;delete out.dataSet.    photos // Caused by "3 Pochuck Dr, Vernon NJ" // Originally thought this property was causing the error, but after testing, determined it was actually out.comps that was causing the error.
 	          ;delete out.comps              // Caused by "3 Pochuck Dr, Vernon NJ"
-	          ;       out.link=act;/*Logger.log("Trulia: "+JSON.stringify(out));*/return out}} // Append URL, return // Deprecated 6/10/2013 // out[0]++;out.unshift(action); // Inserts details link URL into first (zeroth) element of the output array (and slides all other elements down one) 
+	          ;       out.link=act;/*Logger.log("Trulia: "+JSON.stringify(out));*/return out}} // Append URL, return // Deprecated 6/10/2013 // out[0]++;out.unshift(action); // Inserts details link URL into first (zeroth) element of the output array (and slides all other elements down one)
 function avmTrulia_detail(state,id){
  // var ACT="http://www.trulia.com/_ajax/Maps/InfoWindowAjax/json/?t=a&bounds=0%2C-100%2C0%2C-0&mode=hover&tplname=small&primary=0&state=WA&w=&tpl=0&bc=false&pid=803900"
  // var ACT="http://www.trulia.com/_ajax/Maps/InfoWindowAjax/json/?t=a&bounds=0%2C-100%2C0%2C-0&mode=hover&tplname=small&primary=0&w=&tpl=0&bc=false&state=AZ&pid=20453881"
@@ -1661,7 +1662,7 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
 	{ // 1. Parameters
 		    tMax       = tMax || 1; // Max unsuccessful attempts
 		var STEM       = // "http://www.realtor.com/realestateandhomes-search/" // "For Sale"      http://www.realtor.com/realestateandhomes-search/Costa-Mesa_CA/92627/1139-Aviemore-Terrace
-		                                                                        // "Recently Sold" 
+		                                                                        // "Recently Sold"
 							"http://www.realtor.com/propertyrecord-search/"     // "Not For Sale"  http://www.realtor.com/propertyrecord-search/Shelton_WA/98584/1522-Fairmount-Ave
                                                                                 //                 http://www.realtor.com/propertyrecord-search/Costa-Mesa_CA/92627/1147-Aviemore-Terrace
           , THIS       = [,"--","=-"," ",",",", "]
@@ -1672,10 +1673,10 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
 		  , END        = [,"\""    ,">"        ,"<"    ,"<"    ,"<"    ,"<"    ,"</td>"       ,"<"     ,"<"      ,"<"   ,"<"    ,"<"   ,[">"       ,">"  ,"<"           ,">"  ,"<"           ,">"  ,"<"            ],[">"        ,">"  ,"<"            ,">"  ,"<"            ,">"  ,"<"             ],[">"        ,">"  ,"<"            ,">"  ,"<"            ,">"  ,"<"             ]]
 		  , DEL        = [,null    ,null       ,null   ,[","]  ,null   ,null   ,null          ,null    ,["$",","],null  ,null   ,[","] ,[null      ,null ,["$",","]     ,null ,["$",","]     ,null ,["$",","]      ],[null       ,null ,["$",","]      ,null ,["$",","]      ,null ,["$",","]       ],[null       ,null ,["$",","]      ,null ,["$",","]      ,null ,["$",","]       ]]
 		  , INS        = [,null    ,null       ,null   ,["" ]  ,null   ,null   ,null          ,null    ,["" ,"" ],null  ,null   ,["" ] ,[null      ,null ,["" ,"" ]     ,null ,["" ,"" ]     ,null ,["" ,"" ]      ],[null       ,null ,["" ,"" ]      ,null ,["" ,"" ]      ,null ,["" ,"" ]       ],[null       ,null ,["" ,"" ]      ,null ,["" ,"" ]      ,null ,["" ,"" ]       ]]
-		  ;			  // 0,1        2           3       4       5       6       7              8        9         10             11     120         1     2              3     4              5     6                 130               1               2                 90               1               2              
+		  ;			  // 0,1        2           3       4       5       6       7              8        9         10             11     120         1     2              3     4              5     6                 130               1               2                 90               1               2
 	}
 	{ // 2. URL, forward, scrape, parse & return
-		var out={},act=(STEM+addy.city.replace(/ /g,"-")+"_"+addy.state+"/"+addy.zip+"/"+addy.sa.replace(/ /g,"-")).trim(),i=THIS.length;while(i---1){act=act.replaceAll(THIS[i],WITH[i])} // var act="http://www.realtor.com/realestateandhomes-search/_CA/92587/28916-Avenida-Gaviota";                                
+		var out={},act=(STEM+addy.city.replace(/ /g,"-")+"_"+addy.state+"/"+addy.zip+"/"+addy.sa.replace(/ /g,"-")).trim(),i=THIS.length;while(i---1){act=act.replaceAll(THIS[i],WITH[i])} // var act="http://www.realtor.com/realestateandhomes-search/_CA/92587/28916-Avenida-Gaviota";
 	 // /*LibraryjsBackup.*/print2doc(UrlFetchApp.fetch(act,{options:{followredirects:true}}).getContentText(),"jsAvm","avmRealtor")}}
         var t=0;do{try{out=LibraryjsUtil._scrapeDataset(UrlFetchApp.fetch(act,{options:{followredirects:true}}/*.urlForwardTo(GET_SUFFIX,GET_PREFIX,INCL_SUFFX)*/).getContentText(),/*out[0]*/KEY,QUE,BEG,END,DEL,INS)}catch(e){Logger.log(/*e.message+*/": Error: avmRealtor: "+addy.sa+", "+addy.csz)}t++}while(/*!LibraryjsUtil.isNumber(out[out[0]])&&*/t<tMax) // Forward to unique URL w/ID, scrape & return // Logger.log("Returned Realtor: t="+t+", est="+out[out[0]]);
 		if(!parseInt(out.smartZip_est )){out.smartZip_est =""}else{if(!parseInt(out.smartZip_low )){out.smartZip_low =1*out.smartZip_est -10000}if(!parseInt(out.smartZip_high )){out.smartZip_high =1*out.smartZip_est +10000}}
@@ -1700,7 +1701,7 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
 		var zip   = this[4]; // "Zip" ............. Example: 92530
 		var full  = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 		var part  = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
-		// Note: The [0] element “points” to the element in the returned array containing the AVM “single figure” estimate of value.
+		// Note: The [0] element ï¿½pointsï¿½ to the element in the returned array containing the AVM ï¿½single figureï¿½ estimate of value.
 		var out        = new Array();
 		out[0]         = 1; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function.
 	* /
@@ -1725,7 +1726,7 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
 		  , BEG  = [,"$"                          ,">"    ,">"    ,">"    ,"<span>",">"      ,">"    ]
 		  , END  = [,"<"                          ,"<"    ,"<"    ,"<"    ,","     ,"<"      ,"<"    ]
 		  , DEL  = [,["$",","]                    ,null   ,null   ,null   ,null    ,null     ,null   ]
-		  , INS  = [,["" ,"" ]                    ,null   ,null   ,null   ,null    ,null     ,null   ];	
+		  , INS  = [,["" ,"" ]                    ,null   ,null   ,null   ,null    ,null     ,null   ];
 	}
 	{ // 2. URL, (do not forward), scrape, parse & return
 		var out={},act=(STEM+addy.full.getPrefix(addy.state)+","+addy.state+"/").trim(),i=THIS.length;while(i---1){act=act.replaceAll(THIS[i],WITH[i])} // http://www.realestate.com/homevalues/32445+Stonewood+Way,LAKE+ELSINORE,CA/
@@ -1738,7 +1739,7 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
 		// http://www.homegain.com/homevalues/Seattle-WA/98109/2114-Bigelow-Ave-N
 	* /
 	/* Archive
-		// Note: The [0] element “points” to the element in the returned array containing the AVM “single figure” estimate of value.
+		// Note: The [0] element ï¿½pointsï¿½ to the element in the returned array containing the AVM ï¿½single figureï¿½ estimate of value.
 		var out   = [1]    ; // This is the special element that contains the element number of the AVM estimate; a key self-contained reference within the function.
 		    tMax  = tMax||1; // Max unsuccessful attempts
 		var sa    = this[0]; // "sa" .............. Example: 32445 Stonewood Way (f/k/a "Number_and_street")
@@ -1795,9 +1796,9 @@ function avmRealtor     (addy    ,tMax  ){//function test(){var a={sa:"7317 S Do
  //	,   QUE = [ , "valueEstimateLow\">" , "valueEstimateCurrent\">" , "valueEstimateHigh\">" , ">Value Estimate<" , "<"        , ">Beds<" , "<"    , ">Heating<" , "<"       , ">Payment Estimate<" , "<"      , ">Baths Full<" , "<"         , ">Basement<" , "<"        , ">Rent Estimate<" , "<"       , ">Baths Half<" , "<"         , ">Stories<" , "<"       , ">Tax Estimate<" , "<"      , ">Sq Ft<" , "<"    , ">Address Stories<" , "<"              , "HomeScore<" , "<"         , ">Lot Size<" , "<"   , ">Fireplaces<" , "<"          , "InvestorScore<" , "<"             , ">Last Sale Date<" , "<"            , ">Last Sale Price<" , "<"             , ">Year Built<" , "<"         ]
  //	,   BEG = [ , ">"                   , ">"                       , ">"                    , "/"                , ">"        , "/"      , ">"    , "/"         , ">"       , "/"                  , ">"      , "/"            , ">"         , "/"          , ">"        , "/"               , ">"       , "/"            , ">"         , "/"         , ">"       , "/"              , ">"      , "/"       , ">"    , "/"                 , ">"              , "/"          , ">"         , "/"          , ">"   , "/"            , ">"          , "/"              , ">"             , "/"                , ">"            , "/"                 , ">"             , "/"            , ">"         ]
  //	,   END = [ , "<"                   , "<"                       , "<"                    , ">"                , "<"        , ">"      , "<"    , ">"         , "<"       , ">"                  , "<"      , ">"            , "<"         , ">"          , "<"        , ">"               , "<"       , ">"            , "<"         , ">"         , "<"       , ">"              , "<"      , ">"       , "<"    , ">"                 , "<"              , ">"          , "<"         , ">"          , "<"   , ">"            , "<"          , ">"              , "<"             , ">"                , "<"            , ">"                 , "<"             , ">"            , "<"         ]
- //	,   DEL = [ "$" , "," ] , 
+ //	,   DEL = [ "$" , "," ] ,
     var act = "http://express.realquest.com/reports/PropertyDetail_HTML.aspx?PID=GUZTAMZTPQYTMOBZGQYDAMBZGV6DCOJRHF6EESKHIVGE6VZAIFLEKICOPR6DSOBRGA4Q"//"http://express.realquest.com/reports/PropertyDetail_HTML.aspx?format=JSON&PID=GUZTAMZTPQYTMOBZGQYDAMBZGV6DCOJRHF6EESKHIVGE6VZAIFLEKICOPR6DSOBRGA4Q&lat=47.636269&lon=-122.348713&isParcelCentroid=false"//"http://express.realquest.com/services/ExpressServices.asmx/validateLocation"//"http://express.realquest.com/search.aspx?location="+encodeURIcomponent(addy.full) // Ex. "http://express.realquest.com/search.aspx?location=11462%20Cromwell%20Ct,Dallas,TX%20,75229"
- // ,   INS = [ ""  , ""  ] , 
+ // ,   INS = [ ""  , ""  ] ,
     data=UrlFetchApp.fetch(act/*,{muteHttpExceptions:true}* /).getContentText();//,out=LibraryjsUtil._scrapeDataset(data,KEY,QUE,BEG,END,DEL,INS);out.link=act;
     Logger.log(JSON.stringify(/*out* /data));return /*out* /data}*/
 function avmBofA(){} // Need to decode SecurityToken // https://docs.google.com/spreadsheets/d/1mKkW538JASIRbGxfkcj6wPuh8o5TfEqdVFj3_FE7gcc/edit#gid=0
@@ -1843,7 +1844,7 @@ function linkGoogleMaps (addy           ){return  "https://maps.google.com/maps?
 //function linkYahoo    (addy           ){return ("http://realestate.yahoo.com/Homevalues/result.html?search=Search&sa="+addy.sa+"&csz="+addy.csz).replaceAll(" ","+")} // Deprecated. 9/6/2014. Yahoo no longer provides comprehensive property data. Instead they now only focus on listed property.
 function linkZillow     (addy           ){var STEM="http://www.zillow.com/homes/",mid=(typeof addy=="object")?(addy.sa+",-"+addy.zip):addy;return (STEM+mid+"_rb/").replace(/ /g,"-")} // Example out: http://www.zillow.com/homes/1789-E-Oakland-St,85225_rb/
 function linkZipRealty  (addy           ){return  "http://www.ziprealty.com/xhr/autocomplete_mls_city?query="+escape(addy.full)} // Example out: http://www.ziprealty.com/xhr/autocomplete_mls_city?query=6781%20Pilot%20Wy%2C%20San%20Diego%2C%20CA%2092114 // var address.full="6781 Pilot Wy, San Diego, CA 92114";
-/*Array.prototype.urlYahoo      = function(){ // Deprecated. 9/6/2014. Yahoo no longer provides comprehensive property data. Instead they now only focus on listed property. // Construct search URL for Yahoo®  property search // Example: http://realestate.yahoo.com/Homevalues/result.html?sa=38124+Placer+Creek+St&csz=92562&search=Search
+/*Array.prototype.urlYahoo      = function(){ // Deprecated. 9/6/2014. Yahoo no longer provides comprehensive property data. Instead they now only focus on listed property. // Construct search URL for Yahooï¿½  property search // Example: http://realestate.yahoo.com/Homevalues/result.html?sa=38124+Placer+Creek+St&csz=92562&search=Search
 	var sa    = this[0]; // "sa" .............. Example: 32445 Stonewood Way (f/k/a "Number_and_street")
 	var csz   = this[1]; // "csz" ............. Example: LAKE ELSINORE CA 92530
 	var num   = this[2]; // "Number" .......... Example: 32445
@@ -1852,7 +1853,7 @@ function linkZipRealty  (addy           ){return  "http://www.ziprealty.com/xhr/
 	var full  = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 	var part  = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
 	return ("http://realestate.yahoo.com/Homevalues/result.html?sa=" + sa + "&csz=" + zip + "&search=Search").replaceAll(" ","+")} */
-/*Array.prototype.urlZillow     = function(){ // Construct search URL for Zillow® property search // Example: http://www.zillow.com/homes/2056-154th-ave-se,-98007_rb/
+/*Array.prototype.urlZillow     = function(){ // Construct search URL for Zillowï¿½ property search // Example: http://www.zillow.com/homes/2056-154th-ave-se,-98007_rb/
 	var sa    = this[0]; // "sa" .............. Example: 32445 Stonewood Way (f/k/a "Number_and_street")
 	var csz   = this[1]; // "csz" ............. Example: LAKE ELSINORE CA 92530
 	var num   = this[2]; // "Number" .......... Example: 32445
@@ -1860,7 +1861,7 @@ function linkZipRealty  (addy           ){return  "http://www.ziprealty.com/xhr/
 	var zip   = this[4]; // "Zip" ............. Example: 92530
 	var full  = this[5]; // "Full_address" .... Example: 32445 Stonewood Way, LAKE ELSINORE CA 92530
 	var part  = this[6]; // "Partial_address" . Example: Stonewood Way, LAKE ELSINORE CA 92530
-	return ("http://www.zillow.com/homes/"+sa+", "+zip+"_rb/").replace(/ /g,"-")/*.replaceAll(" ","-")* /}*/		
+	return ("http://www.zillow.com/homes/"+sa+", "+zip+"_rb/").replace(/ /g,"-")/*.replaceAll(" ","-")* /}*/
 Array.prototype.propertyShark = function(){ // Pull tax records to use in income approach // Didn't use: Realtor.com: Details URL not included; Zillow: Anti-scrape; Yahoo: Anti-scrape; Others: Data not reliable
     // Sample output: {"propertySharkUrl":"http://www.propertyshark.com/mason/Property/11153478","propertyTax":9433.75,"taxYear":2013,"salePrice":995000,"saleDate":"11/18/2008","parcelID":"168940-0490"}
     // POST http://www.propertyshark.com/mason/UI/homepage_search.html
@@ -1877,13 +1878,13 @@ Array.prototype.propertyShark = function(){ // Pull tax records to use in income
 function verifyAddy(r){var ar=["sa","city","state","zip"],i=ar.length;try{while(i--){if(!r[ar[i]].length){return false}}}catch(e){Logger.log("Error xzXKE: "+e.message);return false}return true}
 function str2addy(str){var q,r,out;
     try{         out=  LibraryjsUtil.  geoMapQuestCsz  (str) ; if( out.geoSource   ){ return out  }}catch(e){Logger.log("Error 9fLG4: geoMapQuest () did not return a match. "+e.message)} // geoSource=="geoMapQuest" // Logger.log(JSON.stringify(out));
-    try{         out=  LibraryjsUtil.  geoGoogle       (str) ; if( out.geoSource   ){ return out  }}catch(e){Logger.log("Error 2cgh4: geoGoogle   () did not return a match. "+e.message)} // geoSource=="geoGoogle" 
+    try{         out=  LibraryjsUtil.  geoGoogle       (str) ; if( out.geoSource   ){ return out  }}catch(e){Logger.log("Error 2cgh4: geoGoogle   () did not return a match. "+e.message)} // geoSource=="geoGoogle"
 	try{         out=/*LibraryjsAvm .*/avmZillowAPI    (str)                                       }catch(e){Logger.log("Error dqeJa: avmZillowAPI() did not return a match. "+e.message)}
     try{       r=out.searchresults.response.results.result/*[0]*/.address;q={sa:r.street.Text,city:r.city.Text,state:r.state.Text,zip:r.zipcode.Text}
 	if(!parseInt(out.searchresults.message.code/*text*/.Text)/*=="Request successfully processed"*/&&verifyAddy(q)) // Reference: API codes and messages http://www.zillow.com/howto/api/GetUpdatedPropertyDetails.htm
 		                                                {out.geoSource="avmZillowAPI";return out  }}catch(e){Logger.log("Error swKxN: "+e.message)}
 	               Logger       .log                    (   "Geocoders failed"      );return false;
-    // The purpose of this function is to document and provide guidance for future versions if/when available resource change. I.e., new geocoding tools enter the marketplace and, perhaps, some leave. 
+    // The purpose of this function is to document and provide guidance for future versions if/when available resource change. I.e., new geocoding tools enter the marketplace and, perhaps, some leave.
 	/* Test Function
 	function test(){var out=[],ARR=[ "10813 Rutherford Ct, Jacksonville, FL 32257"
 								   , "5162 S Wallace St, Seattle, WA 98178"
@@ -1914,7 +1915,7 @@ function nhoodZillow_api  (state,city,nhood){ // (CO-)MAIN CALL for neighborhood
 	// Sample response XML (http://codebeautify.org/xmlviewer/): <demographics><request><state>WA</state><city>Seattle</city><neighborhood>Ballard</neighborhood></request><message><text>Request successfully processed</text><code>0</code></message><response><region><id>250017</id><state>Washington</state><city>Seattle</city><neighborhood>Ballard</neighborhood><latitude>47.668304</latitude><longitude>-122.384601</longitude></region><links><main>http://www.zillow.com/local-info/WA-Seattle/Ballard/r_250017/</main><affordability>http://www.zillow.com/local-info/WA-Seattle/Ballard-home-value/r_250017/</affordability><homesandrealestate>http://www.zillow.com/local-info/WA-Seattle/Ballard-homes/r_250017/</homesandrealestate><people>http://www.zillow.com/local-info/WA-Seattle/Ballard-people/r_250017/</people><forSale>http://www.zillow.com/ballard-seattle-wa/</forSale><forSaleByOwner>http://www.zillow.com/homes/fsbo/Ballard-Seattle-WA/</forSaleByOwner><foreclosures>http://www.zillow.com/ballard-seattle-wa/fore_lt/</foreclosures><recentlySold>http://www.zillow.com/homes/recently_sold/Ballard-Seattle-WA/</recentlySold></links><charts><chart><name>Median Condo Value</name></chart><chart><name>Median Home Value</name></chart><chart><name>Dollars Per Square Feet</name></chart><chart><name deprecated="true">Zillow Home Value Index Distribution</name></chart><chart><name>Home Type</name></chart><chart><name deprecated="true">Owners vs. Renters</name></chart><chart><name>Home Size in Square Feet</name></chart><chart><name>Year Built</name></chart></charts><market deprecated="true"></market><pages><page><name>Affordability</name><tables><table><name>Affordability Data</name><data><attribute><name>Zillow Home Value Index</name><values><neighborhood><value type="USD">330600</value></neighborhood><city><value type="USD">383000</value></city><nation><value type="USD">191200</value></nation></values></attribute><attribute><name>Median Single Family Home Value</name><values><neighborhood><value type="USD">389300</value></neighborhood><city><value type="USD">409600</value></city><nation><value type="USD">192800</value></nation></values></attribute><attribute><name>Median Condo Value</name><values><neighborhood><value type="USD">295200</value></neighborhood><city><value type="USD">305300</value></city><nation><value type="USD">181300</value></nation></values></attribute><attribute><name>Median 2-Bedroom Home Value</name><values><neighborhood><value type="USD">341100</value></neighborhood><city><value type="USD">342000</value></city><nation><value type="USD">149800</value></nation></values></attribute><attribute><name>Median 3-Bedroom Home Value</name><values><neighborhood><value type="USD">378700</value></neighborhood><city><value type="USD">409000</value></city><nation><value type="USD">174300</value></nation></values></attribute><attribute><name>Median 4-Bedroom Home Value</name><values><neighborhood><value type="USD">441500</value></neighborhood><city><value type="USD">479900</value></city><nation><value type="USD">263500</value></nation></values></attribute><attribute><name>Percent Homes Decreasing</name><values><neighborhood><value type="percent">0.859</value></neighborhood><city><value type="percent">0.825</value></city><nation><value type="percent">0.693</value></nation></values></attribute><attribute><name>Percent Listing Price Reduction</name><values><neighborhood><value type="percent">0.21</value></neighborhood><city><value type="percent">0.236</value></city><nation><value type="percent">0.247</value></nation></values></attribute><attribute><name>Median List Price Per Sq Ft</name><values><neighborhood><value type="USD">304</value></neighborhood><city><value type="USD">280</value></city><nation><value type="USD">115</value></nation></values></attribute><attribute><name>Median List Price</name><values><neighborhood><value type="USD">330000</value></neighborhood><city><value type="USD">449000</value></city><nation><value type="USD">215000</value></nation></values></attribute><attribute><name>Median Sale Price</name><values><neighborhood><value type="USD">333800</value></neighborhood><city><value type="USD">380600</value></city><nation><value type="USD">210600</value></nation></values></attribute><attribute><name>Homes For Sale</name><values><neighborhood><value>105</value></neighborhood><city><value>7492</value></city><nation><value>3512252</value></nation></values></attribute><attribute><name>Homes Recently Sold</name><values><neighborhood><value>13</value></neighborhood><city><value>750</value></city><nation><value>272365</value></nation></values></attribute><attribute><name>Property Tax</name><values><neighborhood><value type="USD">2735</value></neighborhood><city><value type="USD">3456</value></city><nation><value type="USD">2192</value></nation></values></attribute><attribute><name>Turnover (Sold Within Last Yr.)</name><values><neighborhood><value type="percent">0.091</value></neighborhood><city><value type="percent">0.039</value></city><nation><value type="percent">0.035</value></nation></values></attribute><attribute><name>Median Value Per Sq Ft</name><values><neighborhood><value type="USD">370</value></neighborhood><city><value type="USD">328</value></city><nation><value type="USD">118</value></nation></values></attribute><attribute><name>1-Yr. Change</name><values><neighborhood><value type="percent">-0.086</value></neighborhood><city><value type="percent">-0.102</value></city><nation><value type="percent">-0.076</value></nation></values></attribute><attribute><name>>Homes For Sale By Owner</name><values><neighborhood><value>5</value></neighborhood><city><value>205</value></city><nation><value>25194</value></nation></values></attribute><attribute><name>>New Construction</name><values><neighborhood><value>0</value></neighborhood><city><value>12</value></city><nation><value>102395</value></nation></values></attribute><attribute><name>>Foreclosures</name><values><neighborhood><value>1</value></neighborhood><city><value>404</value></city><nation><value>664546</value></nation></values></attribute></data></table></tables></page><page><name>Homes Real Estate</name><tables><table><name>Homes Real Estate Data</name><data><attribute><name>Owners</name><values><neighborhood><value type="percent">0.35028618</value></neighborhood><city><value type="percent">0.48412441</value></city><nation><value type="percent">0.66268764</value></nation></values></attribute><attribute><name>Renters</name><values><neighborhood><value type="percent">0.64971382</value></neighborhood><city><value type="percent">0.51587559</value></city><nation><value type="percent">0.33731236</value></nation></values></attribute><attribute><name>Median Home Size (Sq. Ft.)</name><values><neighborhood><value>1230</value></neighborhood><city><value>1460</value></city><nation><value>1548</value></nation></values></attribute><attribute><name>Avg. Year Built</name><values><neighborhood><value>1980</value></neighborhood><city><value>1948</value></city><nation><value>1974</value></nation></values></attribute><attribute><name>Single-Family Homes</name><values><neighborhood><value type="percent">0.3128767123287671</value></neighborhood><city><value type="percent">0.7606991687356031</value></city><nation><value type="percent">0.7866848290049298</value></nation></values></attribute><attribute><name>Condos</name><values><neighborhood><value type="percent">0.4263013698630137</value></neighborhood><city><value type="percent">0.17935175082098562</value></city><nation><value type="percent">0.10635880824351963</value></nation></values></attribute></data></table><table><name>BuiltYear</name><data><attribute><name>>2000</name><value type="percent">0.33095890410958906</value></attribute><attribute><name>1900-1919</name><value type="percent">0.24054794520547945</value></attribute><attribute><name>1920-1939</name><value type="percent">0.057534246575342465</value></attribute><attribute><name>1940-1959</name><value type="percent">0.06301369863013699</value></attribute><attribute><name>1960-1979</name><value type="percent">0.12876712328767123</value></attribute><attribute><name>1980-1999</name><value type="percent">0.17917808219178083</value></attribute></data></table><table><name>Census Summary-HomeSize</name><data><attribute><name>1000sqft</name><value type="percent">0.3942470389170897</value></attribute><attribute><name>3600sqft</name><value type="percent">0.025380710659898477</value></attribute><attribute><name>1000-1400sqft</name><value type="percent">0.24591088550479415</value></attribute><attribute><name>1400-1800sqft</name><value type="percent">0.14438804286520024</value></attribute><attribute><name>1800-2400sqft</name><value type="percent">0.1065989847715736</value></attribute><attribute><name>2400-3600sqft</name><value type="percent">0.08347433728144388</value></attribute></data></table><table><name>Census Summary-HomeType</name><data><attribute><name>Condo</name><value type="percent">0.4263013698630137</value></attribute><attribute><name>Other</name><value type="percent">0.2608219178082192</value></attribute><attribute><name>SingleFamily</name><value type="percent">0.3128767123287671</value></attribute></data></table><table><name>Census Summary-Occupancy</name><data><attribute><name>Own</name><value type="percent">0.35028618</value></attribute><attribute><name>Rent</name><value type="percent">0.64971382</value></attribute></data></table></tables></page><page><name>People</name><tables><table><name>People Data</name><data><attribute><name>Median Household Income</name><values><neighborhood><value currency="USD">41202.9453206937</value></neighborhood><city><value currency="USD">45736</value></city><nation><value currency="USD">44512.0130806292</value></nation></values></attribute><attribute><name>Single Males</name><values><neighborhood><value type="percent">0.218182040689239</value></neighborhood><city><value type="percent">0.230033266826908</value></city><nation><value type="percent">0.146462187349365</value></nation></values></attribute><attribute><name>Single Females</name><values><neighborhood><value type="percent">0.197726979090431</value></neighborhood><city><value type="percent">0.187486853578992</value></city><nation><value type="percent">0.124578258618535</value></nation></values></attribute><attribute><name>Median Age</name><values><neighborhood><value>39</value></neighborhood><city><value>37</value></city><nation><value>36</value></nation></values></attribute><attribute><name>Homes With Kids</name><values><neighborhood><value type="percent">0.149933859172205</value></neighborhood><city><value type="percent">0.181808339938523</value></city><nation><value type="percent">0.313623902816284</value></nation></values></attribute><attribute><name>Average Household Size</name><values><neighborhood><value>1.82278897942217</value></neighborhood><city><value>2.08</value></city><nation><value>2.58883240001203</value></nation></values></attribute><attribute><name>Average Commute Time (Minutes)</name><values><neighborhood><value>26.56776121676753</value></neighborhood><city><value>26.6363786935206</value></city><nation><value>26.375545725891282</value></nation></values></attribute></data></table><table><name>Census Summary-AgeDecade</name><data><attribute><name>70s</name><value type="percent">0.114872901061</value></attribute><attribute><name>0s</name><value type="percent">0.0698273234810158</value></attribute><attribute><name>10s</name><value type="percent">0.0614721332267584</value></attribute><attribute><name>20s</name><value type="percent">0.210411237406907</value></attribute><attribute><name>30s</name><value type="percent">0.222130722421361</value></attribute><attribute><name>40s</name><value type="percent">0.159760457231474</value></attribute><attribute><name>50s</name><value type="percent">0.100382039995932</value></attribute><attribute><name>60s</name><value type="percent">0.0611431851755522</value></attribute></data></table><table><name>Census Summary-CommuteTime</name><data><attribute><name>10min</name><value type="percent">0.116523248268039</value></attribute><attribute><name>60min</name><value type="percent">0.0482377198229543</value></attribute><attribute><name>10-20min</name><value type="percent">0.266281330068427</value></attribute><attribute><name>20-30min</name><value type="percent">0.255069379257092</value></attribute><attribute><name>30-45min</name><value type="percent">0.189151878627933</value></attribute><attribute><name>45-60min</name><value type="percent">0.124736443955555</value></attribute></data></table><table><name>Census Summary-Household</name><data><attribute><name>NoKids</name><value type="percent">0.850066140827795</value></attribute><attribute><name>WithKids</name><value type="percent">0.149933859172205</value></attribute></data></table><table><name>Census Summary-RelationshipStatus</name><data><attribute><name>Divorced-Female</name><value type="percent">0.0854375513590899</value></attribute><attribute><name>Divorced-Male</name><value type="percent">0.0602982799519792</value></attribute><attribute><name>Married-Female</name><value type="percent">0.178297193386233</value></attribute><attribute><name>Married-Male</name><value type="percent">0.186687382837076</value></attribute><attribute><name>Single-Female</name><value type="percent">0.197726979090431</value></attribute><attribute><name>Single-Male</name><value type="percent">0.218182040689239</value></attribute><attribute><name>Widowed-Female</name><value type="percent">0.0632616593158969</value></attribute><attribute><name>Widowed-Male</name><value type="percent">0.0101089133700551</value></attribute></data></table></tables><segmentation><liveshere><title>Makin' It Singles</title><name>Upper-scale urban singles.</name><description>Pre-middle-age to middle-age singles with upper-scale incomes. May or may not own their own home. Most have college educations and are employed in mid-management professions.</description></liveshere><liveshere><title>Aspiring Urbanites</title><name>Urban singles with moderate income.</name><description>Low- to middle-income singles over a wide age range. Some have a college education. They work in a variety of occupations, including some management-level positions.</description></liveshere><liveshere><title>Bright Lights, Big City</title><name>Very mobile singles living in the city.</name><description>Singles ranging in age from early 20s to mid-40s who have moved to an urban setting. Most rent their apartment or condo. Some have a college education and work in services and the professional sector.</description></liveshere></segmentation><uniqueness><category type="Education"><characteristic>Bachelor's degrees</characteristic></category><category type="Employment"><characteristic>Females working for non-profits</characteristic><characteristic>Self-employed (unincorporated businesses)</characteristic><characteristic>Work in arts, design, entertainment, sports, or media occupations</characteristic><characteristic>Work in computer or mathematical occupations</characteristic><characteristic>Work in office and administrative support occupations</characteristic></category><category type="People Culture"><characteristic>Born in the Midwest</characteristic><characteristic>Born in the Northeast</characteristic><characteristic>Born in the South</characteristic><characteristic>Divorced females</characteristic><characteristic>Single females</characteristic><characteristic>Single males</characteristic><characteristic>Widowed females</characteristic></category><category type="Transportation"><characteristic>Get to work by bicycle</characteristic><characteristic>Get to work by bus</characteristic></category></uniqueness></page></pages></response></demographics>
 	// Sample response JSON (http://www.httputility.net/json-minifier.aspx) : {"demographics":{"request":{"state":"WA","city":"Seattle","neighborhood":"Ballard"},"message":{"text":"Request successfully processed","code":"0"},"response":{"region":{"id":"250017","state":"Washington","city":"Seattle","neighborhood":"Ballard","latitude":"47.668304","longitude":"122.384601"},"links":{"main":"http://www.zillow.com/local-info/WA-Seattle/Ballard/r_250017/","affordability":"http://www.zillow.com/local-info/WA-Seattle/Ballard-home-value/r_250017/","homesandrealestate":"http://www.zillow.com/local-info/WA-Seattle/Ballard-homes/r_250017/","people":"http://www.zillow.com/local-info/WA-Seattle/Ballard-people/r_250017/","forSale":"http://www.zillow.com/ballard-seattle-wa/","forSaleByOwner":"http://www.zillow.com/homes/fsbo/Ballard-Seattle-WA/","foreclosures":"http://www.zillow.com/ballard-seattle-wa/fore_lt/","recentlySold":"http://www.zillow.com/homes/recently_sold/Ballard-Seattle-WA/"},"charts":{"chart":[{"name":"Median Condo Value"},{"name":"Median Home Value"},{"name":"Dollars Per Square Feet"},{"name":{"deprecated":"true","text":"Zillow Home Value Index Distribution"}},{"name":"Home Type"},{"name":{"deprecated":"true","text":"Owners vs. Renters"}},{"name":"Home Size in Square Feet"},{"name":"Year Built"}]},"market":{"deprecated":"true"},"pages":{"page":[{"name":"Affordability","tables":{"table":{"name":"Affordability Data","data":{"attribute":[{"name":"Zillow Home Value Index","values":{"neighborhood":{"value":{"type":"USD","text":"330600"}},"city":{"value":{"type":"USD","text":"383000"}},"nation":{"value":{"type":"USD","text":"191200"}}}},{"name":"Median Single Family Home Value","values":{"neighborhood":{"value":{"type":"USD","text":"389300"}},"city":{"value":{"type":"USD","text":"409600"}},"nation":{"value":{"type":"USD","text":"192800"}}}},{"name":"Median Condo Value","values":{"neighborhood":{"value":{"type":"USD","text":"295200"}},"city":{"value":{"type":"USD","text":"305300"}},"nation":{"value":{"type":"USD","text":"181300"}}}},{"name":"Median 2-Bedroom Home Value","values":{"neighborhood":{"value":{"type":"USD","text":"341100"}},"city":{"value":{"type":"USD","text":"342000"}},"nation":{"value":{"type":"USD","text":"149800"}}}},{"name":"Median 3-Bedroom Home Value","values":{"neighborhood":{"value":{"type":"USD","text":"378700"}},"city":{"value":{"type":"USD","text":"409000"}},"nation":{"value":{"type":"USD","text":"174300"}}}},{"name":"Median 4-Bedroom Home Value","values":{"neighborhood":{"value":{"type":"USD","text":"441500"}},"city":{"value":{"type":"USD","text":"479900"}},"nation":{"value":{"type":"USD","text":"263500"}}}},{"name":"Percent Homes Decreasing","values":{"neighborhood":{"value":{"type":"percent","text":"0.859"}},"city":{"value":{"type":"percent","text":"0.825"}},"nation":{"value":{"type":"percent","text":"0.693"}}}},{"name":"Percent Listing Price Reduction","values":{"neighborhood":{"value":{"type":"percent","text":"0.21"}},"city":{"value":{"type":"percent","text":"0.236"}},"nation":{"value":{"type":"percent","text":"0.247"}}}},{"name":"Median List Price Per Sq Ft","values":{"neighborhood":{"value":{"type":"USD","text":"304"}},"city":{"value":{"type":"USD","text":"280"}},"nation":{"value":{"type":"USD","text":"115"}}}},{"name":"Median List Price","values":{"neighborhood":{"value":{"type":"USD","text":"330000"}},"city":{"value":{"type":"USD","text":"449000"}},"nation":{"value":{"type":"USD","text":"215000"}}}},{"name":"Median Sale Price","values":{"neighborhood":{"value":{"type":"USD","text":"333800"}},"city":{"value":{"type":"USD","text":"380600"}},"nation":{"value":{"type":"USD","text":"210600"}}}},{"name":"Homes For Sale","values":{"neighborhood":{"value":"105"},"city":{"value":"7492"},"nation":{"value":"3512252"}}},{"name":"Homes Recently Sold","values":{"neighborhood":{"value":"13"},"city":{"value":"750"},"nation":{"value":"272365"}}},{"name":"Property Tax","values":{"neighborhood":{"value":{"type":"USD","text":"2735"}},"city":{"value":{"type":"USD","text":"3456"}},"nation":{"value":{"type":"USD","text":"2192"}}}},{"name":"Turnover (Sold Within Last Yr.)","values":{"neighborhood":{"value":{"type":"percent","text":"0.091"}},"city":{"value":{"type":"percent","text":"0.039"}},"nation":{"value":{"type":"percent","text":"0.035"}}}},{"name":"Median Value Per Sq Ft","values":{"neighborhood":{"value":{"type":"USD","text":"370"}},"city":{"value":{"type":"USD","text":"328"}},"nation":{"value":{"type":"USD","text":"118"}}}},{"name":"1-Yr. Change","values":{"neighborhood":{"value":{"type":"percent","text":"0.086"}},"city":{"value":{"type":"percent","text":"0.102"}},"nation":{"value":{"type":"percent","text":"0.076"}}}},{"name":">Homes For Sale By Owner","values":{"neighborhood":{"value":"5"},"city":{"value":"205"},"nation":{"value":"25194"}}},{"name":">New Construction","values":{"neighborhood":{"value":"0"},"city":{"value":"12"},"nation":{"value":"102395"}}},{"name":">Foreclosures","values":{"neighborhood":{"value":"1"},"city":{"value":"404"},"nation":{"value":"664546"}}}]}}}},{"name":"Homes Real Estate","tables":{"table":[{"name":"Homes Real Estate Data","data":{"attribute":[{"name":"Owners","values":{"neighborhood":{"value":{"type":"percent","text":"0.35028618"}},"city":{"value":{"type":"percent","text":"0.48412441"}},"nation":{"value":{"type":"percent","text":"0.66268764"}}}},{"name":"Renters","values":{"neighborhood":{"value":{"type":"percent","text":"0.64971382"}},"city":{"value":{"type":"percent","text":"0.51587559"}},"nation":{"value":{"type":"percent","text":"0.33731236"}}}},{"name":"Median Home Size (Sq. Ft.)","values":{"neighborhood":{"value":"1230"},"city":{"value":"1460"},"nation":{"value":"1548"}}},{"name":"Avg. Year Built","values":{"neighborhood":{"value":"1980"},"city":{"value":"1948"},"nation":{"value":"1974"}}},{"name":"Single-Family Homes","values":{"neighborhood":{"value":{"type":"percent","text":"0.3128767123287671"}},"city":{"value":{"type":"percent","text":"0.7606991687356031"}},"nation":{"value":{"type":"percent","text":"0.7866848290049298"}}}},{"name":"Condos","values":{"neighborhood":{"value":{"type":"percent","text":"0.4263013698630137"}},"city":{"value":{"type":"percent","text":"0.17935175082098562"}},"nation":{"value":{"type":"percent","text":"0.10635880824351963"}}}}]}},{"name":"BuiltYear","data":{"attribute":[{"name":">2000","value":{"type":"percent","text":"0.33095890410958906"}},{"name":"1900-1919","value":{"type":"percent","text":"0.24054794520547945"}},{"name":"1920-1939","value":{"type":"percent","text":"0.057534246575342465"}},{"name":"1940-1959","value":{"type":"percent","text":"0.06301369863013699"}},{"name":"1960-1979","value":{"type":"percent","text":"0.12876712328767123"}},{"name":"1980-1999","value":{"type":"percent","text":"0.17917808219178083"}}]}},{"name":"Census Summary-HomeSize","data":{"attribute":[{"name":"1000sqft","value":{"type":"percent","text":"0.3942470389170897"}},{"name":"3600sqft","value":{"type":"percent","text":"0.025380710659898477"}},{"name":"1000-1400sqft","value":{"type":"percent","text":"0.24591088550479415"}},{"name":"1400-1800sqft","value":{"type":"percent","text":"0.14438804286520024"}},{"name":"1800-2400sqft","value":{"type":"percent","text":"0.1065989847715736"}},{"name":"2400-3600sqft","value":{"type":"percent","text":"0.08347433728144388"}}]}},{"name":"Census Summary-HomeType","data":{"attribute":[{"name":"Condo","value":{"type":"percent","text":"0.4263013698630137"}},{"name":"Other","value":{"type":"percent","text":"0.2608219178082192"}},{"name":"SingleFamily","value":{"type":"percent","text":"0.3128767123287671"}}]}},{"name":"Census Summary-Occupancy","data":{"attribute":[{"name":"Own","value":{"type":"percent","text":"0.35028618"}},{"name":"Rent","value":{"type":"percent","text":"0.64971382"}}]}}]}},{"name":"People","tables":{"table":[{"name":"People Data","data":{"attribute":[{"name":"Median Household Income","values":{"neighborhood":{"value":{"currency":"USD","text":"41202.9453206937"}},"city":{"value":{"currency":"USD","text":"45736"}},"nation":{"value":{"currency":"USD","text":"44512.0130806292"}}}},{"name":"Single Males","values":{"neighborhood":{"value":{"type":"percent","text":"0.218182040689239"}},"city":{"value":{"type":"percent","text":"0.230033266826908"}},"nation":{"value":{"type":"percent","text":"0.146462187349365"}}}},{"name":"Single Females","values":{"neighborhood":{"value":{"type":"percent","text":"0.197726979090431"}},"city":{"value":{"type":"percent","text":"0.187486853578992"}},"nation":{"value":{"type":"percent","text":"0.124578258618535"}}}},{"name":"Median Age","values":{"neighborhood":{"value":"39"},"city":{"value":"37"},"nation":{"value":"36"}}},{"name":"Homes With Kids","values":{"neighborhood":{"value":{"type":"percent","text":"0.149933859172205"}},"city":{"value":{"type":"percent","text":"0.181808339938523"}},"nation":{"value":{"type":"percent","text":"0.313623902816284"}}}},{"name":"Average Household Size","values":{"neighborhood":{"value":"1.82278897942217"},"city":{"value":"2.08"},"nation":{"value":"2.58883240001203"}}},{"name":"Average Commute Time (Minutes)","values":{"neighborhood":{"value":"26.56776121676753"},"city":{"value":"26.6363786935206"},"nation":{"value":"26.375545725891282"}}}]}},{"name":"Census Summary-AgeDecade","data":{"attribute":[{"name":"70s","value":{"type":"percent","text":"0.114872901061"}},{"name":"0s","value":{"type":"percent","text":"0.0698273234810158"}},{"name":"10s","value":{"type":"percent","text":"0.0614721332267584"}},{"name":"20s","value":{"type":"percent","text":"0.210411237406907"}},{"name":"30s","value":{"type":"percent","text":"0.222130722421361"}},{"name":"40s","value":{"type":"percent","text":"0.159760457231474"}},{"name":"50s","value":{"type":"percent","text":"0.100382039995932"}},{"name":"60s","value":{"type":"percent","text":"0.0611431851755522"}}]}},{"name":"Census Summary-CommuteTime","data":{"attribute":[{"name":"10min","value":{"type":"percent","text":"0.116523248268039"}},{"name":"60min","value":{"type":"percent","text":"0.0482377198229543"}},{"name":"10-20min","value":{"type":"percent","text":"0.266281330068427"}},{"name":"20-30min","value":{"type":"percent","text":"0.255069379257092"}},{"name":"30-45min","value":{"type":"percent","text":"0.189151878627933"}},{"name":"45-60min","value":{"type":"percent","text":"0.124736443955555"}}]}},{"name":"Census Summary-Household","data":{"attribute":[{"name":"NoKids","value":{"type":"percent","text":"0.850066140827795"}},{"name":"WithKids","value":{"type":"percent","text":"0.149933859172205"}}]}},{"name":"Census Summary-RelationshipStatus","data":{"attribute":[{"name":"Divorced-Female","value":{"type":"percent","text":"0.0854375513590899"}},{"name":"Divorced-Male","value":{"type":"percent","text":"0.0602982799519792"}},{"name":"Married-Female","value":{"type":"percent","text":"0.178297193386233"}},{"name":"Married-Male","value":{"type":"percent","text":"0.186687382837076"}},{"name":"Single-Female","value":{"type":"percent","text":"0.197726979090431"}},{"name":"Single-Male","value":{"type":"percent","text":"0.218182040689239"}},{"name":"Widowed-Female","value":{"type":"percent","text":"0.0632616593158969"}},{"name":"Widowed-Male","value":{"type":"percent","text":"0.0101089133700551"}}]}}]},"segmentation":{"liveshere":[{"title":"Makin' It Singles","name":"Upper-scale urban singles.","description":"Pre-middle-age to middle-age singles with upper-scale incomes. May or may not own their own home. Most have college educations and are employed in mid-management professions."},{"title":"Aspiring Urbanites","name":"Urban singles with moderate income.","description":"Low- to middle-income singles over a wide age range. Some have a college education. They work in a variety of occupations, including some management-level positions."},{"title":"Bright Lights, Big City","name":"Very mobile singles living in the city.","description":"Singles ranging in age from early 20s to mid-40s who have moved to an urban setting. Most rent their apartment or condo. Some have a college education and work in services and the professional sector."}]},"uniqueness":{"category":[{"type":"Education","characteristic":"Bachelor's degrees"},{"type":"Employment","characteristic":["Females working for non-profits","Self-employed (unincorporated businesses)","Work in arts, design, entertainment, sports, or media occupations","Work in computer or mathematical occupations","Work in office and administrative support occupations"]},{"type":"People Culture","characteristic":["Born in the Midwest","Born in the Northeast","Born in the South","Divorced females","Single females","Single males","Widowed females"]},{"type":"Transportation","characteristic":["Get to work by bicycle","Get to work by bus"]}]}}]}}}}
     var ZWSID = zillowAPIcredentials().zwsid,act="http://www.zillow.com/webservice/GetDemographics.htm?zws-id="+ZWSID+"&state="+state+"&city="+city+"&neighborhood="+nhood;try{return Xml.parse(UrlFetchApp.fetch(act).getContentText(),true)}catch(e){Logger.log("Error 0vzGS: "+e.message);return false}} // function test(){Logger.log(JSON.stringify(nhoodZillow_api("wa","seattle","ballard")))}
-function nhoodZillow_fetch(state,city,nhood){ // (CO-)MAIN CALL for neighborhood data // Scrapes Zillow neighborhood page: http://www.zillow.com/rainier-view-seattle-wa/home-values/ 
+function nhoodZillow_fetch(state,city,nhood){ // (CO-)MAIN CALL for neighborhood data // Scrapes Zillow neighborhood page: http://www.zillow.com/rainier-view-seattle-wa/home-values/
     // Sample call: var nhood=avmZillowAPI().searchresults.response.results.result/*[0]*/.localRealEstate.region.name
     // Sample call: var r=LibraryjsAvm.avmJson({"source":{"name":"manual","data":decodeURI(addy)}}),n=LibraryjsAvm.nhoodZillow_fetch(r.address.state,r.address.city,r.avm.dataset.zillow.searchresults.response.results.result/*[0]*/.localRealEstate.region.name)
     //             344027             Rainier View         8  -122.271292,47.495551,-122.24086,47.506415  16037               Seattle                     6                           102001                    United States                $249,900
@@ -1945,7 +1946,7 @@ function populateLinks(r){//@return{object} Links contained in the given AVM obj
 			,	"link_yahoo"             : function(){try{return  /*OK*/    r.link.yahoo	   					                    }catch(e){Logger.log("Error jKGFY: "+e.message);return null;}}() //
 			,	"link_zillow"            : function(){try{return  /*OK*/    r.link.zillow                                           }catch(e){Logger.log("Error 9Z5Gn: "+e.message);return null;}}() //
 			,	"link_zillowdetails"     : function(){try{return  /*OK*/    r.avm.dataset.zillow.searchresults.response.results.result/*zil[i]*/.links.homedetails.Text}catch(e){Logger.log("Error dBjEz: "+e.message);return null;}}() //
-			,	"link_zipRealty"         : function(){try{return            r.link.zipRealty                                        }catch(e){Logger.log("Error Gx2c1: "+e.message);return null;}}() //    
+			,	"link_zipRealty"         : function(){try{return            r.link.zipRealty                                        }catch(e){Logger.log("Error Gx2c1: "+e.message);return null;}}() //
 		//	,	"link_zipSkinny"         : function(){try{return  /*XX*/    r.link.zipSkinny                                        }catch(e){Logger.log("Error r7Zro: "+e.message);return null;}}() //
 			}}
 function populateFacts(r){//@return{object} Facts contained in the given AVM object //@param{object} r an AVM object returned from avmJson() // Return NULL to avoid type mismatch when uploading to Parse DB via API
@@ -1959,7 +1960,7 @@ function populateFacts(r){//@return{object} Facts contained in the given AVM obj
 			,	"beds"                   : function(){try{return            r.avm.combi.beds                                        }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() //
 			,	"city"                   : function(){try{return            r.address.city                                          }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() //
 			,	"cof"                    : function(){try{return            r.counter                     .value                    }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() // "cof" Strict input // Counter
-			,	"com"                    : function(){try{return            r.LST_Attributes[21].attribute_value                    }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() // "com" Strict input // Comments 
+			,	"com"                    : function(){try{return            r.LST_Attributes[21].attribute_value                    }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() // "com" Strict input // Comments
 			,	"full"                   : function(){try{return            r.address.full                                          }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() //
 			,	"grm"                    : function(){try{return Math.round(r.ask/(12*Number(r.avm.dataset.zillow.searchresults.response.results.result/*zil[i]*/.rentzestimate.amount.Text)))}catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() // "grm" Compute gross rent margin
 			,	"ia"                     : function(){try{return            r.incomeApproach                                        }catch(e){Logger.log("Error eHa8m: "+e.message);return null;}}() // "ia"  Compute price per income approach
@@ -2081,7 +2082,7 @@ function avmReport(ob/*item,avmJson,addy,exit*/){ob.exit=ob.exit||1;//ob.showgat
 	  ; out.link = populateLinks(r) //r.link; //linksPopulate() might be a more comprehensive method of collecting all the links than r.link. // Requires verification
 	  ; out.fact = populateFacts(r)
 	  ; out.avm  = r;
-	if(ob.exit==1){LibraryjsUtil.dbParse({verb:"post",project:"argenta",className:"avmReport",ob:out});return out} // Called by Argenta™ main
+	if(ob.exit==1){LibraryjsUtil.dbParse({verb:"post",project:"argenta",className:"avmReport",ob:out});return out} // Called by Argentaï¿½ main
     if(ob.exit==2){var exit2 = { avm_est        : mm , avm_high        : mh , avm_low        : ml
 	                  //       , coreLogic_est  : cm , coreLogic_high  : ch , coreLogic_low  : cl
 	                           , homeSnap_est   : hm , homeSnap_high   : hh , homeSnap_low   : hl
@@ -2095,7 +2096,7 @@ function avmReport(ob/*item,avmJson,addy,exit*/){ob.exit=ob.exit||1;//ob.showgat
 						     var keys=Object.keys(out.link),j=keys.length;while(j--){                       exit2[keys[j]]=out["link"][keys[j]]}
 						         keys=Object.keys(out.fact),j=keys.length;while(j--){                       exit2[keys[j]]=out["fact"][keys[j]]}
 						         keys=Object.keys(exit2   ),j=keys.length;while(j--){if(exit2[keys[j]]==""){exit2[keys[j]]=null               }}
-			    return exit2} // Called by DealDigger™ main
+			    return exit2} // Called by DealDiggerï¿½ main
 	return out} // function test(){Logger.log(JSON.stringify(avmReport("7318 S Dorchester Ave, Chicago IL",1)))} // 12420 SE 223rd Drive, Kent, WA 98031 // 2635 E 79th St, Chicago, IL 60619
 function avmZipRealty(s){                     //  smartZip                               zillow                                 eppraisal
     var KEY = [ , "foo"                        , "A_estVal" , "A_estMin" , "A_estMax" , "B_estVal" , "B_estMin" , "B_estMax" , "C_estVal" , "C_estMin" , "C_estMax" ]//, "priceHistory" ]

@@ -1,0 +1,10 @@
+﻿'twitter-login.iim
+'Login to Twitter.com
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://www.twitter.com
+TAG POS=1 TYPE=A ATTR=TXT:Log<SP>In
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:https://twitter.com/sessions ATTR=NAME:session[username_or_email] CONTENT={{U}}
+SET !ENCRYPTION NO
+TAG POS=1 TYPE=INPUT:PASSWORD FORM=ACTION:https://twitter.com/sessions ATTR=NAME:session[password] CONTENT={{P}}
+TAG POS=1 TYPE=INPUT:SUBMIT FORM=ACTION:https://twitter.com/sessions ATTR=*

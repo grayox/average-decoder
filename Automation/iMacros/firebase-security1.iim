@@ -1,0 +1,16 @@
+'DEPRECATED 6/24/2016 - Will deploy security rules at CLI using document seurity-rules.json
+'Event playback does not 'select all' if text dimensions change
+'firebase-security.iim
+'Add security rules to Firebase
+'https://firebase.google.com/docs/database/security/quickstart#configuring_rules
+
+VERSION BUILD=8970419 RECORDER=FX
+TAB T=1
+URL GOTO=https://firebase.com/
+TAG POS=1 TYPE=A ATTR=ID:nav-login
+TAG POS=2 TYPE=A ATTR=TXT:Manage<SP>App
+TAG POS=1 TYPE=I ATTR=CLASS:icon-lock&&TXT:
+'https://console.firebase.google.com/project/liberating-architect/database/rules
+TAG POS=2 TYPE=DIV ATTR=TXT:*
+TAG POS=1 TYPE=TEXTAREA ATTR=WRAP:off&&CLASS:ace_text-input&&SPELLCHECK:false&&TXT: CONTENT={{RULES}}
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Save<SP>Rules
